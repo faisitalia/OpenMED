@@ -8,13 +8,13 @@ Affinchè l'applicativo funzioni correttamente è necessario:
 
 ### Configurazione ambiente di backend
 
-La guida per la configurazione dell'ambiente di sviluppo è disponibile [qui](../v1.0.0.md). Di seguito sono elencati i passaggi necessari alla configurazione, in modo da semplificare la fruizione della guida:
+La guida per la configurazione dell'ambiente di sviluppo è disponibile [qui](../v2.0.0.md). Di seguito sono elencati i passaggi necessari alla configurazione, in modo da semplificare la fruizione della guida:
 
 ### Configurazione file .env
 
 Partendo dal file ".env.template" creare il file ".env" impostando correttamente le seguenti variabili:
 
-- **REACT_APP_API_SERVER**: è l'URL dell'API server di OpenMED. In sviluppo sarà: [http://localhost:3001](http://localhost:3001)
+- **REACT_APP_API_SERVER**: è l'URL dell'API server di OpenMED. In sviluppo sarà: http://localhost:3001
 
 ## Utilizzo
 
