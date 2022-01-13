@@ -1,13 +1,19 @@
 # OpenMED
 
-## Presentazione
+## Overview
 
-Il progetto nasce dall’esperienza di FAIS maturata in Smart Ostomy Support con lo scopo di realizzare una piattaforma tecnologica a supporto delle associazioni di pazienti aderenti al progetto.
+It is a technological platform to support the patient associations participating in the project.
+It is not intended to replace "enterprise"telemedicine applications
+It can be used to validate "hybrid" care models that employ videoconferencing and face-to-face visits
+It also enables remote working in the healthcare sector, making it possible for doctor-patient interaction even from places other than care facilities.
 
-## Obiettivi
+## Scope
 
-- Permettere anche a realtà che non hanno le risorse finanziarie e tecnologiche necessarie per acquisire soluzioni di livello enterprise di usufruire di una piattaforma di telemedica per tutto il supporto necessario
-- Evitare l’impiego di tecnologie consumer quali WhatsApp, Skype, Zoom, Google drive Dropbox e simili che non nascono per il trattamento di dati sanitari
-- Consentire ai volontari aderenti alla FAIS e alle altre associazioni partner di interagire tra loro e con i pazienti per condividere esperienze e fornire un supporto tramite la piattaforma OpenMED
+- It allows organizations that do not have the financial and technological resources necessary to acquire enterprise-level solutions
+- Avoid the use of consumer technologies such as WhatsApp, Skype, Zoom, Google drive, Dropbox and the like that are not created for the processing of health data
+- Volunteers adhering to FAIS and other partner associations are equipped with work tools (smartphones and tablets) that will allow them to interact with each other and with patients to share experiences and provide support through the OpenMED platform.
 
-Tutte le informazioni utili sulla configurazione dell'ambiente di sviluppo e sull'installazione sono disponibili [qui](./v2.0.0.md).
+All useful information on setting up the development environment and installing is available  [here](./v2.0.0.md).
+
+## Website
+https://openmed.faisitalia.it/index.php/en/
