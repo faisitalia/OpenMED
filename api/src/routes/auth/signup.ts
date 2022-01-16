@@ -7,6 +7,40 @@ import { User } from '../../models/user'
 
 const router = express.Router()
 
+/**
+ * @openapi
+ * /users/signup:
+ *   post:
+ *     description: Returns the nearest facilities to the coordinates sent via query parameters
+ *     tags:
+ *      - User
+ *     produces:
+ *      - application/json
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 description: The user's name.
+ *                 example: user@openmed.test
+ *               password:
+ *                 type: string
+ *                 description: The user's name.
+ *                 example: password
+ *     security: []    # no authentication
+ *     responses:
+ *      '200':
+ *         description: Successfully signed up. The session ID is returned in a cookie named `jwt`. You need to include this cookie in subsequent requests.
+ *         headers:
+ *           Set-Cookie:
+ *             schema:
+ *               type: string
+ *               example: jwt=abcde12345; Path=/; HttpOnly
+ */
 router.post(
   '/v1/users/signup',
   [
