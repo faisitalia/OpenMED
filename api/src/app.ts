@@ -12,6 +12,10 @@ import { signoutRouter } from './routes/auth/signout'
 import { signupRouter } from './routes/auth/signup'
 
 import { facilityRouter } from './routes/facility'
+import swaggerDocs from './utils/swagger'
+
+// set the express listening port
+const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 
 const app = express()
 app.set('trust proxy', true)
@@ -32,10 +36,12 @@ app.use(signoutRouter)
 app.use(signupRouter)
 app.use(facilityRouter)
 
+swaggerDocs(app, 3001)
+
 app.all('*', async (req, res) => {
   throw new NotFoundError()
 })
 
 app.use(errorHandler)
 
-export { app }
+export { app, PORT }

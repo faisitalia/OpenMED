@@ -1,0 +1,42 @@
+{
+  "definition": {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "OpenMED REST API",
+      "description": "This is the API documentation of the OpenMED project. You can find out more about OpenMED at [https://github.com/faisitalia/OpenMED](https://github.com/faisitalia/OpenMED)",
+      "contact": {
+        "name": "Info",
+        "url": "https://openmed.faisitalia.it/index.php/en",
+        "email": "dev@openmed.cloud"
+      },
+      "version": "v1.0.0",
+      "license": {
+        "name": "Apache 2.0",
+        "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+      }
+    },
+    "servers": [{ "url": "/v1" }],
+    "components": {
+      "securitySchemas": {
+        "cookieAuth": {
+          "type": "apiKey",
+          "in": "cookie",
+          "name": "jwt"
+        }
+      }
+    },
+    "tags": [
+      {
+        "name": "Facility",
+        "description": "Everything about your Facilities",
+        "externalDocs": { "description": "Find out more", "url": "http://swagger.io" }
+      },
+      {
+        "name": "User",
+        "description": "Everything about your Users",
+        "externalDocs": { "description": "Find out more", "url": "http://swagger.io" }
+      }
+    ]
+  },
+  "apis": ["./src/routes/facility/*.ts", "./src/routes/auth/*.ts", "../models/*.ts"]
+}
