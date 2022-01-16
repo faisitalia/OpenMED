@@ -59,7 +59,23 @@ router.get('/v1/facilities/findnearest', requireAuth, async (req: Request, res: 
 })
 
 /**
- *
+ * @openapi
+ * /facilities/coordinatesByAddress:
+ *   get:
+ *     description: Returns the coordinates of the address passed as parameter
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: address
+ *         description: Address
+ *         in: query
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: A JSON object with longitude and latitude of the address
  */
 router.get(
   '/v1/facilities/coordinatesByAddress',
