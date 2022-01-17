@@ -12,7 +12,28 @@ import {
 const router = express.Router()
 
 /**
- *
+ * @openapi
+ * /facilities/findnearest:
+ *   get:
+ *     description: Returns the nearest facilities to the coordinates sent via query parameters
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: latitude
+ *         description: latitude
+ *         in: query
+ *         required: true
+ *         type: string
+ *       - name: longitude
+ *         description: Longitude
+ *         in: query
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: facilities
  */
 router.get('/v1/facilities/findnearest', requireAuth, async (req: Request, res: Response) => {
   // get the params
@@ -38,7 +59,23 @@ router.get('/v1/facilities/findnearest', requireAuth, async (req: Request, res: 
 })
 
 /**
- *
+ * @openapi
+ * /facilities/coordinatesByAddress:
+ *   get:
+ *     description: Returns the coordinates of the address passed as parameter
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: address
+ *         description: Address
+ *         in: query
+ *         required: true
+ *         type: string
+ *     responses:
+ *       200:
+ *         description: A JSON object with longitude and latitude of the address
  */
 router.get(
   '/v1/facilities/coordinatesByAddress',
@@ -53,7 +90,23 @@ router.get(
 )
 
 /**
- *
+ * @openapi
+ * /facilities/{facilityId}:
+ *   get:
+ *     description: Returns the facility details
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: facilityId
+ *         description: The id of the facility
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: facility details
  */
 router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: Response) => {
   const facility = await getFacilityById(req.params.facilityId)
@@ -61,7 +114,17 @@ router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: 
 })
 
 /**
- *
+ * @openapi
+ * /facilities:
+ *   get:
+ *     description: Returns all the facilities
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: List of the all facilities available in the database
  */
 router.get('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
   const facilities = await getAllFacilities()

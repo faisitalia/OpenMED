@@ -2,9 +2,7 @@ require('dotenv').config()
 
 import mongoose from 'mongoose'
 
-import { app } from './app'
-
-const PORT = process.env.PORT || 3001
+import { app, PORT } from './app'
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -22,7 +20,7 @@ const start = async () => {
   }
 
   app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}...`)
+    console.log(`Listening on port ${PORT}`)
   })
 }
 

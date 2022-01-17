@@ -1,11 +1,24 @@
-import express from 'express';
+import express from 'express'
 
-const router = express.Router();
+const router = express.Router()
 
+/**
+ * @openapi
+ * /users/signout:
+ *   post:
+ *     description: Logout the current user
+ *     tags:
+ *      - User
+ *     produces:
+ *      - application/json
+ *     responses:
+ *      '200':
+ *         description: Successfully signed out. The session ID is removed.
+ */
 router.post('/v1/users/signout', (req, res) => {
-  req.session = null;
+  req.session = null
 
-  res.send({});
-});
+  res.send({})
+})
 
-export { router as signoutRouter };
+export { router as signoutRouter }
