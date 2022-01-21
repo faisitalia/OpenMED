@@ -9,6 +9,7 @@ interface FacilityAttrs {
   town: string
   state: string
   county: string
+  country: string
   postalcode: number
 }
 
