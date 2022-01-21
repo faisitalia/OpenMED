@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { constants } from 'http2'
 
 import { app } from '../../../app'
 import facilitiesData from './facilities.json'
@@ -8,6 +9,35 @@ describe('Facility integration test suite', function () {
   beforeEach(async () => {
     // create and populate facility collection
     await Facility.insertMany(facilitiesData)
+  })
+
+  it.only('should create a facility', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // create the facility
+    const facility = Facility.build({
+      state: 'Piemonte',
+      town: 'Torino',
+      postalcode: 10126,
+      county: 'To',
+      name: 'Azienda Ospedaliera Molinette',
+      street: 'Corso Bramante 88',
+      email: '',
+      country: 'IT',
+      domainIdentifier: '',
+      location: { type: 'Point', coordinates: [7.6745153, 45.0416061] },
+    })
+
+    // make the request to fetch all the facilities
+    const { body: createdFacility } = await request(app)
+      .post(`/v1/facilities`)
+      .set('Cookie', cookie)
+      .send(facility)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    console.log(createdFacility)
+    expect(createdFacility).toBeDefined()
   })
 
   it('should fetch all the facilities', async () => {

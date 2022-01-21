@@ -6,10 +6,36 @@ import {
   getAllFacilities,
   getCoordinatesByAddress,
   getFacilityById,
+  createFacility,
 } from '../../services/facility'
 
 // create the express router
 const router = express.Router()
+
+/**
+ * @openapi
+ * /facilities:
+ *   post:
+ *     description: Create a facility
+ *     tags:
+ *      - Facility
+ *     produces:
+ *      - application/json
+ *     requestBody:
+ *     description: Optional description in *Markdown*
+ *     required: true
+ *     content:
+ *      - Facility
+ *     responses:
+ *       201:
+ *         description: The created facility
+ */
+router.post('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
+  const facilityRawData = req.body
+  // TODO validate the inputs
+  const createdFacility = await createFacility(facilityRawData)
+  res.send(createdFacility)
+})
 
 /**
  * @openapi

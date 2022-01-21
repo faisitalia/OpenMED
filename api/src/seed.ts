@@ -4,7 +4,8 @@ import mongoose from 'mongoose'
 import fs from 'fs-extra'
 
 import { Facility } from './models/facility'
-import { User } from './models/user'
+import { User, Role } from './models/user'
+import { Person } from './models/person'
 import { transformData } from './services/facility/utils/etl-json'
 import facilitiesData from './routes/facility/__test__/facilities.json'
 
@@ -12,13 +13,28 @@ import facilitiesData from './routes/facility/__test__/facilities.json'
  *
  */
 const populateUsers = async function () {
-  console.log(`Droping users....`)
+  console.log(`Droping users and persons....`)
   await User.deleteMany({})
+  await Person.deleteMany({})
 
   console.log(`Inserting user....`)
+
+  // create the person
+  const firstname = 'John'
+  const lastname = 'Doe'
+  const birthdate = new Date()
+  const personDoc = Person.build({ firstname, lastname, birthdate })
+  const person = await personDoc.save()
+
+  // create the user
   const userEmail = 'user@openmed.test'
   const userPassword = 'password'
-  const user = User.build({ email: userEmail, password: userPassword })
+  const user = User.build({
+    email: userEmail,
+    password: userPassword,
+    role: Role.USER,
+    personId: person.id,
+  })
   await user.save()
   console.log(`User inserted!`)
 }
