@@ -10,7 +10,9 @@ interface FacilityAttrs {
   state: string
   county: string
   country: string
+  domainIdentifier: string
   postalcode: number
+  location: object
 }
 
 // An interface that describes the properties

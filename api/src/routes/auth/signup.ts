@@ -60,6 +60,8 @@ router.post(
       throw new BadRequestError('Email in use')
     }
 
+    // create the person
+
     const user = User.build({ email, password })
     await user.save()
 

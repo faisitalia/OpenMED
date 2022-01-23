@@ -55,4 +55,4 @@ personSchema.statics.build = (attrs: PersonAttrs) => {
 
 const Person = mongoose.model<PersonDoc, PersonModel>('Person', personSchema)
 
-export { Person }
+export { Person, PersonDoc }
