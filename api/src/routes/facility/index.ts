@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
+import { constants } from 'http2'
+import { body } from 'express-validator'
 
-import { requireAuth } from '../../common'
+import { requireAuth, validateRequest } from '../../common'
 import {
   findNearest,
   getAllFacilities,
@@ -13,7 +15,7 @@ import {
 const router = express.Router()
 
 /**
- * @openapi
+ *
  * /facilities:
  *   post:
  *     description: Create a facility
@@ -30,12 +32,44 @@ const router = express.Router()
  *       201:
  *         description: The created facility
  */
-router.post('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
-  const facilityRawData = req.body
-  // TODO validate the inputs
-  const createdFacility = await createFacility(facilityRawData)
-  res.send(createdFacility)
-})
+router.post(
+  '/v1/facilities',
+  // [
+  //   body('name').trim().not().isEmpty().isAlpha().withMessage('Name is required'),
+  //   body('email').trim().isEmail().withMessage('Email is required'),
+  //   body('street').trim().not().isEmpty().isAlphanumeric().withMessage('Street is required'),
+  // ],
+  // validateRequest,
+  requireAuth,
+  async (req: Request, res: Response) => {
+    const {
+      name,
+      email,
+      street,
+      town,
+      state,
+      county,
+      country,
+      postalcode,
+      location,
+    } = req.body._doc
+
+    const createdFacility = await createFacility(
+      {
+        name,
+        email,
+        street,
+        town,
+        state,
+        county,
+        country,
+        postalcode,
+      },
+      location
+    )
+    res.status(constants.HTTP_STATUS_CREATED).send(createdFacility)
+  }
+)
 
 /**
  * @openapi

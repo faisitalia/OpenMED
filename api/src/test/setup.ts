@@ -8,11 +8,24 @@ declare global {
   namespace NodeJS {
     interface Global {
       signin(): Promise<string[]>
+      person: {
+        firstname: string
+        lastname: string
+        birthdate: Date
+      }
     }
   }
 }
 
 let mongo: any
+
+// person data
+const PERSON = {
+  firstname: 'Test',
+  lastname: 'Usertest',
+  birthdate: new Date(),
+}
+
 beforeAll(async () => {
   process.env.JWT_KEY = 'asdfasdf'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -36,15 +49,26 @@ afterAll(async () => {
   // await mongoose.connection.close();
 })
 
+global.person = PERSON
+
 global.signin = async () => {
+  // user data
   const email = 'test@test.com'
   const password = 'password'
+
+  // person data
+  const firstname = PERSON.firstname
+  const lastname = PERSON.lastname
+  const birthdate = PERSON.birthdate
 
   const response = await request(app)
     .post('/v1/users/signup')
     .send({
       email,
       password,
+      firstname,
+      lastname,
+      birthdate,
     })
     .expect(201)
 

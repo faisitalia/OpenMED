@@ -1,11 +1,12 @@
-import { Facility, FacilityDoc } from '../../models/facility'
+import { Facility, FacilityAttrs } from '../../models/facility'
 import { geoServer } from './utils/geoServer'
 
 /**
  *
  * @param data
  */
-async function createFacility(data: FacilityDoc) {
+async function createFacility(data: FacilityAttrs, location: object) {
+  console.log(location)
   const facilityDoc = Facility.build(data)
   return facilityDoc.save()
 }

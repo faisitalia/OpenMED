@@ -11,12 +11,12 @@ describe('Facility integration test suite', function () {
     await Facility.insertMany(facilitiesData)
   })
 
-  it.only('should create a facility', async () => {
+  it.only('should create a facility with no location', async () => {
     // get the cookie
     const cookie = await global.signin()
 
     // create the facility
-    const facility = Facility.build({
+    const facilityToCreate = {
       state: 'Piemonte',
       town: 'Torino',
       postalcode: 10126,
@@ -25,9 +25,9 @@ describe('Facility integration test suite', function () {
       street: 'Corso Bramante 88',
       email: '',
       country: 'IT',
-      domainIdentifier: '',
       location: { type: 'Point', coordinates: [7.6745153, 45.0416061] },
-    })
+    }
+    const facility = Facility.build(facilityToCreate)
 
     // make the request to fetch all the facilities
     const { body: createdFacility } = await request(app)
@@ -36,8 +36,20 @@ describe('Facility integration test suite', function () {
       .send(facility)
       .expect(constants.HTTP_STATUS_CREATED)
 
-    console.log(createdFacility)
-    expect(createdFacility).toBeDefined()
+    // check data
+    expect(createdFacility.id).toBeDefined()
+    expect(createdFacility.name).toStrictEqual(facilityToCreate.name)
+    expect(createdFacility.email).toStrictEqual(facilityToCreate.email)
+    expect(createdFacility.state).toStrictEqual(facilityToCreate.state)
+    expect(createdFacility.town).toStrictEqual(facilityToCreate.town)
+    expect(createdFacility.postalcode).toStrictEqual(facilityToCreate.postalcode)
+    expect(createdFacility.county).toStrictEqual(facilityToCreate.county)
+    expect(createdFacility.country).toStrictEqual(facilityToCreate.country)
+    expect(createdFacility.email).toStrictEqual(facilityToCreate.email)
+    // expect(createdFacility.location).toBeDefined()
+    // expect(createdFacility.location.type).toStrictEqual('Point')
+    // expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
+    // expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
   })
 
   it('should fetch all the facilities', async () => {

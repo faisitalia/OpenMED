@@ -10,9 +10,7 @@ interface FacilityAttrs {
   state: string
   county: string
   country: string
-  domainIdentifier: string
   postalcode: number
-  location: object
 }
 
 // An interface that describes the properties
@@ -99,4 +97,4 @@ FacilitySchema.statics.build = (attrs: FacilityAttrs) => {
 
 const Facility = mongoose.model<FacilityDoc, FacilityModel>('Facility', FacilitySchema)
 
-export { Facility, FacilityDoc }
+export { Facility, FacilityAttrs }
