@@ -11,7 +11,7 @@ describe('Facility integration test suite', function () {
     await Facility.insertMany(facilitiesData)
   })
 
-  it.only('should create a facility with no location', async () => {
+  it.only('should create a facility', async () => {
     // get the cookie
     const cookie = await global.signin()
 
@@ -25,7 +25,6 @@ describe('Facility integration test suite', function () {
       street: 'Corso Bramante 88',
       email: '',
       country: 'IT',
-      location: { type: 'Point', coordinates: [7.6745153, 45.0416061] },
     }
     const facility = Facility.build(facilityToCreate)
 
@@ -33,7 +32,7 @@ describe('Facility integration test suite', function () {
     const { body: createdFacility } = await request(app)
       .post(`/v1/facilities`)
       .set('Cookie', cookie)
-      .send(facility)
+      .send(facility.toJSON())
       .expect(constants.HTTP_STATUS_CREATED)
 
     // check data
@@ -46,10 +45,10 @@ describe('Facility integration test suite', function () {
     expect(createdFacility.county).toStrictEqual(facilityToCreate.county)
     expect(createdFacility.country).toStrictEqual(facilityToCreate.country)
     expect(createdFacility.email).toStrictEqual(facilityToCreate.email)
-    // expect(createdFacility.location).toBeDefined()
-    // expect(createdFacility.location.type).toStrictEqual('Point')
-    // expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
-    // expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
+    expect(createdFacility.location).toBeDefined()
+    expect(createdFacility.location.type).toStrictEqual('Point')
+    expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
+    expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
   })
 
   it('should fetch all the facilities', async () => {

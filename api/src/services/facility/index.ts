@@ -3,11 +3,24 @@ import { geoServer } from './utils/geoServer'
 
 /**
  *
- * @param data
+ * @param facility
  */
-async function createFacility(data: FacilityAttrs, location: object) {
-  console.log(location)
-  const facilityDoc = Facility.build(data)
+async function createFacility(facility: FacilityAttrs) {
+  const facilityDoc = Facility.build(facility)
+
+  // retrieve the location data
+  const address = `${facility.street}, ${facility.postalcode}, ${facility.town}, ${facility.country}`
+  const coordinates = await getCoordinatesByAddress(address)
+
+  // check coordinates
+  if (!coordinates) throw new Error(`No coordinates available for the address ${address}`)
+
+  // add location to the facility doc
+  facilityDoc.location = {
+    type: 'Point',
+    coordinates: [coordinates.longitude, coordinates.latitude],
+  }
+
   return facilityDoc.save()
 }
 
