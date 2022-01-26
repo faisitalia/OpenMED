@@ -97,4 +97,4 @@ FacilitySchema.statics.build = (attrs: FacilityAttrs) => {
 
 const Facility = mongoose.model<FacilityDoc, FacilityModel>('Facility', FacilitySchema)
 
-export { Facility, FacilityAttrs }
+export { Facility, FacilityAttrs, FacilityDoc }

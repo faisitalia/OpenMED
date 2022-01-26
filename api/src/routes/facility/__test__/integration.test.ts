@@ -11,7 +11,7 @@ describe('Facility integration test suite', function () {
     await Facility.insertMany(facilitiesData)
   })
 
-  it.only('should create a facility', async () => {
+  it('should create a facility', async () => {
     // get the cookie
     const cookie = await global.signin()
 

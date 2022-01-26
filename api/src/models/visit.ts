@@ -66,4 +66,4 @@ visitSchema.statics.build = (attrs: VisitAttrs) => {
 
 const Visit = mongoose.model<VisitDoc, VisitModel>('Visit', visitSchema)
 
-export { Visit, VisitDoc }
+export { Visit, VisitDoc, VisitAttrs }

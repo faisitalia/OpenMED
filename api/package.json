@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest facility/* --watchAll --no-cache",
+    "test": "jest --watchAll --no-cache",
     "eslint": "eslint",
     "start": "ts-node-dev src/index.ts",
     "seed": "ts-node-dev src/seed.ts"
