@@ -87,6 +87,7 @@ describe('Visit integration test suite', function () {
     const facilityCounty = 'To'
     const facilityCountry = 'IT'
     const facilityPostalcode = 10126
+
     facility = await createFacility({
       name: facilityName,
       email: facilityEmail,
@@ -126,10 +127,57 @@ describe('Visit integration test suite', function () {
 
     // check data
     expect(createdVisit.id).toBeDefined()
-    expect(createdVisit.facilityId).toStrictEqual(facility.id)
-    expect(createdVisit.patientId).toStrictEqual(patient.id)
-    expect(createdVisit.doctorId).toStrictEqual(doctor.id)
-    expect(createdVisit.caregiverId).toStrictEqual(caregiver.id)
+    expect(createdVisit.facility.id).toStrictEqual(facility.id)
+    expect(createdVisit.patient.id).toStrictEqual(patient.id)
+    expect(createdVisit.doctor.id).toStrictEqual(doctor.id)
+    expect(createdVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
+  })
+
+  it('should update the visit', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // set the slot
+    const slot = new Date()
+
+    // set the visit data
+    const visitData = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot,
+    }
+
+    // make the request to create the visit
+    const response = await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    const createdVisit: VisitDoc = response.body
+    expect(createdVisit.id).toBeDefined()
+
+    // update the visit
+    const newSlot = new Date()
+    const newVisitData = visitData
+    newVisitData.slot = newSlot
+
+    const updateResponse = await request(app)
+      .put(`/v1/visits/${createdVisit.id}`)
+      .set('Cookie', cookie)
+      .send(newVisitData)
+      .expect(constants.HTTP_STATUS_OK)
+
+    const updatedVisit: VisitDoc = updateResponse.body
+
+    // check the updated visit
+    expect(updatedVisit.facility.id).toStrictEqual(facility.id)
+    expect(updatedVisit.patient.id).toStrictEqual(patient.id)
+    expect(updatedVisit.doctor.id).toStrictEqual(doctor.id)
+    expect(updatedVisit.caregiver.id).toStrictEqual(caregiver.id)
+    expect(new Date(updatedVisit.slot)).toStrictEqual(newSlot)
   })
 })
