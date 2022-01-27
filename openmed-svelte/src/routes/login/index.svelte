@@ -1,7 +1,7 @@
 <script context="module">
   export async function load({ session }) {
     // If the user is logged in already, re-route him to the index
-    if(session?.cookie) {
+    if(session?.id) {
       return {
         status: 302,
         redirect: '/'
@@ -19,14 +19,27 @@
   let hasStarted = false;
   let email;
   let password;
+
   // TODO properly handle errors
   // let errors;
 
-  async function logIn() {
-    // This is now hard-coded, just to test the APIs
-    email = "user@openmed.test";
-    password = "password";
+  async function getUserData() {
+    const response = await fetch(
+      'http://localhost:3001/v1/users/currentuser',
+      { credentials: 'include' }
+    );
+    // If something goes wrong with this call, we can't authenticate
+    if (!response.ok) return null;
 
+    // If we got a proper response body, we extract its currentUser prop
+    const responseBody = await response.json();
+    const currentUser = responseBody.currentUser;
+    if (!currentUser) return null;
+
+    return { ...currentUser };
+  }
+
+  async function logIn() {
     const response = await fetch(
       'http://localhost:3001/v1/users/signin',
       {
@@ -39,10 +52,9 @@
       }
     );
     
-
     if (response.ok) {
-      const body = await response.json();
-      $session = body;  // Save the session info
+      await response.json(); // Do we actually need this? TODO
+      $session = await getUserData();
       goto('/');
     } else {
       const errors = await response.json();
@@ -61,7 +73,8 @@
 {#if !hasStarted}
   <button on:click={() => hasStarted=true}>Inizia</button>
 {:else}
-  <form on:submit|preventDefault={logIn}>
+  <form on:submit|preventDefault={logIn} id="signin">
+    <!-- TODO: valutare se aggiungere delle label per accessibilità -->
     <fieldset>
       <input
         bind:value={email}
