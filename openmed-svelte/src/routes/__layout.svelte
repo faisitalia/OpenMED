@@ -3,5 +3,5 @@
 </script>
 
 <!-- TODO: add static assets -->
-<img src="./logo/openmed-logo.svg" alt=""/>
+<!-- <img src="./logo/openmed-logo.svg" alt=""/> -->
 <slot />

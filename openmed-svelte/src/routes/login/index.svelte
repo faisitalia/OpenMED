@@ -1,7 +1,7 @@
 <script context="module">
   export async function load({ session }) {
     // If the user is logged in already, re-route him to the index
-    if(session?.id) {
+    if(session?.cookie) {
       return {
         status: 302,
         redirect: '/'
@@ -27,20 +27,27 @@
     email = "user@openmed.test";
     password = "password";
 
-    const response = await fetch('http://localhost:3001/v1/users/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ email, password })
-    });
-    const body = await response.json();
+    const response = await fetch(
+      'http://localhost:3001/v1/users/signin',
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password })
+      }
+    );
+    
 
     if (response.ok) {
+      const body = await response.json();
       $session = body;  // Save the session info
       goto('/');
     } else {
-      // TODO Handle errors
+      const errors = await response.json();
+      // TODO properly handle errors
+      console.log(errors);
     }
   }
 </script> 
@@ -89,11 +96,11 @@
 {/if}
 
 <!-- TODO: add proper static assets, here -->
-<img src="fais-logo.svg" alt=""/>
+<!-- <img src="fais-logo.svg" alt=""/>
 <br/>
 <img src="sponsor1.svg" alt=""/>
 <img src="sponsor2.svg" alt=""/>
-<img src="sponsor2.svg" alt=""/>
+<img src="sponsor2.svg" alt=""/> -->
 
 
 
