@@ -16,9 +16,16 @@
 </script>
 
 <script>
-  export let email;
-  export let id;
-  export let iat;
+  import DashboardTile from "$lib/dashboard/DashboardTile.svelte";
+  // export let email;
+  // export let id;
+  // export let iat;
+  export let name = "Fabrizio";
+  export let roles = ["user"];
+
+  $: isDoctor = roles.includes("doctor");
+  $: isPatient = roles.includes("user");
+  $: isAdmin = roles.includes("admin");
 </script>
 
 <svelte:head>
@@ -27,18 +34,39 @@
 
 
 <!-- This is just a trial, PLEASE DO NOT TAKE THIS AS SERIOUS CODE -->
-<h1 class='text-2xl font-semibold text-center'>
-  Ciao {email}!
+<h1>
+  Ciao {name},
 </h1>
-<p>
-  Questo è il tuo ID: {id}!
-</p>
-<p>
-  Questo è il tuo iat: {iat}
-  <br/>... <em>Whatever that is</em>
-</p>
+<h2>come desideri procedere?</h2>
+<div class="spacer"></div>
 
-<a href="/about">Go to about</a>
+
+{#if isAdmin}
+  <DashboardTile
+    title="Gestisci Utenti"
+    subtitle="Crea, modifica ed elimina i profili utenti"
+  />
+{/if}
+{#if isDoctor}
+  <DashboardTile
+    title="Crea Appuntamento"
+    subtitle="Crea e gestisci nuovi appuntamenti"
+  />
+{/if}
+{#if isPatient}
+  <DashboardTile
+    title="Lista Appuntamenti"
+    subtitle="Visualizza i tuoi appuntamenti"
+  />
+{/if}
+{#if isPatient && !isDoctor}
+  <DashboardTile
+    title="Cartella Clinica"
+    subtitle="Consulta la tua cartella clinica"
+  />
+{/if}
+
+<!-- TODO add image -->
 
 <style>
 
