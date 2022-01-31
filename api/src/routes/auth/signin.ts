@@ -12,7 +12,7 @@ const router = express.Router()
  * @openapi
  * /users/signin:
  *   post:
- *     description: Returns the nearest facilities to the coordinates sent via query parameters
+ *     description: Returns the logged user
  *     tags:
  *      - User
  *     produces:

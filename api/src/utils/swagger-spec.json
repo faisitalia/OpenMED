@@ -35,8 +35,18 @@
         "name": "User",
         "description": "Everything about your Users",
         "externalDocs": { "description": "Find out more", "url": "http://swagger.io" }
+      },
+      {
+        "name": "Visit",
+        "description": "Everything about your Visits",
+        "externalDocs": { "description": "Find out more", "url": "http://swagger.io" }
       }
     ]
   },
-  "apis": ["./src/routes/facility/*.ts", "./src/routes/auth/*.ts", "../models/*.ts"]
+  "apis": [
+    "./src/routes/facility/*.ts",
+    "./src/routes/auth/*.ts",
+    "./src/routes/visit/*.ts",
+    "../models/*.ts"
+  ]
 }

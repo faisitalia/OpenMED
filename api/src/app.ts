@@ -12,6 +12,8 @@ import { signoutRouter } from './routes/auth/signout'
 import { signupRouter } from './routes/auth/signup'
 
 import { facilityRouter } from './routes/facility'
+import { visitRouter } from './routes/visit'
+
 import swaggerDocs from './utils/swagger'
 
 // set the express listening port
@@ -35,7 +37,9 @@ app.use(signinRouter)
 app.use(signoutRouter)
 app.use(signupRouter)
 app.use(facilityRouter)
+app.use(visitRouter)
 
+// run swagger/openapi docs
 swaggerDocs(app, 3001)
 
 app.all('*', async (req, res) => {

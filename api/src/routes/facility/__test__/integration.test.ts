@@ -1,4 +1,5 @@
 import request from 'supertest'
+import { constants } from 'http2'
 
 import { app } from '../../../app'
 import facilitiesData from './facilities.json'
@@ -8,6 +9,46 @@ describe('Facility integration test suite', function () {
   beforeEach(async () => {
     // create and populate facility collection
     await Facility.insertMany(facilitiesData)
+  })
+
+  it('should create a facility', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // create the facility
+    const facilityToCreate = {
+      state: 'Piemonte',
+      town: 'Torino',
+      postalcode: 10126,
+      county: 'To',
+      name: 'Azienda Ospedaliera Molinette',
+      street: 'Corso Bramante 88',
+      email: '',
+      country: 'IT',
+    }
+    const facility = Facility.build(facilityToCreate)
+
+    // make the request to fetch all the facilities
+    const { body: createdFacility } = await request(app)
+      .post(`/v1/facilities`)
+      .set('Cookie', cookie)
+      .send(facility.toJSON())
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    // check data
+    expect(createdFacility.id).toBeDefined()
+    expect(createdFacility.name).toStrictEqual(facilityToCreate.name)
+    expect(createdFacility.email).toStrictEqual(facilityToCreate.email)
+    expect(createdFacility.state).toStrictEqual(facilityToCreate.state)
+    expect(createdFacility.town).toStrictEqual(facilityToCreate.town)
+    expect(createdFacility.postalcode).toStrictEqual(facilityToCreate.postalcode)
+    expect(createdFacility.county).toStrictEqual(facilityToCreate.county)
+    expect(createdFacility.country).toStrictEqual(facilityToCreate.country)
+    expect(createdFacility.email).toStrictEqual(facilityToCreate.email)
+    expect(createdFacility.location).toBeDefined()
+    expect(createdFacility.location.type).toStrictEqual('Point')
+    expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
+    expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
   })
 
   it('should fetch all the facilities', async () => {
@@ -44,7 +85,7 @@ describe('Facility integration test suite', function () {
     expect(townCoordinates).toBeDefined()
     expect(townCoordinates.latitude).toStrictEqual(45.0677551)
     expect(townCoordinates.longitude).toStrictEqual(7.6824892)
-    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, Italia')
+    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, 10100, Italia')
 
     // get coordinates by address
     const addressToSearch = 'Via Dei Ponderanesi 2, Biella Piemonte'
