@@ -85,7 +85,7 @@ describe('Facility integration test suite', function () {
     expect(townCoordinates).toBeDefined()
     expect(townCoordinates.latitude).toStrictEqual(45.0677551)
     expect(townCoordinates.longitude).toStrictEqual(7.6824892)
-    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, Italia')
+    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, 10100, Italia')
 
     // get coordinates by address
     const addressToSearch = 'Via Dei Ponderanesi 2, Biella Piemonte'

@@ -79,7 +79,8 @@ async function createVisit(
     caregiver,
     slot,
   })
-  return await visitDoc.save()
+
+  return visitDoc.save()
 }
 
 /**
@@ -109,7 +110,71 @@ async function updateVisit(visitId: string, newVisitData: any) {
     slot: newVisitData.slot,
   })
 
-  return await visit.save()
+  return visit.save()
 }
 
-export { createVisit, updateVisit }
+/**
+ *
+ * @param visitId
+ */
+async function fetchVisitById(visitId: string) {
+  // retrieve the visit
+  const visit = await Visit.findById(visitId).populate('facility')
+
+  if (!visit) {
+    throw new NotFoundError()
+  }
+
+  // retrieve the patient
+  const patient = await User.findOne({ _id: visit.patient, role: Role.PATIENT })
+
+  if (!patient) {
+    throw new NotFoundError()
+  }
+
+  // retrieve the doctor
+  const doctor = await User.findOne({ _id: visit.doctor, role: Role.DOCTOR })
+
+  if (!doctor) {
+    throw new NotFoundError()
+  }
+
+  // retrieve the caregiver
+  const caregiver = await User.findOne({ _id: visit.caregiver, role: Role.CAREGIVER })
+
+  if (!caregiver) {
+    throw new NotFoundError()
+  }
+
+  visit.patient = patient
+  visit.doctor = doctor
+  visit.caregiver = caregiver
+
+  return visit
+}
+
+/**
+ *
+ * @returns
+ */
+async function fetchAllVisits() {
+  // retrieve the visit
+  const visits = await Visit.find()
+
+  if (!visits) {
+    throw new NotFoundError()
+  }
+
+  return visits
+}
+
+/**
+ *
+ * @param visitId
+ */
+async function deleteVisitById(visitId: string) {
+  // retrieve the visit
+  await Visit.deleteOne({ _id: visitId })
+}
+
+export { createVisit, updateVisit, fetchVisitById, deleteVisitById, fetchAllVisits }

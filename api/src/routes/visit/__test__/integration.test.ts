@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { constants } from 'http2'
+import mongoose from 'mongoose'
 
 import { app } from '../../../app'
 import { Facility, FacilityDoc } from '../../../models/facility'
@@ -123,7 +124,7 @@ describe('Visit integration test suite', function () {
       .send(visitData)
       .expect(constants.HTTP_STATUS_CREATED)
 
-    const createdVisit: VisitDoc = response.body
+    const createdVisit = response.body
 
     // check data
     expect(createdVisit.id).toBeDefined()
@@ -134,7 +135,17 @@ describe('Visit integration test suite', function () {
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
   })
 
-  it('should update the visit', async () => {
+  it('returns a 404 if the visit is not found', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // create a dummy mongo id
+    const id = new mongoose.Types.ObjectId().toHexString()
+
+    await request(app).get(`/v1/visits/${id}`).set('Cookie', cookie).send().expect(404)
+  })
+
+  it('returns the visit if the visit is found', async () => {
     // get the cookie
     const cookie = await global.signin()
 
@@ -160,24 +171,193 @@ describe('Visit integration test suite', function () {
     const createdVisit: VisitDoc = response.body
     expect(createdVisit.id).toBeDefined()
 
-    // update the visit
-    const newSlot = new Date()
-    const newVisitData = visitData
-    newVisitData.slot = newSlot
+    // retrieve the visit just created
+    const retrievedVisitResponse = await request(app)
+      .get(`/v1/visits/${createdVisit.id}`)
+      .set('Cookie', cookie)
+      .expect(constants.HTTP_STATUS_OK)
 
+    const retrievedVisit = retrievedVisitResponse.body
+
+    // check the retrieved visit
+    expect(retrievedVisit.facility.id).toStrictEqual(createdVisit.facility.id)
+    expect(retrievedVisit.patient.id).toStrictEqual(createdVisit.patient.id)
+    expect(retrievedVisit.doctor.id).toStrictEqual(createdVisit.doctor.id)
+    expect(retrievedVisit.caregiver.id).toStrictEqual(createdVisit.caregiver.id)
+    expect(retrievedVisit.slot).toStrictEqual(createdVisit.slot)
+  })
+
+  it('should fetch all the available visits', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // set the slot
+    const slot1 = new Date()
+    const slot2 = new Date()
+    const slot3 = new Date()
+
+    // set the visit data
+    const visitData1 = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot: slot1,
+    }
+    const visitData2 = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot: slot2,
+    }
+    const visitData3 = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot: slot3,
+    }
+
+    // make the request to create the visits
+    await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData1)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData2)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData3)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    // check data
+    expect(await Visit.countDocuments()).toBe(3)
+  })
+
+  it('should update the visit', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // set the slot
+    const slot = new Date()
+
+    // set the visit data
+    const visitData = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot,
+    }
+
+    // make the request to create the visit
+    const response = await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    const createdVisit = response.body
+    expect(createdVisit.id).toBeDefined()
+
+    // update the facility
+    const newFacility = await createFacility({
+      name: 'UpdatedFacility',
+      email: 'updatedFacility@openmed.cloud',
+      street: 'corso unione sovietica, 88',
+      town: 'Torino',
+      state: 'Piemonte',
+      county: 'To',
+      country: 'IT',
+      postalcode: 10134,
+    })
+    expect(newFacility).toBeDefined()
+    expect(newFacility.id).toBeDefined()
+
+    // update the doctor
+    const newDoctorPersonDoc = Person.build({
+      firstname: 'UpdatedDoctor',
+      lastname: 'UpdatedDoctor1Lastname',
+      birthdate: new Date(),
+    })
+    const newDoctorPerson1 = await newDoctorPersonDoc.save()
+
+    const newDoctorModel = User.build({
+      email: 'updatedDoctor@openmed.test',
+      password: 'password',
+      role: Role.DOCTOR,
+      personId: newDoctorPerson1.id,
+    })
+    const newDoctor = await newDoctorModel.save()
+    expect(newDoctor).toBeDefined()
+    expect(newDoctor.id).toBeDefined()
+
+    // update the slot
+    const newSlot = new Date()
+
+    // update the visit
     const updateResponse = await request(app)
       .put(`/v1/visits/${createdVisit.id}`)
       .set('Cookie', cookie)
-      .send(newVisitData)
+      .send({
+        facilityId: newFacility.id,
+        patientId: patient.id,
+        doctorId: newDoctor.id,
+        caregiverId: caregiver.id,
+        slot: newSlot,
+      })
       .expect(constants.HTTP_STATUS_OK)
 
-    const updatedVisit: VisitDoc = updateResponse.body
+    const updatedVisit = updateResponse.body
 
     // check the updated visit
-    expect(updatedVisit.facility.id).toStrictEqual(facility.id)
+    expect(updatedVisit.facility.id).toStrictEqual(newFacility.id)
     expect(updatedVisit.patient.id).toStrictEqual(patient.id)
-    expect(updatedVisit.doctor.id).toStrictEqual(doctor.id)
+    expect(updatedVisit.doctor.id).toStrictEqual(newDoctor.id)
     expect(updatedVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(updatedVisit.slot)).toStrictEqual(newSlot)
+  })
+
+  it('should delete a visit', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // set the slot
+    const slot = new Date()
+
+    // set the visit data
+    const visitData = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot,
+    }
+
+    // make the request to create the visit
+    const response = await request(app)
+      .post(`/v1/visits`)
+      .set('Cookie', cookie)
+      .send(visitData)
+      .expect(constants.HTTP_STATUS_CREATED)
+
+    const createdVisit = response.body
+    expect(createdVisit.id).toBeDefined()
+
+    // delete the visit
+    await request(app)
+      .delete(`/v1/visits/${createdVisit.id}`)
+      .set('Cookie', cookie)
+      .expect(constants.HTTP_STATUS_NO_CONTENT)
+
+    expect(await Visit.countDocuments({ _id: createdVisit.id })).toBe(0)
   })
 })

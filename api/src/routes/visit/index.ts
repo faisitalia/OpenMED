@@ -4,7 +4,13 @@ import { body } from 'express-validator'
 
 import { requireAuth, validateRequest } from '../../common'
 
-import { createVisit, updateVisit } from '../../services/visit'
+import {
+  createVisit,
+  updateVisit,
+  fetchVisitById,
+  deleteVisitById,
+  fetchAllVisits,
+} from '../../services/visit'
 import { VisitDoc } from '../../models/visit'
 
 // create the express router
@@ -68,7 +74,7 @@ router.post(
       slot
     )
 
-    res.status(constants.HTTP_STATUS_CREATED).send(createdVisit)
+    res.status(constants.HTTP_STATUS_CREATED).send(createdVisit.toJSON())
   }
 )
 
@@ -131,8 +137,81 @@ router.put(
       slot,
     })
 
-    res.status(constants.HTTP_STATUS_OK).send(updatedVisit)
+    res.status(constants.HTTP_STATUS_OK).send(updatedVisit.toJSON())
   }
 )
+
+/**
+ * @openapi
+ * /visits/{visitId}:
+ *   get:
+ *     description: Returns the visit details
+ *     tags:
+ *      - Visit
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: visitId
+ *         description: The id of the visit
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       200:
+ *         description: visit details
+ */
+router.get('/v1/visits/:visitId', requireAuth, async (req: Request, res: Response) => {
+  const visitId = req.params.visitId
+
+  const visit = await fetchVisitById(visitId)
+
+  res.status(constants.HTTP_STATUS_OK).send(visit.toJSON())
+})
+
+/**
+ * @openapi
+ * /visits:
+ *   get:
+ *     description: Returns all the visits
+ *     tags:
+ *      - Visit
+ *     produces:
+ *      - application/json
+ *     responses:
+ *       200:
+ *         description: All the available visits
+ */
+router.get('/v1/visits', requireAuth, async (req: Request, res: Response) => {
+  const visits = await fetchAllVisits()
+
+  res.status(constants.HTTP_STATUS_OK).send(visits)
+})
+
+/**
+ * @openapi
+ * /visits/{visitId}:
+ *   delete:
+ *     description: Delete a visit
+ *     tags:
+ *      - Visit
+ *     produces:
+ *      - application/json
+ *     parameters:
+ *       - name: visitId
+ *         description: The id of the visit
+ *         in: path
+ *         required: true
+ *         type: integer
+ *     responses:
+ *       204:
+ *         description: Visit has been enacted and no further information is to be supplied.
+ */
+router.delete('/v1/visits/:visitId', requireAuth, async (req: Request, res: Response) => {
+  const visitId = req.params.visitId
+
+  await deleteVisitById(visitId)
+
+  res.status(constants.HTTP_STATUS_NO_CONTENT).send()
+})
 
 export { router as visitRouter }
