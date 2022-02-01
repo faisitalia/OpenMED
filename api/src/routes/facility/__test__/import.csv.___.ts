@@ -1,13 +1,13 @@
 import { readCSVData, transformData } from '../../../services/facility/utils/etl-csv'
 
-it.skip('should read data from the CSV file', async () => {
+it('should read data from the CSV file', async () => {
   const data: string[] = await readCSVData()
   expect(data).toBeDefined()
   expect(Array.isArray(data)).toBeTruthy()
   expect(data.length).toBeGreaterThan(0)
 })
 
-it.skip('should transform raw data before the import', async () => {
+it('should transform raw data before the import', async () => {
   let rawData = [
     {
       state: 'ABRUZZO',
