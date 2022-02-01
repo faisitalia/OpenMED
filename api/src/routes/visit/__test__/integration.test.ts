@@ -135,6 +135,34 @@ describe('Visit integration test suite', function () {
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
   })
 
+  it.only('should returns a 400 if the slot is not found', async () => {
+    // get the cookie
+    const cookie = await global.signin()
+
+    // set the slot
+    const slot = new Date()
+
+    // set the visit data
+    const visitData = {
+      facilityId: facility.id,
+      patientId: patient.id,
+      doctorId: doctor.id,
+      caregiverId: caregiver.id,
+      slot1: slot,
+    }
+
+    // make the request to create the visit
+    const response = await request(app).post(`/v1/visits`).set('Cookie', cookie).send(visitData)
+
+    // check data
+    expect(response.statusCode).toStrictEqual(400)
+    const { errors } = response.body
+    expect(errors[0]).toBeDefined()
+    const error = errors[0]
+    expect(error.message).toStrictEqual('The slot is required')
+    expect(error.field).toStrictEqual('slot')
+  })
+
   it('returns a 404 if the visit is not found', async () => {
     // get the cookie
     const cookie = await global.signin()
