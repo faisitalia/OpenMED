@@ -68,8 +68,8 @@ async function transformData(rawData: any) {
           console.error(`Searching for ${postalcode}, ${state} ...`)
           const broadenResults = await geoServer.search({ q: `${postalcode}, ${state}` })
           console.error(`Found ${broadenResults} ...`)
-          latitude = broadenResults[0].lat
-          longitude = broadenResults[0].lon
+          latitude = broadenResults[0] ? broadenResults[0].lat : 0
+          longitude = broadenResults[0] ? broadenResults[0].lon : 0
         }
       }
 

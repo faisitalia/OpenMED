@@ -9,6 +9,7 @@ interface FacilityAttrs {
   town: string
   state: string
   county: string
+  country: string
   postalcode: number
 }
 
@@ -33,7 +34,7 @@ interface FacilityDoc extends mongoose.Document {
   location: object
 }
 
-const FacilitySchema = new mongoose.Schema(
+const facilitySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -88,12 +89,12 @@ const FacilitySchema = new mongoose.Schema(
   }
 )
 
-FacilitySchema.index({ location: '2dsphere' })
+facilitySchema.index({ location: '2dsphere' })
 
-FacilitySchema.statics.build = (attrs: FacilityAttrs) => {
+facilitySchema.statics.build = (attrs: FacilityAttrs) => {
   return new Facility(attrs)
 }
 
-const Facility = mongoose.model<FacilityDoc, FacilityModel>('Facility', FacilitySchema)
+const Facility = mongoose.model<FacilityDoc, FacilityModel>('Facility', facilitySchema)
 
-export { Facility, FacilityDoc }
+export { Facility, FacilityAttrs, FacilityDoc }

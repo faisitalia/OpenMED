@@ -3,7 +3,8 @@ import { body } from 'express-validator'
 import jwt from 'jsonwebtoken'
 import { validateRequest, BadRequestError } from '../../common'
 
-import { User } from '../../models/user'
+import { User, Role } from '../../models/user'
+import { Person } from '../../models/person'
 
 const router = express.Router()
 
@@ -49,10 +50,13 @@ router.post(
       .trim()
       .isLength({ min: 4, max: 20 })
       .withMessage('Password must be between 4 and 20 characters'),
+    body('firstname').trim().not().isEmpty().isAlpha().withMessage('Firstname is required'),
+    body('lastname').trim().not().isEmpty().isAlpha().withMessage('Lastname is required'),
+    body('birthdate').isISO8601().toDate().withMessage('Birthdate is required'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body
+    const { email, password, firstname, lastname, birthdate } = req.body
 
     const existingUser = await User.findOne({ email })
 
@@ -60,7 +64,14 @@ router.post(
       throw new BadRequestError('Email in use')
     }
 
-    const user = User.build({ email, password })
+    // TODO transaction
+
+    // create the person
+    const personDoc = Person.build({ firstname, lastname, birthdate })
+    const person = await personDoc.save()
+
+    // create the user
+    const user = User.build({ email, password, role: Role.USER, personId: person.id })
     await user.save()
 
     // Generate JWT
