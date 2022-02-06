@@ -50,7 +50,9 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body
+    const { email, password, redirectURI } = req.body
+
+    const redirect = decodeURI(redirectURI)
 
     const existingUser = await User.findOne({ email })
     if (!existingUser) {
@@ -63,20 +65,24 @@ router.post(
     }
 
     // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: existingUser.id,
-        email: existingUser.email,
-      },
-      process.env.JWT_KEY!
-    )
+    // const userJwt = jwt.sign(
+    //   {
+    //     id: existingUser.id,
+    //     email: existingUser.email,
+    //   },
+    //   process.env.JWT_KEY!
+    // )
 
     // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    }
+    // req.session = {
+    //   jwt: userJwt,
+    // }
 
-    res.status(200).send(existingUser)
+    if (!redirect || redirect === '' || redirect === 'null') {
+      res.status(200).send(existingUser)
+    } else {
+      res.redirect(redirect)
+    }
   }
 )
 

@@ -3,7 +3,7 @@ import request from 'supertest'
 import { app } from '../../../app'
 import { Role } from '../../../models/user'
 
-it('returns a 201 on successful signup', async () => {
+it.only('returns a 201 on successful signup', async () => {
   return request(app)
     .post('/v1/users/signup')
     .send({

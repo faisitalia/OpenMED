@@ -1,6 +1,9 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-import jwt from 'jsonwebtoken'
+import { kcAdminClient } from './config/keycloak'
+
+// import jwt from 'jsonwebtoken'
+
 import { validateRequest, BadRequestError } from '../../common'
 
 import { User, Role } from '../../models/user'
@@ -75,18 +78,27 @@ router.post(
     await user.save()
 
     // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      process.env.JWT_KEY!
-    )
+    // const userJwt = jwt.sign(
+    //   {
+    //     id: user.id,
+    //     email: user.email,
+    //   },
+    //   process.env.JWT_KEY!
+    // )
 
     // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    }
+    // req.session = {
+    //   jwt: userJwt,
+    // }
+    // This operation will now be performed in 'another-realm' if the user has access.
+    const { id: newUserId } = await kcAdminClient.users.create({
+      username: 'username',
+      email,
+    })
+
+    Credentials credentials = new Credentials()
+
+    console.log('userId', newUserId)
 
     res.status(201).send(user)
   }

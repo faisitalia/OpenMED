@@ -1,8 +1,13 @@
 require('dotenv').config()
 
 import mongoose from 'mongoose'
+import https from 'https'
+import fs from 'fs-extra'
 
 import { app, PORT } from './app'
+
+const key = fs.readFileSync('./key.pem')
+const cert = fs.readFileSync('./cert.pem')
 
 const start = async () => {
   if (!process.env.JWT_KEY) {
@@ -19,8 +24,11 @@ const start = async () => {
     console.error(err)
   }
 
-  app.listen(PORT, () => {
-    console.log(`Listening on port ${PORT}`)
+  // app.listen(PORT, () => {
+  //   console.log(`Listening on port ${PORT}`)
+  // })
+  https.createServer({ key: key, cert: cert }, app).listen(PORT, () => {
+    console.log(`The API server is running at port ${PORT}`)
   })
 }
 

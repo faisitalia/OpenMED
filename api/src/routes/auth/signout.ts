@@ -16,7 +16,7 @@ const router = express.Router()
  *         description: Successfully signed out. The session ID is removed.
  */
 router.post('/v1/users/signout', (req, res) => {
-  req.session = null
+  // req.session = null
 
   res.send({})
 })
