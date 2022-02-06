@@ -1,3 +1,5 @@
+// https://github.com/keycloak/keycloak-nodejs-admin-client/blob/main/test/users.spec.ts
+
 import KcAdminClient from '@keycloak/keycloak-admin-client'
 import https from 'https'
 

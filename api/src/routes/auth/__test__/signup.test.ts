@@ -1,10 +1,12 @@
 import request from 'supertest'
+import { constants } from 'http2'
 
 import { app } from '../../../app'
 import { Role } from '../../../models/user'
+import { deleteUserById } from '../../../services/auth'
 
 it.only('returns a 201 on successful signup', async () => {
-  return request(app)
+  const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
       email: 'test@test.com',
@@ -13,8 +15,12 @@ it.only('returns a 201 on successful signup', async () => {
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(201)
-    .catch((err) => console.error(err))
+    .expect(constants.HTTP_STATUS_CREATED)
+
+  expect(user.id).toBeDefined()
+  expect(user.email).toStrictEqual('test@test.com')
+
+  await deleteUserById(user.id)
 })
 
 it('returns a 400 with an invalid email', async () => {

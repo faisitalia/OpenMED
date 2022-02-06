@@ -2,7 +2,7 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
   "javascript.suggestionActions.enabled": false,
-  "jest.autoEnable": false,
+  // "jest.autoRun": false,
   "html.validate.scripts": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
