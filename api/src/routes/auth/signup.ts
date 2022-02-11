@@ -62,11 +62,11 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password, firstname, lastname, birthdate } = req.body
 
-    const existingUser = await User.findOne({ email })
+    // const existingUser = await User.findOne({ email })
 
-    if (existingUser) {
-      throw new BadRequestError('Email in use')
-    }
+    // if (existingUser) {
+    //   throw new BadRequestError('Email in use')
+    // }
 
     // TODO transaction
 

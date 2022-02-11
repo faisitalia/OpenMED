@@ -38,6 +38,21 @@ async function getUserById(id: string) {
 
 /**
  *
+ * @param email
+ * @returns
+ */
+async function getUserByEmail(email: string) {
+  const user = await kcAdminClient.users.find({
+    email,
+  })
+
+  if (user && user[0]) return user[0]
+
+  return null
+}
+
+/**
+ *
  * @param userId
  * @returns
  */
@@ -47,4 +62,4 @@ async function deleteUserById(userId: string) {
   })
 }
 
-export { createUser, getUserById, deleteUserById }
+export { createUser, getUserById, deleteUserById, getUserByEmail }

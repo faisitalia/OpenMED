@@ -1,6 +1,7 @@
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
+import { constants } from 'http2'
 
 import { app } from '../app'
 
@@ -70,7 +71,7 @@ global.signin = async () => {
       lastname,
       birthdate,
     })
-    .expect(201)
+    .expect(constants.HTTP_STATUS_CREATED)
 
   const cookie = response.get('Set-Cookie')
 

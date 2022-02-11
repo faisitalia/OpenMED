@@ -5,6 +5,9 @@ import { validateRequest, BadRequestError } from '../../common'
 
 import { Password } from '../../services/password'
 import { User } from '../../models/user'
+import { getUserByEmail } from '../../services/auth'
+import { kcAdminClient } from '../../services/auth/config/keycloak'
+import { Credentials } from '@keycloak/keycloak-admin-client/lib/utils/auth'
 
 const router = express.Router()
 
@@ -50,19 +53,30 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, redirectURI } = req.body
+    const { email, password } = req.body
 
-    const redirect = decodeURI(redirectURI)
-
-    const existingUser = await User.findOne({ email })
+    const existingUser = await getUserByEmail(email)
     if (!existingUser) {
       throw new BadRequestError('Invalid credentials')
     }
 
-    const passwordsMatch = await Password.compare(existingUser.password, password)
-    if (!passwordsMatch) {
-      throw new BadRequestError('Invalid Credentials')
+    console.log(existingUser)
+
+    const credentials: Credentials = {
+      username: existingUser.email,
+      password: password,
+      grantType: 'password',
+      clientId: 'admin-cli',
     }
+
+    const login = await kcAdminClient.auth(credentials)
+
+    console.log('login', login)
+
+    // const passwordsMatch = await Password.compare(existingUser.password, password)
+    // if (!passwordsMatch) {
+    //   throw new BadRequestError('Invalid Credentials')
+    // }
 
     // Generate JWT
     // const userJwt = jwt.sign(
@@ -78,11 +92,7 @@ router.post(
     //   jwt: userJwt,
     // }
 
-    if (!redirect || redirect === '' || redirect === 'null') {
-      res.status(200).send(existingUser)
-    } else {
-      res.redirect(redirect)
-    }
+    res.status(200).send(existingUser)
   }
 )
 
