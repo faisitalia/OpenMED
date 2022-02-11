@@ -16,8 +16,8 @@ const router = express.Router()
  *         description: Successfully signed out. The session ID is removed.
  */
 router.post('/v1/users/signout', (req, res) => {
-  // req.session = null
-
+  // @TODO: In order to test it, currentUser has to be logged in
+  // await kcAdminClient.users.logout({id: currentUser.id!});
   res.send({})
 })
 
