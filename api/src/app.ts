@@ -42,12 +42,7 @@ app.use(
   })
 )
 
-app.use(
-  keycloak.middleware({
-    logout: '/logout',
-    admin: '/',
-  })
-)
+app.use(keycloak.middleware())
 
 app.use(currentUser)
 

@@ -206,7 +206,7 @@ router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: 
  *       200:
  *         description: List of the all facilities available in the database
  */
-router.get('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
+router.get('/v1/facilities', keycloak.protect(), async (req: Request, res: Response) => {
   const facilities = await getAllFacilities()
   res.send(facilities)
 })
