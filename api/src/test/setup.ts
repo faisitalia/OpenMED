@@ -4,6 +4,7 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../app'
+import { deleteUserById } from '../services/auth'
 
 declare global {
   namespace NodeJS {
@@ -19,6 +20,7 @@ declare global {
 }
 
 let mongo: any
+let user: any
 
 // person data
 const PERSON = {
@@ -43,6 +45,11 @@ beforeEach(async () => {
   for (let collection of collections) {
     await collection.deleteMany({})
   }
+
+  // delete users
+  if (user && user.id) {
+    await deleteUserById(user.id)
+  }
 })
 
 afterAll(async () => {
@@ -62,7 +69,7 @@ global.signin = async () => {
   const lastname = PERSON.lastname
   const birthdate = PERSON.birthdate
 
-  await request(app)
+  const signup = await request(app)
     .post('/v1/users/signup')
     .send({
       email,
@@ -72,6 +79,7 @@ global.signin = async () => {
       birthdate,
     })
     .expect(constants.HTTP_STATUS_CREATED)
+  user = signup.body.user
 
   const response = await request(app)
     .post('/v1/users/signin')
