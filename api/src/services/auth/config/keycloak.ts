@@ -1,7 +1,10 @@
 // https://github.com/keycloak/keycloak-nodejs-admin-client/blob/main/test/users.spec.ts
 
 import KcAdminClient from '@keycloak/keycloak-admin-client'
+import Keycloak from 'keycloak-connect'
 import https from 'https'
+
+import { MemoryStore } from '../../../session-store'
 
 https.globalAgent.options.rejectUnauthorized = false
 
@@ -31,4 +34,13 @@ kcAdminClient.setConfig({
   realmName: 'OpenMED',
 })
 
-export { kcAdminClient }
+// Provide the session store to the Keycloak so that sessions
+// can be invalidated from the Keycloak console callback.
+//
+// Additional configuration is read from keycloak.json file
+// installed from the Keycloak web console.
+const keycloak = new Keycloak({
+  store: MemoryStore.getInstance(),
+})
+
+export { kcAdminClient, keycloak }

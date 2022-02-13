@@ -11,9 +11,9 @@ describe('Facility integration test suite', function () {
     await Facility.insertMany(facilitiesData)
   })
 
-  it('should create a facility', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+  it.only('should create a facility', async () => {
+    // get the access token
+    const accessToken = await global.signin()
 
     // create the facility
     const facilityToCreate = {
@@ -31,7 +31,7 @@ describe('Facility integration test suite', function () {
     // make the request to fetch all the facilities
     const { body: createdFacility } = await request(app)
       .post(`/v1/facilities`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(facility.toJSON())
       .expect(constants.HTTP_STATUS_CREATED)
 

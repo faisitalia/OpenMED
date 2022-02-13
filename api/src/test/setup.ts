@@ -62,7 +62,7 @@ global.signin = async () => {
   const lastname = PERSON.lastname
   const birthdate = PERSON.birthdate
 
-  const response = await request(app)
+  await request(app)
     .post('/v1/users/signup')
     .send({
       email,
@@ -73,7 +73,15 @@ global.signin = async () => {
     })
     .expect(constants.HTTP_STATUS_CREATED)
 
-  const cookie = response.get('Set-Cookie')
+  const response = await request(app)
+    .post('/v1/users/signin')
+    .send({
+      email,
+      password,
+    })
+    .expect(constants.HTTP_STATUS_OK)
 
-  return cookie
+  const token = response.body.access_token
+
+  return token
 }

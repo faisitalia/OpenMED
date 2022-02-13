@@ -10,6 +10,7 @@ import {
   getFacilityById,
   createFacility,
 } from '../../services/facility'
+import { keycloak } from '../../services/auth/config/keycloak'
 
 // create the express router
 const router = express.Router()
@@ -72,7 +73,7 @@ router.post(
     body('postalcode').trim().not().isEmpty().isNumeric().withMessage('Postal code is required'),
   ],
   validateRequest,
-  requireAuth,
+  keycloak.protect(),
   async (req: Request, res: Response) => {
     const { name, email, street, town, state, county, country, postalcode } = req.body
 

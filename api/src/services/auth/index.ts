@@ -3,6 +3,9 @@ import {
   TokenResponse,
   TokenResponseRaw,
 } from '@keycloak/keycloak-admin-client/lib/utils/auth'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import url from 'url'
+
 import { kcAdminClient } from '../../services/auth/config/keycloak'
 
 /**
@@ -68,43 +71,31 @@ async function deleteUserById(userId: string) {
   })
 }
 
-// export const getToken = async (settings: Settings): Promise<TokenResponse> => {
-//   // Construct URL
-//   const baseUrl = kcAdminClient.baseUrl
-//   const realmName = kcAdminClient.realmName
-//   const url = `${baseUrl}/realms/${realmName}/protocol/openid-connect/token`
+/**
+ *
+ * @param username
+ * @param password
+ * @returns
+ */
+async function getAuthToken(username: string, password: string): Promise<TokenResponse> {
+  // Construct URL
+  const baseUrl = kcAdminClient.baseUrl
+  const realmName = kcAdminClient.realmName
+  const uri = `${baseUrl}/realms/${realmName}/protocol/openid-connect/token`
 
-//   // Prepare credentials for openid-connect token request
-//   // ref: http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
-//   const credentials = settings.credentials || ({} as any)
-//   const payload = querystring.stringify({
-//     username: credentials.username,
-//     password: credentials.password,
-//     grant_type: credentials.grantType,
-//     client_id: credentials.clientId,
-//     totp: credentials.totp,
-//     ...(credentials.offlineToken ? { scope: 'offline_access' } : {}),
-//     ...(credentials.refreshToken
-//       ? {
-//           refresh_token: credentials.refreshToken,
-//           client_secret: credentials.clientSecret,
-//         }
-//       : {}),
-//   })
+  // Prepare credentials for openid-connect token request
+  // ref: http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
+  const payload = new url.URLSearchParams({
+    username: username,
+    password: password,
+    grant_type: 'password',
+    client_id: 'openmed-client',
+    client_secret: 'Z4Q7mLVDqcbcLXueTCGC1efoMSLAJVGv',
+  })
 
-//   const config: AxiosRequestConfig = {
-//     ...settings.requestConfig,
-//   }
+  const { data } = await axios.post(uri, payload.toString())
 
-//   if (credentials.clientSecret) {
-//     config.auth = {
-//       username: credentials.clientId,
-//       password: credentials.clientSecret,
-//     }
-//   }
+  return data
+}
 
-//   const { data } = await axios.post<any, AxiosResponse<TokenResponseRaw>(url, payload, config)
-//   return camelize(data)
-// }
-
-export { createUser, getUserById, deleteUserById, getUserByEmail }
+export { createUser, getUserById, deleteUserById, getUserByEmail, getAuthToken }

@@ -15,7 +15,7 @@ it('fails when a email that does not exist is supplied', async () => {
 })
 
 it('fails when an incorrect password is supplied', async () => {
-  await request(app)
+  const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
       email: 'test@test.com',
@@ -33,13 +33,15 @@ it('fails when an incorrect password is supplied', async () => {
       password: 'aslkdfjalskdfj',
     })
     .expect(400)
+
+  await deleteUserById(user.id)
 })
 
-it.only('responds with a cookie when given valid credentials', async () => {
+it('responds with a cookie when given valid credentials', async () => {
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
-      email: 'test@test.com',
+      email: 'test_signin@test.com',
       password: 'password',
       firstname: global.person.firstname,
       lastname: global.person.lastname,
@@ -50,14 +52,17 @@ it.only('responds with a cookie when given valid credentials', async () => {
   const response = await request(app)
     .post('/v1/users/signin')
     .send({
-      email: 'test@test.com',
+      email: 'test_signin@test.com',
       password: 'password',
     })
     .expect(constants.HTTP_STATUS_OK)
 
-  console.log(response)
-
-  // expect(response.get('Set-Cookie')).toBeDefined()
+  expect(response.get('Set-Cookie')).toBeDefined()
+  expect(response.body.access_token).toBeDefined()
+  expect(response.body.expires_in).toBeDefined()
+  expect(response.body.refresh_expires_in).toBeDefined()
+  expect(response.body.refresh_token).toBeDefined()
+  expect(response.body.session_state).toBeDefined()
 
   await deleteUserById(user.id)
 })
