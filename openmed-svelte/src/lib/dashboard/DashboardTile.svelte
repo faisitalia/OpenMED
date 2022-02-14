@@ -1,9 +1,12 @@
 <script>
+  import { createEventDispatcher } from "svelte";
   export let title;
   export let subtitle;
+
+  const dispatch = createEventDispatcher();
 </script>
 
-<div>
+<div on:click={() => dispatch('click')}>
   <h1>
     {title}
   </h1>
