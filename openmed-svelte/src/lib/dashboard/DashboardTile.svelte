@@ -4,11 +4,11 @@
 </script>
 
 <div>
-  <h3>
+  <h1>
     {title}
-  </h3>
-  <h4>
+  </h1>
+  <div>
     {subtitle}
-  </h4>
+  </div>
 </div>
 
