@@ -1,5 +1,5 @@
 <script context="module">
-  import { uri } from "$lib/consts";
+  import { visitsEndpoint, facilitiesEndpoint} from "$lib/uri.js";
   
   export async function load({ session, fetch }) {
     if(!session?.id) {
@@ -11,7 +11,7 @@
 
     // 1. Get Clinics' list
     const response = await fetch(
-        `${uri}/facilities`,
+        facilitiesEndpoint,
         { credentials: 'include' }
       );
 
@@ -81,7 +81,7 @@
 
     // 2. Submit the form
     const response = await fetch(
-      `${uri}/visits`,
+      `${visitsEndpoint}/visits`,
       {
         method: 'POST',
         credentials: 'include',

@@ -1,1 +1,0 @@
-export const uri = 'http://localhost:3001/v1';

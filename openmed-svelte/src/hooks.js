@@ -1,4 +1,4 @@
-import { uri } from "$lib/consts";
+import { usersEndpoint } from "$lib/uri.js";
 
 export async function getSession(event) {
   const cookie = event?.request?.headers?.get('cookie');
@@ -7,7 +7,7 @@ export async function getSession(event) {
 
   // If there's a cookie, then we can fetch the session
   const response = await fetch(
-    `${uri}/users/currentuser`,
+    `${usersEndpoint}/currentuser`,
     {
       method: 'GET',
       headers: {
