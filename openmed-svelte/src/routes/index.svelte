@@ -16,12 +16,14 @@
 </script>
 
 <script>
+  import { goto } from "$app/navigation";
   import DashboardTile from "$lib/dashboard/DashboardTile.svelte";
-  // export let email;
-  // export let id;
-  // export let iat;
+
+  export let email;
+  export let id;
+  export let iat;
   export let name = "Fabrizio";
-  export let roles = ["user"];
+  export let roles = ["doctor"];
 
   $: isDoctor = roles.includes("doctor");
   $: isPatient = roles.includes("user");
@@ -50,6 +52,7 @@
   <DashboardTile
     title="Crea Appuntamento"
     subtitle="Crea e gestisci nuovi appuntamenti"
+    on:click={() => goto('/appointment')}
   />
 {/if}
 {#if isPatient}
