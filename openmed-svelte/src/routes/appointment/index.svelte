@@ -39,6 +39,7 @@
       props: {
         'clinics': clinicsList,
         'patients': patientsList,
+        'doctorId': session.id,
       }
     };
   };
@@ -51,6 +52,7 @@
 
   export let patients;
   export let clinics;
+  export let doctorId;
 
   let choosenClinic;
   let choosenDate = toISOStringDateOnly(new Date());
@@ -73,7 +75,38 @@
 
   async function submit() {
     // try and submit a new appointment
+
+    // 1. Validate the form
+    // TODO
+
+    // 2. Submit the form
+    const response = await fetch(
+      `${uri}/visits`,
+      {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "facilityId": choosenClinic.id,
+          "patientId": choosenPatient.id,
+          "doctorId": doctorId,
+          "caregiverId": null,  // TODO understand why is this here?
+          "slot": null,  // TODO understand this parameter
+        })
+      }
+    );
+
+    if (!response.ok) {
+      // mhh... we should handle this case properly
+    }
+
+    // Everything went right, therefore redirect to the confirm page
+    goto('/appointment/ok');
   }
+
+  
 </script>
 
 
@@ -136,7 +169,7 @@
       {/each}
     </select>
   </fieldset>
-  <button type="submit">
+  <button type="submit" on:submit={submit}>
     Crea appuntamento
   </button>
 </form>
