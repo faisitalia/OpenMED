@@ -1,10 +1,7 @@
 <script context="module">
   import { uri } from "$lib/consts";
-  // import {  } from "";
-
+  
   export async function load({ session, fetch }) {
-    console.log(session);
-
     if(!session?.id) {
       return {
         status: 302,
