@@ -15,6 +15,7 @@
 <script>
   import { goto } from "$app/navigation";
   import { session } from "$app/stores";
+  import { uri } from "$lib/consts";
 
   let hasStarted = false;
   let email;
@@ -25,7 +26,7 @@
 
   async function getUserData() {
     const response = await fetch(
-      'http://localhost:3001/v1/users/currentuser',
+      `${uri}/users/currentuser`,
       { credentials: 'include' }
     );
     // If something goes wrong with this call, we can't authenticate
@@ -41,7 +42,7 @@
 
   async function logIn() {
     const response = await fetch(
-      'http://localhost:3001/v1/users/signin',
+      `${uri}/v1/users/signin`,
       {
         method: 'POST',
         credentials: 'include',
