@@ -33,7 +33,6 @@
 </svelte:head>
 
 
-<!-- This is just a trial, PLEASE DO NOT TAKE THIS AS SERIOUS CODE -->
 <h1>
   Ciao {name},
 </h1>

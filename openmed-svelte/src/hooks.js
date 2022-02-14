@@ -1,12 +1,13 @@
-export async function getSession(event) {
+import { uri } from "$lib/consts";
 
+export async function getSession(event) {
   const cookie = event?.request?.headers?.get('cookie');
   // If there's no cookies, no session can be restored
   if (!cookie) return null;
 
   // If there's a cookie, then we can fetch the session
   const response = await fetch(
-    'http://localhost:3001/v1/users/currentuser',
+    `${uri}/users/currentuser`,
     {
       method: 'GET',
       headers: {
@@ -19,7 +20,7 @@ export async function getSession(event) {
   if (!response.ok) return null;
 
   // If we got a proper response body, we extract its currentUser prop
-  const responseBody = await response.json()
+  const responseBody = await response.json();
   const currentUser = responseBody.currentUser;
   // If it's null, then the server doesn't recognize this user
   if (!currentUser) return null;
