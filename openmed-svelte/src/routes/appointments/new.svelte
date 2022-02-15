@@ -1,5 +1,5 @@
 <script context="module">
-  import { facilitiesEndpoint} from "$lib/uri.js";
+  import { facilitiesEndpoint } from "$lib/uri.js";
   
   export async function load({ session, fetch }) {
     if(!session?.id) {
@@ -62,7 +62,7 @@
     "00","05","10","15","20","25","30","35","40","45","50","55"
   ];
   const durations = [
-    10,20,30,40,50,60,70,80,90
+    10,20,30,40,50,60,75,90
   ];
   const today = yyyyMMdd(new Date());
   const choices = {
@@ -98,7 +98,17 @@
         message: `^Non puoi prenotare appuntamenti per il passato`
       }
     },
+    hour: {
+      inclusion: { hours }
+    },
+    minute: {
+      inclusion: { minutes }
+    },
+    duration: {
+      inclusion: { durations }
+    }
   }
+  validate.validators.inclusion.message = `^Hai selezionato un valore non presente tra quelli disponibili`;
   // Set-up the validator to gracefully accept DateTime objects
   validate.extend(
     validate.validators.datetime, {
@@ -112,16 +122,14 @@
         // Here, `value` a UNIX timestamp
         const d = new Date(value);
         // This lib requires us to return a user-friendly date, given the UNIX timestamp
-        return d.toString();
+        return d.toString();  // This is sufficient
       }
     }
   );
-  let errors = undefined;
-  let asyncErrors = undefined;
+  let errors;
+  let asyncErrors;
   
   async function submit() {
-    // try and submit a new appointment
-
     // 1. Validate the form
     const selected = {
       clinic: choices.clinic,
@@ -140,7 +148,7 @@
 
     // 3. Submit the form
     const response = await fetch(
-      `${visitsEndpoint}`,
+      visitsEndpoint,
       {
         method: 'POST',
         credentials: 'include',
@@ -148,8 +156,8 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          "facilityId": "test", // TODO use this: choosenClinic.id,
-          "patientId": doctorId, // TODO use this: choosenPatient.id,
+          "facilityId": "test", // TODO this is a mock, use this whenever possible: choosenClinic.id,
+          "patientId": doctorId, // TODO this is a mock, use this whenever possible: choosenPatient.id,
           "doctorId": doctorId,  // WARN: we assume the user is a doctor
           "caregiverId": doctorId,  // TODO: this is a mock, this should be patched later on
           "slot": iso8601Slot,
@@ -159,6 +167,7 @@
 
     if (!response.ok) {
       asyncErrors = await response.json();
+      console.log(asyncErrors);
       return;
     }
 
