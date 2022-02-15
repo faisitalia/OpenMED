@@ -1,5 +1,5 @@
 <script context="module">
-  import { visitsEndpoint, facilitiesEndpoint} from "$lib/uri.js";
+  import { facilitiesEndpoint} from "$lib/uri.js";
   
   export async function load({ session, fetch }) {
     if(!session?.id) {
@@ -46,9 +46,9 @@
 </script>
 
 <script>
+  import { visitsEndpoint } from "$lib/uri";
   import { toISOStringDateOnly } from "$lib/utils";
   import { goto } from "$app/navigation";
-  import { each } from "svelte/internal";
 
   export let patients;
   export let clinics;
