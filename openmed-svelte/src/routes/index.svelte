@@ -52,7 +52,7 @@
     on:click={() => goto('/appointments/new')}
   />
 {/if}
-{#if isPatient}
+{#if isPatient || isDoctor}
   <DashboardTile
     title="Lista Appuntamenti"
     subtitle="Visualizza i tuoi appuntamenti"
