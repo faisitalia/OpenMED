@@ -10,8 +10,8 @@
   <h1>
     {title}
   </h1>
-  <div>
+  <p>
     {subtitle}
-  </div>
+  </p>
 </div>
 

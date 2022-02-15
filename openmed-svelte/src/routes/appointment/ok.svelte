@@ -3,7 +3,7 @@
 </script>
 
 <h1>Appuntamento registrato correttamente</h1>
-<sub>Continua la navigazione</sub>
+<p>Continua la navigazione</p>
 
 <button on:click={() => goto('/')}>Torna in Home</button>
 

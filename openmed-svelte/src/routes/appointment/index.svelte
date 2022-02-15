@@ -100,6 +100,7 @@
 
     if (!response.ok) {
       // mhh... we should handle this case properly
+      return;
     }
 
     // Everything went right, therefore redirect to the confirm page
@@ -116,7 +117,7 @@
 </svelte:head>
 
 <h1>Nuovo Appuntamento</h1>
-<sub>Compila tutti i campi.</sub>
+<p>Compila tutti i campi.</p>
 
 <form on:submit|preventDefault="{submit}" id="newAppointment">
   <fieldset>
