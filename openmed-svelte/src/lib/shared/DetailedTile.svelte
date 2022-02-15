@@ -1,5 +1,4 @@
 <script>
-  import { createEventDispatcher } from "svelte";
   export let title;
   export let subtitle;
   export let iconImgPath;
@@ -11,7 +10,7 @@
   }
 </script>
 
-<div id="container" on:click="{() => toggle()}">
+<div id="container" on:click="{toggle}">
   <img src="{iconImgPath}" alt="{iconImgAlt}">
   <h2>{title}</h2>
   {#if !isExpanded}
