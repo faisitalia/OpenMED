@@ -1,4 +1,4 @@
-export function toISOStringDateOnly(date) {
+export function yyyyMMdd(date) {
   let month = '' + (date.getMonth() + 1);
   let day = '' + date.getDate();
   let year = date.getFullYear();

@@ -46,45 +46,97 @@
 </script>
 
 <script>
+  import { validate } from "validate.js";
   import { visitsEndpoint } from "$lib/uri";
-  import { toISOStringDateOnly } from "$lib/utils";
+  import { yyyyMMdd } from "$lib/utils";
   import { goto } from "$app/navigation";
 
   export let patients;
   export let clinics;
   export let doctorId;
 
-  let choosenClinic;
-  let choosenDate = toISOStringDateOnly(new Date());
-  let choosenHour, choosenMinute;
-  let choosenDuration;
-  let choosenPatient;
-  let hours = [
+  const hours = [
     "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20"
   ];
-  let minutes = [
+  const minutes = [
     "00","05","10","15","20","25","30","35","40","45","50","55"
   ];
-  let durations = [
+  const durations = [
     10,20,30,40,50,60,70,80,90
   ];
-  
-  const maxDays = 365*3;
-  const msInDay = 86400000;
-  let maxDate = new Date(new Date().getTime() + msInDay*maxDays) ; // TODO
+  const today = yyyyMMdd(new Date());
+  const choices = {
+    date: today,
+    hour: hours[0],
+    minute: minutes[0],
+    duration: durations[0],    
+    clinic: undefined,
+    patient: undefined,
+  };
+  $: startDate = new Date(choices.date+'T'+choices.hour+':'+choices.minute+':00.000');
 
+
+  // Initialize constraints
+  const now = new Date(Date.now()).toISOString();
+  // Set-up the validator constraints
+  const formConstraints = {
+    clinic: {
+      presence: {
+        allowEmpty: false,
+        message: `^Devi selezionare un ambulatorio, oppure scegli "Virtuale"`
+      }
+    },
+    patient: {
+      presence: {
+        allowEmpty: false,
+        message: `^Devi selezionare un paziente da visitare`
+      }
+    },
+    startDate: {
+      datetime: {
+        earliest: now,
+        message: `^Non puoi prenotare appuntamenti per il passato`
+      }
+    },
+  }
+  // Set-up the validator to gracefully accept DateTime objects
+  validate.extend(
+    validate.validators.datetime, {
+      parse: (value, options) => {
+        // Here, `value` is the ISO6801 date format
+        const d = new Date(value);
+        // This lib requires us to return UNIX timestamp for that date, or NaN if invalid
+        return d.getTime();  // This will do
+      },
+      format: (value, options) => {
+        // Here, `value` a UNIX timestamp
+        const d = new Date(value);
+        // This lib requires us to return a user-friendly date, given the UNIX timestamp
+        return d.toString();
+      }
+    }
+  );
+  
   async function submit() {
     // try and submit a new appointment
-    
-    // 0. Elaborate the chosen datetime interval
-    const startDate = new Date(choosenDate+'T'+choosenHour+':'+choosenMinute+':00.000');
-    const endDate = new Date(startDate.getTime() + 1000*60*choosenDuration);
-    const iso8601Slot = startDate.toISOString()+'/'+endDate.toISOString();
 
     // 1. Validate the form
-    // TODO
+    const selected = {
+      clinic: choices.clinic,
+      patient: choices.patient,
+      startDate: startDate,
+    };
+    const errors = validate(selected, formConstraints);
+    if(errors) {
+      console.log(errors);
+      return;
+    }
 
-    // 2. Submit the form
+    // 2. Elaborate the chosen datetime interval
+    const endDate = new Date(startDate.getTime() + 1000*60*choices.duration);
+    const iso8601Slot = startDate.toISOString()+'/'+endDate.toISOString();
+
+    // 3. Submit the form
     const response = await fetch(
       `${visitsEndpoint}`,
       {
@@ -112,8 +164,6 @@
     // Everything went right, therefore redirect to the confirm page
     goto('/appointments/ok');
   }
-
-  
 </script>
 
 
@@ -128,11 +178,12 @@
 <form on:submit|preventDefault="{submit}" id="newAppointment">
   <fieldset>
     <label for="clinic">Seleziona Ambulatorio</label>
-    <select bind:value={choosenClinic} name="Ambulatorio" id="clinic" required>
+    <select bind:value={choices.clinic} name="Ambulatorio" id="clinic" required>
+      <option value="Virtuale">Virtuale</option>
       {#each clinics as c}
         <option value={c}>{c?.name}</option>
       {:else}
-        <option value="noClinic" disabled=true>Nessuna clinica disponibile</option>
+        <option value=null disabled=true>Nessuna clinica disponibile</option>
       {/each}
     </select>
   </fieldset>
@@ -140,19 +191,18 @@
     <label for="date">Seleziona una data</label>
     <input
       type="date" name="Data" id="date"
-      bind:value={choosenDate}
-      min={new Date()} max={maxDate}
+      bind:value={choices.date}
       required
     />
   </fieldset>
   <fieldset>
     <label for="date">Seleziona orario</label>
-    <select bind:value={choosenHour} name="Ore" id="hours">
+    <select bind:value={choices.hour} name="Ore" id="hours">
       {#each hours as h}
         <option value={h}>{h}</option>
       {/each}
     </select>
-    <select bind:value={choosenMinute} name="Minuti" id="minutes">
+    <select bind:value={choices.minute} name="Minuti" id="minutes">
       {#each minutes as m}
         <option value={m}>{m}</option>
       {/each}
@@ -160,7 +210,7 @@
   </fieldset>
   <fieldset>
     <label for="duration">Durata Visita</label>
-    <select bind:value={choosenDuration} name="Durata" id="duration">
+    <select bind:value={choices.duration} name="Durata" id="duration">
       {#each durations as d}
         <option value={d}>{d}</option>
       {/each}
@@ -168,11 +218,11 @@
   </fieldset>
   <fieldset>
     <label for="patient">Seleziona Paziente</label>
-    <select bind:value={choosenPatient} name="Paziente" id="patient">
+    <select bind:value={choices.patient} name="Paziente" id="patient">
       {#each patients as p}
         <option value={p}>{p?.name}</option>
       {:else}
-        <option value="noPatient" disabled=true>Nessun Paziente disponibile</option>
+        <option value=null disabled=true>Nessun Paziente disponibile</option>
       {/each}
     </select>
   </fieldset>
