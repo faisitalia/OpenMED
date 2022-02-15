@@ -7,11 +7,7 @@
       };
     }
 
-    return {
-      props: {
-        ...session
-      }
-    };
+    return { };
   };
 </script>
 
