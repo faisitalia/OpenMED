@@ -68,7 +68,7 @@
 
 
 <svelte:head>
-  <title>OpenMed Log-in</title>
+  <title>Log-in - OpenMed</title>
 </svelte:head>
 
 {#if !hasStarted}

@@ -2,6 +2,10 @@
   import { goto } from "$app/navigation";
 </script>
 
+<svelte:head>
+  <title>Tutto fatto! - OpenMed</title>
+</svelte:head>
+
 <h1>Appuntamento registrato correttamente</h1>
 <p>Continua la navigazione</p>
 

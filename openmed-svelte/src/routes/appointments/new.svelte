@@ -81,19 +81,20 @@
 
     // 2. Submit the form
     const response = await fetch(
-      `${visitsEndpoint}/visits`,
+      `${visitsEndpoint}`,
       {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
+        // TODO better understand this API call
         body: JSON.stringify({
           "facilityId": choosenClinic.id,
           "patientId": choosenPatient.id,
           "doctorId": doctorId,
-          "caregiverId": null,  // TODO understand why is this here?
-          "slot": null,  // TODO understand this parameter
+          "caregiverId": null,
+          "slot": null,
         })
       }
     );
@@ -113,7 +114,7 @@
 
 
 <svelte:head>
-  <title>OpenMed Nuovo appuntamento</title>
+  <title>Nuova visita - OpenMed</title>
 </svelte:head>
 
 <h1>Nuovo Appuntamento</h1>

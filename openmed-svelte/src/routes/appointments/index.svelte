@@ -29,7 +29,7 @@
 
     const visitsList = await response.json();
     if(visitsList.length === 0) {
-      console.log("warn: there are no visits!");
+      console.log("warn: there are no appointments!");
 
       // TODO redirect to an error page
     }
@@ -61,6 +61,11 @@
 
   // TODO
 </script>
+
+
+<svelte:head>
+  <title>I tuoi appuntamenti - OpenMed</title>
+</svelte:head>
 
 <h1>Scegli il tuo appuntamento</h1>
 {#each visits as v}
