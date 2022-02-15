@@ -49,7 +49,7 @@
   import DetailedTile from "$lib/shared/DetailedTile.svelte";
 
   export let visits;
-  // export let userId;
+  export let userId;
 
   function callStart(visit) {
     //TODO

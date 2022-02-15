@@ -75,6 +75,11 @@
 
   async function submit() {
     // try and submit a new appointment
+    
+    // 0. Elaborate the chosen datetime interval
+    const startDate = new Date(choosenDate+'T'+choosenHour+':'+choosenMinute+':00.000');
+    const endDate = new Date(startDate.getTime() + 1000*60*choosenDuration);
+    const iso8601Slot = startDate.toISOString()+'/'+endDate.toISOString();
 
     // 1. Validate the form
     // TODO
@@ -88,19 +93,19 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        // TODO better understand this API call
         body: JSON.stringify({
-          "facilityId": choosenClinic.id,
-          "patientId": choosenPatient.id,
-          "doctorId": doctorId,
-          "caregiverId": null,
-          "slot": null,
+          "facilityId": "test", // TODO use this: choosenClinic.id,
+          "patientId": doctorId, // TODO use this: choosenPatient.id,
+          "doctorId": doctorId,  // WARN: we assume the user is a doctor
+          "caregiverId": doctorId,  // TODO: this is a mock, this should be patched later on
+          "slot": iso8601Slot,
         })
       }
     );
 
     if (!response.ok) {
-      // mhh... we should handle this case properly
+      console.log(await response.json());
+      // TODO show some sort of error message
       return;
     }
 
