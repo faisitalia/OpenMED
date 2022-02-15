@@ -17,7 +17,7 @@
 
 <script>
   import { goto } from "$app/navigation";
-  import DashboardTile from "$lib/dashboard/DashboardTile.svelte";
+  import DashboardTile from "$lib/shared/DashboardTile.svelte";
 
   export let name = "Fabrizio";
   export let roles = ["doctor"];
