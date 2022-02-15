@@ -56,6 +56,7 @@
   <DashboardTile
     title="Lista Appuntamenti"
     subtitle="Visualizza i tuoi appuntamenti"
+    on:click={() => goto('/appointments')}
   />
 {/if}
 {#if isPatient && !isDoctor}
