@@ -116,6 +116,8 @@
       }
     }
   );
+  let errors = undefined;
+  let asyncErrors = undefined;
   
   async function submit() {
     // try and submit a new appointment
@@ -126,7 +128,7 @@
       patient: choices.patient,
       startDate: startDate,
     };
-    const errors = validate(selected, formConstraints);
+    errors = validate(selected, formConstraints);
     if(errors) {
       console.log(errors);
       return;
@@ -156,8 +158,7 @@
     );
 
     if (!response.ok) {
-      console.log(await response.json());
-      // TODO show some sort of error message
+      asyncErrors = await response.json();
       return;
     }
 
@@ -187,6 +188,9 @@
       {/each}
     </select>
   </fieldset>
+  {#if errors?.clinic}
+    <div class="error">{errors.clinic[0]}</div>
+  {/if}
   <fieldset>
     <label for="date">Seleziona una data</label>
     <input
@@ -208,6 +212,9 @@
       {/each}
     </select>
   </fieldset>
+  {#if errors?.startDate}
+    <div class="error">{errors.startDate[0]}</div>
+  {/if}
   <fieldset>
     <label for="duration">Durata Visita</label>
     <select bind:value={choices.duration} name="Durata" id="duration">
@@ -226,7 +233,22 @@
       {/each}
     </select>
   </fieldset>
+  {#if errors?.patient}
+    <div class="error">{errors.patient[0]}</div>
+  {/if}
   <button type="submit" on:submit={submit}>
     Crea appuntamento
   </button>
 </form>
+{#if asyncErrors?.errors}
+  <div class="asyncErrors">Woops! Qualcosa è andato storto, riprova.</div>
+{/if}
+
+<style>
+  .error {
+    color: red;
+  }
+  .asyncErrors {
+    color: red;
+  }
+</style>
