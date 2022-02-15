@@ -13,16 +13,36 @@
 </script>
 
 <script>
+  import { validate } from "validate.js";
   import { goto } from "$app/navigation";
   import { session } from "$app/stores";
   import { usersEndpoint } from "$lib/uri.js";
 
   let hasStarted = false;
-  let email;
-  let password;
 
-  // TODO properly handle errors
-  // let errors;
+  // Initialize form values
+  const form = {
+    username: undefined,
+    password: undefined,
+  };
+
+  // Initialize form constraints
+  const formConstraints = {
+    username: {
+      presence: {
+        allowEmpty: false,
+        message: `^Devi inserire un username`
+      },
+      // We are NOT checking a proper email since this mode is deprecated
+    },
+    password: {
+      presence: {
+        allowEmpty: false,
+        message: `^Devi inserire la tua password`
+      }
+    }
+  }
+  let errors;
 
   async function getUserData() {
     const response = await fetch(
@@ -41,6 +61,14 @@
   }
 
   async function logIn() {
+    // Form validation
+    errors = validate(form, formConstraints);
+    if(errors) {
+      console.log(errors);
+      return;
+    }
+
+    // Log in request
     const response = await fetch(
       `${usersEndpoint}/signin`,
       {
@@ -49,12 +77,14 @@
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({
+          "email": form.username,
+          "password": form.password
+        })
       }
     );
     
     if (response.ok) {
-      await response.json(); // Do we actually need this? TODO
       $session = await getUserData();
       goto('/');
     } else {
@@ -78,28 +108,32 @@
     <!-- TODO: valutare se aggiungere delle label per accessibilità -->
     <fieldset>
       <input
-        bind:value={email}
+        bind:value={form.username}
         label="Username"
         placeholder="Username"
         id="ssn"
         name="ssn"
         type="text"
-        required
-        class="shadow-sm focus:ring-green-600 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
+        class="sh adow-sm focus:ring-green-600 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
       />
     </fieldset>
+    {#if errors?.username}
+      <div class="error">{errors.username[0]}</div>
+    {/if}
     <fieldset>
       <input
-        bind:value={password}
+        bind:value={form.password}
         label="Password"
         placeholder="Password"
         id="psw"
         name="psw"
         type="password"
-        required
         class="shadow-sm focus:ring-green-600 focus:border-green-500 block w-full sm:text-sm border-gray-300 rounded-md"
       />
     </fieldset>
+    {#if errors?.password}
+      <div class="error">{errors.password[0]}</div>
+    {/if}
     <button
       type="submit"
       class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
@@ -117,7 +151,8 @@
 <img src="sponsor2.svg" alt=""/> -->
 
 
-
 <style>
-  
+  .error {
+    color: red;
+  }
 </style>
