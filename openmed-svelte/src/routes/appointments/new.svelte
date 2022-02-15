@@ -104,7 +104,7 @@
     }
 
     // Everything went right, therefore redirect to the confirm page
-    goto('/appointment/ok');
+    goto('/appointments/ok');
   }
 
   

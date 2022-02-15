@@ -19,9 +19,6 @@
   import { goto } from "$app/navigation";
   import DashboardTile from "$lib/dashboard/DashboardTile.svelte";
 
-  export let email;
-  export let id;
-  export let iat;
   export let name = "Fabrizio";
   export let roles = ["doctor"];
 
@@ -52,7 +49,7 @@
   <DashboardTile
     title="Crea Appuntamento"
     subtitle="Crea e gestisci nuovi appuntamenti"
-    on:click={() => goto('/appointment')}
+    on:click={() => goto('/appointments/new')}
   />
 {/if}
 {#if isPatient}

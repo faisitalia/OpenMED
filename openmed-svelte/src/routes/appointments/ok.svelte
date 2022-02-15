@@ -7,4 +7,4 @@
 
 <button on:click={() => goto('/')}>Torna in Home</button>
 
-<div on:click={() => goto('/appointment')}>Crea Nuovo Appuntamento</div>
+<div on:click={() => goto('/appointments/new')}>Crea Nuovo Appuntamento</div>
