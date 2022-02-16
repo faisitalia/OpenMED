@@ -3,7 +3,7 @@
     // If the user is logged in already, let this component know
     return {
       props: {
-        session: session?.id
+        userId: session?.id
       }
     };
   }
@@ -11,10 +11,11 @@
 
 <script>
   import { goto } from "$app/navigation";
+  import { session } from "$app/stores";
   import { usersEndpoint } from "$lib/uri";
   import "../app.css";
 
-  export let session;
+  export let userId;
 
   async function logout() {
     await fetch(
@@ -24,11 +25,12 @@
         credentials: 'include'
       }
     );
-    goto('/');
+    $session = null;
+    goto('/login');
   }
 </script>
 
-{#if session}
+{#if userId}
   <p on:click|preventDefault={() => logout()}>Done? Logout here</p>
 {/if}
 <!-- TODO: add static assets -->
