@@ -63,6 +63,7 @@
 </script>
 
 
+
 <svelte:head>
   <title>I tuoi appuntamenti - OpenMed</title>
 </svelte:head>
@@ -108,3 +109,14 @@
 {:else}
   <p>Non hai appuntamenti da poter mostrare qui.</p>
 {/each}
+
+
+
+<style>
+  h1 {
+    margin: 1rem;
+  }
+  p {
+    margin: 1rem;
+  }
+</style>

@@ -65,5 +65,11 @@
 <!-- TODO add image -->
 
 <style>
-
+  h1 {
+    margin: 1rem;
+  }
+  h2 {
+    margin: 1rem;
+    margin-bottom: 2rem;
+  }
 </style>

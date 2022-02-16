@@ -255,9 +255,27 @@
 
 <style>
   .error {
+    padding: 1rem;
     color: red;
   }
   .asyncErrors {
+    padding: 1rem;
     color: red;
+  }
+  h1 {
+    margin: 1rem;
+  }
+  p {
+    margin: 1rem;
+    margin-bottom: 3rem;
+  }
+  fieldset {
+    margin: 1rem;
+  }
+  button {
+    padding: 1rem;
+    margin: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 </style>

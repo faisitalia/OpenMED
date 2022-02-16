@@ -102,7 +102,7 @@
 </svelte:head>
 
 {#if !hasStarted}
-  <button on:click={() => hasStarted=true}>Inizia</button>
+  <button on:click={() => hasStarted=true} class="start">Inizia</button>
 {:else}
   <form on:submit|preventDefault={logIn} id="signin">
     <!-- TODO: valutare se aggiungere delle label per accessibilità -->
@@ -136,7 +136,7 @@
     {/if}
     <button
       type="submit"
-      class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
     >
       Accedi
     </button>
@@ -154,5 +154,17 @@
 <style>
   .error {
     color: red;
+  }
+  .start {
+    margin: 1rem;
+  }
+  fieldset {
+    margin: 1rem;
+    padding: 0.5rem;
+    max-width: 35%;
+    border: 1px dashed black;
+  }
+  .submit {
+    margin: 1rem;
   }
 </style>
