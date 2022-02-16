@@ -10,6 +10,7 @@
 </script>
 
 <script>
+  import { goto } from "$app/navigation";
   import { usersEndpoint } from "$lib/uri";
   import "../app.css";
 
@@ -23,11 +24,12 @@
         credentials: 'include'
       }
     );
+    goto('/');
   }
 </script>
 
 {#if session}
-  <p on:click|preventDefault={logout}>Done? Logout here</p>
+  <p on:click|preventDefault={() => logout()}>Done? Logout here</p>
 {/if}
 <!-- TODO: add static assets -->
 <!-- <img src="./logo/openmed-logo.svg" alt=""/> -->
@@ -35,3 +37,10 @@
 <slot />
 
 <!-- TODO: add static footer -->
+
+<style>
+  p {
+    text-align: end;
+    padding: 0.75rem;
+  }
+</style>
