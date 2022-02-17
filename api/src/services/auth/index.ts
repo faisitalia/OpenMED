@@ -1,3 +1,4 @@
+import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
 import {
   Settings,
   TokenResponse,
@@ -82,15 +83,15 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
   const baseUrl = kcAdminClient.baseUrl
   const realmName = kcAdminClient.realmName
   const uri = `${baseUrl}/realms/${realmName}/protocol/openid-connect/token`
-
+  console.log(uri)
   // Prepare credentials for openid-connect token request
   // ref: http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
   const payload = new url.URLSearchParams({
     username: username,
     password: password,
     grant_type: 'password',
-    client_id: 'openmed-client',
-    client_secret: 'Z4Q7mLVDqcbcLXueTCGC1efoMSLAJVGv',
+    client_id: process.env.OPENID_CLIENT_ID,
+    client_secret: process.env.OPENID_CLIENT_SECRET,
   })
 
   const { data } = await axios.post(uri, payload.toString())
@@ -98,4 +99,34 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
   return data
 }
 
-export { createUser, getUserById, deleteUserById, getUserByEmail, getAuthToken }
+/**
+ *
+ * @param roleName
+ * @param user
+ */
+async function assignRoleToUser(roleName: string, user: UserRepresentation) {
+  const role = await kcAdminClient.roles.findOneByName({
+    name: roleName,
+  })
+
+  if (!role) throw new Error(`The role ${roleName} is not available!`)
+
+  const clientId = process.env.OPENID_CLIENT_ID!
+  const clients = await kcAdminClient.clients.find({ clientId })
+
+  const response = await kcAdminClient.users.addClientRoleMappings({
+    id: user.id!,
+    clientUniqueId: clients[0].id!,
+
+    // at least id and name should appear
+    roles: [
+      {
+        id: role.id!,
+        name: role.name!,
+      },
+    ],
+  })
+  console.log(response)
+}
+
+export { createUser, getUserById, deleteUserById, getUserByEmail, getAuthToken, assignRoleToUser }

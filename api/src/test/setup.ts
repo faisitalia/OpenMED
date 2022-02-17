@@ -4,7 +4,7 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../app'
-import { deleteUserById } from '../services/auth'
+import { assignRoleToUser, deleteUserById } from '../services/auth'
 
 declare global {
   namespace NodeJS {
@@ -30,7 +30,8 @@ const PERSON = {
 }
 
 beforeAll(async () => {
-  process.env.JWT_KEY = 'asdfasdf'
+  process.env.OPENID_CLIENT_ID = 'openmed-client'
+  process.env.OPENID_CLIENT_SECRET = '2Vvjjr5V5B4MSxlUTNHegnRk8TrNCVmT'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()
@@ -79,7 +80,11 @@ global.signin = async () => {
       birthdate,
     })
     .expect(constants.HTTP_STATUS_CREATED)
-  user = signup.body.user
+
+  user = signup.body
+
+  // add the "user" role to the test user
+  // await assignRoleToUser('user', user)
 
   const response = await request(app)
     .post('/v1/users/signin')
