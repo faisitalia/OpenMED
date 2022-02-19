@@ -1,13 +1,8 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-import jwt from 'jsonwebtoken'
-import { validateRequest, BadRequestError } from '../../common'
 
-import { Password } from '../../services/password'
-import { User } from '../../models/user'
+import { validateRequest, BadRequestError } from '../../common'
 import { getAuthToken, getUserByEmail } from '../../services/auth'
-import { kcAdminClient } from '../../services/auth/config/keycloak'
-import { Credentials } from '@keycloak/keycloak-admin-client/lib/utils/auth'
 
 const router = express.Router()
 
@@ -60,7 +55,7 @@ router.post(
       throw new BadRequestError('Invalid credentials')
     }
 
-    const login = await getAuthToken(existingUser.email!, password)
+    const login = await getAuthToken(existingUser.username!, password)
 
     // Store it on session object
     // req.session = {

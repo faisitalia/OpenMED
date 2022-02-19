@@ -30,8 +30,8 @@ const PERSON = {
 }
 
 beforeAll(async () => {
-  process.env.OPENID_CLIENT_ID = 'openmed-client'
-  process.env.OPENID_CLIENT_SECRET = '2Vvjjr5V5B4MSxlUTNHegnRk8TrNCVmT'
+  process.env.OPENID_CLIENT_ID = 'api-server'
+  process.env.OPENID_CLIENT_SECRET = 'FzTvkn9c6MmIPxO7p1j21nBUp3Ostx6X'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()

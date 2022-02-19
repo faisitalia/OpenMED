@@ -6,8 +6,8 @@ import {
 } from '@keycloak/keycloak-admin-client/lib/utils/auth'
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
 import url from 'url'
-
-import { kcAdminClient } from '../../services/auth/config/keycloak'
+import { KeycloakAdminClientImpl } from './config/keycloakAdminClient'
+import { getOpenIDConnectURI } from './config/openid-connect'
 
 /**
  *
@@ -17,6 +17,8 @@ import { kcAdminClient } from '../../services/auth/config/keycloak'
  * @returns
  */
 async function createUser(username: string, email: string, password: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+
   const { id: userId } = await kcAdminClient.users.create({
     username,
     email,
@@ -41,6 +43,7 @@ async function createUser(username: string, email: string, password: string) {
  * @returns
  */
 async function getUserById(id: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   return kcAdminClient.users.findOne({
     id,
   })
@@ -52,6 +55,7 @@ async function getUserById(id: string) {
  * @returns
  */
 async function getUserByEmail(email: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const user = await kcAdminClient.users.find({
     email,
   })
@@ -67,6 +71,7 @@ async function getUserByEmail(email: string) {
  * @returns
  */
 async function deleteUserById(userId: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   return kcAdminClient.users.del({
     id: userId!,
   })
@@ -80,10 +85,9 @@ async function deleteUserById(userId: string) {
  */
 async function getAuthToken(username: string, password: string): Promise<TokenResponse> {
   // Construct URL
-  const baseUrl = kcAdminClient.baseUrl
-  const realmName = kcAdminClient.realmName
-  const uri = `${baseUrl}/realms/${realmName}/protocol/openid-connect/token`
-  console.log(uri)
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+  const openidURI = getOpenIDConnectURI(kcAdminClient)
+
   // Prepare credentials for openid-connect token request
   // ref: http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
   const payload = new url.URLSearchParams({
@@ -94,8 +98,25 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
     client_secret: process.env.OPENID_CLIENT_SECRET,
   })
 
-  const { data } = await axios.post(uri, payload.toString())
+  const { data } = await axios.post(`${openidURI}/token`, payload.toString())
 
+  return data
+}
+
+/**
+ *
+ * @param accessToken
+ * @returns
+ */
+async function getUserInfo(accessToken: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+  const openidURI = getOpenIDConnectURI(kcAdminClient)
+
+  const { data } = await axios.get(`${openidURI}/userinfo`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  })
   return data
 }
 
@@ -105,6 +126,7 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
  * @param user
  */
 async function assignRoleToUser(roleName: string, user: UserRepresentation) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const role = await kcAdminClient.roles.findOneByName({
     name: roleName,
   })
@@ -129,4 +151,12 @@ async function assignRoleToUser(roleName: string, user: UserRepresentation) {
   console.log(response)
 }
 
-export { createUser, getUserById, deleteUserById, getUserByEmail, getAuthToken, assignRoleToUser }
+export {
+  createUser,
+  getUserById,
+  deleteUserById,
+  getUserByEmail,
+  getAuthToken,
+  assignRoleToUser,
+  getUserInfo,
+}

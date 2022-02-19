@@ -18,7 +18,7 @@ import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
 
 import swaggerDocs from './utils/swagger'
-import { keycloak } from './services/auth/config/keycloak'
+import { KcConnect } from './services/auth/config/keycloakConnect'
 
 // set the express listening port
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
@@ -42,6 +42,8 @@ app.use(
   })
 )
 
+// set up keycloak
+const keycloak = KcConnect.getInstance()
 app.use(keycloak.middleware())
 
 app.use(currentUser)

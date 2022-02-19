@@ -5,13 +5,13 @@ import { app } from '../../../app'
 import facilitiesData from './facilities.json'
 import { Facility } from '../../../models/facility'
 
-describe('Facility integration test suite', function () {
+describe('Facility integration test suite', () => {
   beforeEach(async () => {
     // create and populate facility collection
     await Facility.insertMany(facilitiesData)
   })
 
-  it.only('should create a facility', async () => {
+  it('should create a facility', async () => {
     // get the access token
     const accessToken = await global.signin()
 
@@ -51,16 +51,16 @@ describe('Facility integration test suite', function () {
     expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
   })
 
-  it('should fetch all the facilities', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+  it.only('should fetch all the facilities', async () => {
+    // get the access token
+    const accessToken = await global.signin()
 
     // make the request to fetch all the facilities
     const { body: fetchedFacilities } = await request(app)
       .get(`/v1/facilities`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(200)
+    // .expect(200)
 
     expect(fetchedFacilities.length).toBe(293)
   })

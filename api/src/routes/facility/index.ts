@@ -10,10 +10,12 @@ import {
   getFacilityById,
   createFacility,
 } from '../../services/facility'
-import { keycloak } from '../../services/auth/config/keycloak'
+import { KcConnect } from '../../services/auth/config/keycloakConnect'
 
 // create the express router
 const router = express.Router()
+
+const keycloak = KcConnect.getInstance()
 
 /**
  * @openapi
@@ -206,7 +208,8 @@ router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: 
  *       200:
  *         description: List of the all facilities available in the database
  */
-router.get('/v1/facilities', keycloak.protect(), async (req: Request, res: Response) => {
+router.get('/v1/facilities', async (req: Request, res: Response) => {
+  console.log(req)
   const facilities = await getAllFacilities()
   res.send(facilities)
 })
