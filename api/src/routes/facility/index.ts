@@ -10,12 +10,9 @@ import {
   getFacilityById,
   createFacility,
 } from '../../services/facility'
-import { KcConnect } from '../../services/auth/config/keycloakConnect'
 
 // create the express router
 const router = express.Router()
-
-const keycloak = KcConnect.getInstance()
 
 /**
  * @openapi
@@ -75,7 +72,7 @@ router.post(
     body('postalcode').trim().not().isEmpty().isNumeric().withMessage('Postal code is required'),
   ],
   validateRequest,
-  keycloak.protect(),
+  requireAuth,
   async (req: Request, res: Response) => {
     const { name, email, street, town, state, county, country, postalcode } = req.body
 
@@ -208,8 +205,7 @@ router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: 
  *       200:
  *         description: List of the all facilities available in the database
  */
-router.get('/v1/facilities', async (req: Request, res: Response) => {
-  console.log(req)
+router.get('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
   const facilities = await getAllFacilities()
   res.send(facilities)
 })

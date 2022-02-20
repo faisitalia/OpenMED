@@ -20,6 +20,8 @@ import { visitRouter } from './routes/visit'
 import swaggerDocs from './utils/swagger'
 import { KcConnect } from './services/auth/config/keycloakConnect'
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 // set the express listening port
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 
@@ -45,6 +47,10 @@ app.use(
 // set up keycloak
 const keycloak = KcConnect.getInstance()
 app.use(keycloak.middleware())
+
+app.get('/test', keycloak.protect(), function (req, res) {
+  console.log('TEST')
+})
 
 app.use(currentUser)
 

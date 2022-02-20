@@ -9,7 +9,7 @@ import { assignRoleToUser, deleteUserById } from '../services/auth'
 declare global {
   namespace NodeJS {
     interface Global {
-      signin(): Promise<string[]>
+      signin(): string
       person: {
         firstname: string
         lastname: string
@@ -21,6 +21,7 @@ declare global {
 
 let mongo: any
 let user: any
+let token: any
 
 // person data
 const PERSON = {
@@ -31,36 +32,14 @@ const PERSON = {
 
 beforeAll(async () => {
   process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = 'FzTvkn9c6MmIPxO7p1j21nBUp3Ostx6X'
+  process.env.OPENID_CLIENT_SECRET = 'CVXrccbQqxTdTJGKqa39kUyhEAlnHdd1'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()
   const mongoUri = await mongo.getUri()
 
   await mongoose.connect(mongoUri)
-})
 
-beforeEach(async () => {
-  const collections = await mongoose.connection.db.collections()
-
-  for (let collection of collections) {
-    await collection.deleteMany({})
-  }
-
-  // delete users
-  if (user && user.id) {
-    await deleteUserById(user.id)
-  }
-})
-
-afterAll(async () => {
-  await mongo.stop()
-  // await mongoose.connection.close();
-})
-
-global.person = PERSON
-
-global.signin = async () => {
   // user data
   const email = 'test@test.com'
   const password = 'password'
@@ -94,7 +73,34 @@ global.signin = async () => {
     })
     .expect(constants.HTTP_STATUS_OK)
 
-  const token = response.body.access_token
+  token = response.body.access_token
+})
 
+beforeEach(async () => {
+  const collections = await mongoose.connection.db.collections()
+
+  for (let collection of collections) {
+    await collection.deleteMany({})
+  }
+
+  // delete users
+  // if (user && user.id) {
+  //   await deleteUserById(user.id)
+  // }
+})
+
+afterAll(async () => {
+  await mongo.stop()
+  // await mongoose.connection.close();
+
+  // delete users
+  if (user && user.id) {
+    await deleteUserById(user.id)
+  }
+})
+
+global.person = PERSON
+
+global.signin = () => {
   return token
 }

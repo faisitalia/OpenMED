@@ -2,10 +2,9 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { Role } from '../../../models/user'
 import { deleteUserById } from '../../../services/auth'
 
-it('returns a constants.HTTP_STATUS_CREATED on successful signup', async () => {
+it('returns a 200 on successful signup', async () => {
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({

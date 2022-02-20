@@ -1,6 +1,5 @@
 import express from 'express'
 import { currentUser } from '../../common'
-import { getUserInfo } from '../../services/auth'
 
 const router = express.Router()
 
@@ -18,8 +17,6 @@ const router = express.Router()
  *         description: JSON Object with the logged user details
  */
 router.get('/v1/users/currentuser', currentUser, async (req, res) => {
-  console.log(req)
-  // const userInfo = await getUserInfo()
   res.send({ currentUser: req.currentUser || null })
 })
 

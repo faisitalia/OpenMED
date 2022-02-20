@@ -3,8 +3,12 @@
   "auth-server-url": "https://localhost:8443/auth/",
   "ssl-required": "external",
   "resource": "api-server",
-  "public-client": true,
   "verify-token-audience": true,
+  "credentials": {
+    "secret": "CVXrccbQqxTdTJGKqa39kUyhEAlnHdd1"
+  },
   "use-resource-role-mappings": true,
-  "confidential-port": 0
+  "confidential-port": 0,
+  "bearer-only": true,
+  "realm-public-key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmD4FnsTnl1H6VksziugShtcr5HWsQKcSkBa0PNXir3QoZXM1GVshsLjjlCeKf2xdFJ9nJrDvUu2CI6Y4U34eBbPpMsFJzotrQbQ7YGzFQR1fhlY8yNfLgxYXHeSHaOLUhd4+OPvBslXa9FLkAHX+GkyGUAEUrfVzYQ11kSVKWFgwWAvoa4lz2JJ7ik+RMAJSJ774jt+kwOmIBSLqM+Vs101IEN0WQ3Xa2kVbJrNIgs/ZKME57/bLMyc829g1A7h2yyBhxJ8xtggQ26L1E8R4rAOIXPWMluyq2vZj06FeA/BZvxVN3qLBSb9KNQhukwcAOFF+3U3iECJSFX4+SUfG8QIDAQAB"
 }

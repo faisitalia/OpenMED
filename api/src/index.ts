@@ -6,8 +6,8 @@ import fs from 'fs-extra'
 
 import { app, PORT } from './app'
 
-const key = fs.readFileSync('./key.pem')
-const cert = fs.readFileSync('./cert.pem')
+const key = fs.readFileSync('./certs/key.pem')
+const cert = fs.readFileSync('./certs/cert.pem')
 
 const start = async () => {
   if (!process.env.OPENID_CLIENT_ID) {

@@ -13,7 +13,7 @@ describe('Facility integration test suite', () => {
 
   it('should create a facility', async () => {
     // get the access token
-    const accessToken = await global.signin()
+    const accessToken = global.signin()
 
     // create the facility
     const facilityToCreate = {
@@ -51,36 +51,36 @@ describe('Facility integration test suite', () => {
     expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
   })
 
-  it.only('should fetch all the facilities', async () => {
+  it('should fetch all the facilities', async () => {
     // get the access token
-    const accessToken = await global.signin()
+    const accessToken = global.signin()
 
     // make the request to fetch all the facilities
     const { body: fetchedFacilities } = await request(app)
       .get(`/v1/facilities`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
-    // .expect(200)
+      .expect(constants.HTTP_STATUS_OK)
 
     expect(fetchedFacilities.length).toBe(293)
   })
 
   it('should return an unauthorized error fetching all the facility with no login', async () => {
     // make an unauthorized request
-    await request(app).get(`/v1/facilities`).send().expect(401)
+    await request(app).get(`/v1/facilities`).send().expect(constants.HTTP_STATUS_UNAUTHORIZED)
   })
 
   it('should return the facility coordinates', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const accessToken = global.signin()
 
     // get coordinates by town
     const townToSearch = 'Torino'
     const { body: townCoordinates } = await request(app)
       .get(`/v1/facilities/coordinatesByAddress?address=${encodeURIComponent(townToSearch)}`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(200)
+      .expect(constants.HTTP_STATUS_OK)
 
     expect(townCoordinates).toBeDefined()
     expect(townCoordinates.latitude).toStrictEqual(45.0677551)
@@ -91,9 +91,9 @@ describe('Facility integration test suite', () => {
     const addressToSearch = 'Via Dei Ponderanesi 2, Biella Piemonte'
     const { body: addressCoordinates } = await request(app)
       .get(`/v1/facilities/coordinatesByAddress?address=${encodeURIComponent(addressToSearch)}`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(200)
+      .expect(constants.HTTP_STATUS_OK)
 
     expect(addressCoordinates).toBeDefined()
     expect(addressCoordinates.latitude).toStrictEqual(45.5439946)
@@ -104,8 +104,8 @@ describe('Facility integration test suite', () => {
   })
 
   it('should return the nearest facilities to a particular point (lat, long)', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const accessToken = global.signin()
 
     // set the params
     const latitude = 38.1041882
@@ -120,9 +120,9 @@ describe('Facility integration test suite', () => {
       .get(
         `/v1/facilities/findnearest?latitude=${latitude}&longitude=${longitude}&minDistance=${minDistance}&maxDistance=${maxDistance}&limit=${limit}`
       )
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(200)
+      .expect(constants.HTTP_STATUS_OK)
 
     // check data
     expect(nearestFacilities.length).toStrictEqual(5)
@@ -150,8 +150,8 @@ describe('Facility integration test suite', () => {
   })
 
   it('should return the nearest facility to a particular point (lat, long)', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const accessToken = global.signin()
 
     // set the params
     const latitude = 38.1041882
@@ -166,9 +166,9 @@ describe('Facility integration test suite', () => {
       .get(
         `/v1/facilities/findnearest?latitude=${latitude}&longitude=${longitude}&minDistance=${minDistance}&maxDistance=${maxDistance}&limit=${limit}`
       )
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(200)
+      .expect(constants.HTTP_STATUS_OK)
 
     // check data
     expect(nearestFacilities.length).toStrictEqual(1)

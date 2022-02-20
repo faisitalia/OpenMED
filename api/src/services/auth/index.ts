@@ -98,8 +98,10 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
     client_secret: process.env.OPENID_CLIENT_SECRET,
   })
 
-  const { data } = await axios.post(`${openidURI}/token`, payload.toString())
+  // console.log('openid URI', openidURI)
+  // console.log('payload', payload)
 
+  const { data } = await axios.post(`${openidURI}/token`, payload.toString())
   return data
 }
 
@@ -112,12 +114,33 @@ async function getUserInfo(accessToken: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const openidURI = getOpenIDConnectURI(kcAdminClient)
 
-  const { data } = await axios.get(`${openidURI}/userinfo`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  })
-  return data
+  try {
+    const { data } = await axios.get(`${openidURI}/userinfo`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+    return data
+  } catch (error: any) {
+    throw error.response.data.error_description
+  }
+}
+
+/**
+ *
+ * @param userId
+ * @returns
+ */
+async function logout(userId: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+  await kcAdminClient.users.logout({ id: userId! })
+  // const openidURI = getOpenIDConnectURI(kcAdminClient)
+
+  // await axios.get(`${openidURI}/logout`, {
+  //   headers: {
+  //     Authorization: `Bearer ${accessToken}`,
+  //   },
+  // })
 }
 
 /**
@@ -159,4 +182,5 @@ export {
   getAuthToken,
   assignRoleToUser,
   getUserInfo,
+  logout,
 }
