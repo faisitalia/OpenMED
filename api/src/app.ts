@@ -13,8 +13,11 @@ import { signupRouter } from './routes/auth/signup'
 
 import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
+import { filesRouter } from './routes/files'
 
 import swaggerDocs from './utils/swagger'
+import bodyParser from 'body-parser'
+
 
 // set the express listening port
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
@@ -22,6 +25,7 @@ const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 const app = express()
 app.set('trust proxy', true)
 app.use(json())
+app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(cors({ origin: ['http://localhost:3000'], credentials: true }))
 app.use(
   cookieSession({
@@ -38,6 +42,7 @@ app.use(signoutRouter)
 app.use(signupRouter)
 app.use(facilityRouter)
 app.use(visitRouter)
+app.use(filesRouter)
 
 // run swagger/openapi docs
 swaggerDocs(app, 3001)
