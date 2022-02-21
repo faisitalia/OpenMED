@@ -16,6 +16,8 @@
     "jest/prefer-to-have-length": "warn",
     "jest/valid-expect": "error",
     "no-var": "error",
+    "no-use-before-define": "error",
+    "no-unused-vars": ["error", { "ignoreRestSiblings": true }],
     "prefer-const": ["error", { "destructuring": "any", "ignoreReadBeforeAssign": false }],
     "no-multi-assign": "error",
     "one-var": ["error", "never"],
