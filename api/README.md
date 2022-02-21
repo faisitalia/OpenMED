@@ -6,8 +6,14 @@ Creare un file .env copiandolo da .env.template. Il backend richiede che ci sia 
 
 ## Utilizzo
 
+- crea una directory "certs"
+
+- entrare nella directory "certs" e lanciare:
+
+```bash
 openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
 openssl rsa -in keytmp.pem -out key.pem
+```
 
 Per lanciare l'API server:
 
