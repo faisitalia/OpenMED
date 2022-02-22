@@ -4,6 +4,7 @@ import { constants } from 'http2'
 import { app } from '../../../app'
 import facilitiesData from './facilities.json'
 import { Facility } from '../../../models/facility'
+import { deleteUserById } from '../../../services/auth'
 
 describe('Facility integration test suite', () => {
   beforeEach(async () => {
@@ -13,7 +14,17 @@ describe('Facility integration test suite', () => {
 
   it('should create a facility', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-facility@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // create the facility
     const facilityToCreate = {
@@ -49,11 +60,23 @@ describe('Facility integration test suite', () => {
     expect(createdFacility.location.type).toStrictEqual('Point')
     expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
     expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
+
+    await deleteUserById(user.id!)
   })
 
   it('should fetch all the facilities', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-all-facility@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // make the request to fetch all the facilities
     const { body: fetchedFacilities } = await request(app)
@@ -63,6 +86,8 @@ describe('Facility integration test suite', () => {
       .expect(constants.HTTP_STATUS_OK)
 
     expect(fetchedFacilities.length).toBe(293)
+
+    await deleteUserById(user.id!)
   })
 
   it('should return an unauthorized error fetching all the facility with no login', async () => {
@@ -72,7 +97,17 @@ describe('Facility integration test suite', () => {
 
   it('should return the facility coordinates', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-coord-facility@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // get coordinates by town
     const townToSearch = 'Torino'
@@ -101,11 +136,23 @@ describe('Facility integration test suite', () => {
     expect(addressCoordinates.address).toStrictEqual(
       '2, Via dei Ponderanesi, Alberetti, Ponderano, Biella, Piemonte, 13875, Italia'
     )
+
+    await deleteUserById(user.id!)
   })
 
   it('should return the nearest facilities to a particular point (lat, long)', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-near-facilities@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the params
     const latitude = 38.1041882
@@ -147,11 +194,23 @@ describe('Facility integration test suite', () => {
     expect(fartherFaciity.state).toStrictEqual('Sicilia')
     expect(fartherFaciity.county).toStrictEqual('Pa')
     expect(fartherFaciity.postalcode).toStrictEqual(90127)
+
+    await deleteUserById(user.id!)
   })
 
   it('should return the nearest facility to a particular point (lat, long)', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-coord-facility@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the params
     const latitude = 38.1041882
@@ -183,5 +242,7 @@ describe('Facility integration test suite', () => {
     expect(nearestFaciity.state).toStrictEqual('Sicilia')
     expect(nearestFaciity.county).toStrictEqual('Pa')
     expect(nearestFaciity.postalcode).toStrictEqual(90127)
+
+    await deleteUserById(user.id!)
   })
 })

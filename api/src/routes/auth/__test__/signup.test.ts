@@ -129,20 +129,3 @@ it('disallows duplicate emails', async () => {
 
   await deleteUserById(user.id)
 })
-
-// it('sets a cookie after successful signup', async () => {
-//   const response = await request(app)
-//     .post('/v1/users/signup')
-//     .send({
-//       email: 'john@test.com',
-//       password: 'password',
-//       firstname: 'John',
-//       lastname: 'Doe',
-//       birthdate: new Date(),
-//     })
-//     .expect(constants.HTTP_STATUS_CREATED)
-
-//   expect(response.get('Set-Cookie')).toBeDefined()
-
-//   await deleteUserById(response.body.user.id)
-// })

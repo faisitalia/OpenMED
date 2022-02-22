@@ -8,6 +8,7 @@ import { createFacility } from '../../../services/facility'
 import { Person } from '../../../models/person'
 import { User, Role, UserDoc } from '../../../models/user'
 import { Visit, VisitDoc } from '../../../models/visit'
+import { deleteUserById } from '../../../services/auth'
 
 describe('Visit integration test suite', function () {
   let patient: UserDoc
@@ -103,8 +104,18 @@ describe('Visit integration test suite', function () {
 
   it('should create a visit', async () => {
     // get the access token
-    const accessToken = global.signin()
-    //.set('Authorization', `Bearer ${accessToken}`)
+    const email = 'user-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
+
     // set the slot
     const slot = new Date()
 
@@ -133,11 +144,23 @@ describe('Visit integration test suite', function () {
     expect(createdVisit.doctor.id).toStrictEqual(doctor.id)
     expect(createdVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
+
+    await deleteUserById(user.id!)
   })
 
   it('should returns a 400 if the slot is not found', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-no-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -164,11 +187,23 @@ describe('Visit integration test suite', function () {
     const error = errors[0]
     expect(error.message).toStrictEqual('The slot is required')
     expect(error.field).toStrictEqual('slot')
+
+    await deleteUserById(user.id!)
   })
 
   it('returns a 404 if the visit is not found', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-no2-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // create a dummy mongo id
     const id = new mongoose.Types.ObjectId().toHexString()
@@ -178,11 +213,23 @@ describe('Visit integration test suite', function () {
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
       .expect(404)
+
+    await deleteUserById(user.id!)
   })
 
   it('returns the visit if the visit is found', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-id-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -220,11 +267,23 @@ describe('Visit integration test suite', function () {
     expect(retrievedVisit.doctor.id).toStrictEqual(createdVisit.doctor.id)
     expect(retrievedVisit.caregiver.id).toStrictEqual(createdVisit.caregiver.id)
     expect(retrievedVisit.slot).toStrictEqual(createdVisit.slot)
+
+    await deleteUserById(user.id!)
   })
 
   it('should fetch all the available visits', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-all-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot1 = new Date()
@@ -275,11 +334,23 @@ describe('Visit integration test suite', function () {
 
     // check data
     expect(await Visit.countDocuments()).toBe(3)
+
+    await deleteUserById(user.id!)
   })
 
   it('should update the visit', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-update-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -359,11 +430,23 @@ describe('Visit integration test suite', function () {
     expect(updatedVisit.doctor.id).toStrictEqual(newDoctor.id)
     expect(updatedVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(updatedVisit.slot)).toStrictEqual(newSlot)
+
+    await deleteUserById(user.id!)
   })
 
   it('should delete a visit', async () => {
     // get the access token
-    const accessToken = global.signin()
+    const email = 'user-delete-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -394,5 +477,7 @@ describe('Visit integration test suite', function () {
       .expect(constants.HTTP_STATUS_NO_CONTENT)
 
     expect(await Visit.countDocuments({ _id: createdVisit.id })).toBe(0)
+
+    await deleteUserById(user.id!)
   })
 })

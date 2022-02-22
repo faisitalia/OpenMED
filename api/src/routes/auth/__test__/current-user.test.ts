@@ -2,9 +2,20 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
+import { deleteUserById } from '../../../services/auth'
 
 it('responds with details about the current user', async () => {
-  const accessToken = global.signin()
+  const email = 'user-current@test.com'
+  const password = 'password'
+  const firstname = 'john'
+  const lastname = 'doe'
+  const birthdate = new Date()
+
+  // signup
+  const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+  // get auth token
+  const accessToken = await global.signin(email, password)
 
   const response = await request(app)
     .get('/v1/users/currentuser')
@@ -12,7 +23,9 @@ it('responds with details about the current user', async () => {
     .send()
     .expect(constants.HTTP_STATUS_OK)
 
-  expect(response.body.currentUser.email).toEqual('test@test.com')
+  expect(response.body.currentUser.email).toEqual(email)
+
+  await deleteUserById(user.id!)
 })
 
 it('responds with null if not authenticated', async () => {

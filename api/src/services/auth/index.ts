@@ -114,6 +114,8 @@ async function getUserInfo(accessToken: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const openidURI = getOpenIDConnectURI(kcAdminClient)
 
+  if (!accessToken) throw 'Access token is invalid!'
+
   try {
     const { data } = await axios.get(`${openidURI}/userinfo`, {
       headers: {
@@ -134,13 +136,6 @@ async function getUserInfo(accessToken: string) {
 async function logout(userId: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   await kcAdminClient.users.logout({ id: userId! })
-  // const openidURI = getOpenIDConnectURI(kcAdminClient)
-
-  // await axios.get(`${openidURI}/logout`, {
-  //   headers: {
-  //     Authorization: `Bearer ${accessToken}`,
-  //   },
-  // })
 }
 
 /**

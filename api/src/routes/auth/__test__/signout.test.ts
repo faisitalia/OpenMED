@@ -2,10 +2,24 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { getUserInfo } from '../../../services/auth'
+import { deleteUserById, getUserInfo } from '../../../services/auth'
 
 it('clears the session after signing out', async () => {
-  const accessToken = global.signin()
+  const email = 'user-session@test.com'
+  const password = 'password'
+
+  const { body: user } = await request(app)
+    .post('/v1/users/signup')
+    .send({
+      email,
+      password,
+      firstname: 'John',
+      lastname: 'Doe',
+      birthdate: new Date(),
+    })
+    .expect(constants.HTTP_STATUS_CREATED)
+
+  const accessToken = await global.signin(email, password)
 
   // logout
   await request(app)
@@ -20,4 +34,6 @@ it('clears the session after signing out', async () => {
   } catch (error) {
     expect(error).toBe(`User session not found or doesn't have client attached on it`)
   }
+
+  await deleteUserById(user.id)
 })
