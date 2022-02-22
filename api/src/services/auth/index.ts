@@ -1,10 +1,6 @@
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
-import {
-  Settings,
-  TokenResponse,
-  TokenResponseRaw,
-} from '@keycloak/keycloak-admin-client/lib/utils/auth'
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
+import { TokenResponse } from '@keycloak/keycloak-admin-client/lib/utils/auth'
+import axios from 'axios'
 import url from 'url'
 import { KeycloakAdminClientImpl } from './config/keycloakAdminClient'
 import { getOpenIDConnectURI } from './config/openid-connect'

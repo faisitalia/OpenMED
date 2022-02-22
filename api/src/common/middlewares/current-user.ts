@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
 import { getUserInfo } from '../../services/auth'
 
 interface UserPayload {

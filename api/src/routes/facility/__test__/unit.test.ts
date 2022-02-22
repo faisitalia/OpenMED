@@ -28,7 +28,7 @@ describe('Facility unit test suite', function () {
     // TODO test more addresses --> via fabbri 43 Bologna / via fabbri 43 Bologna 40138
   })
 
-  it.only('should get the nearest facilities starting from latitude and longitude', async () => {
+  it('should get the nearest facilities starting from latitude and longitude', async () => {
     // get the nearest facilities
     const latitude = 38.1041882
     const longitude = 13.3627699
@@ -37,11 +37,11 @@ describe('Facility unit test suite', function () {
     const maxDistance = 5000
     const limit = 5
 
-   const facilities = await findNearest(latitude, longitude, minDistance, maxDistance, limit)
+    const facilities = await findNearest(latitude, longitude, minDistance, maxDistance, limit)
 
     // check data
     expect(Array.isArray(facilities)).toBeTruthy()
-    expect(facilities.length).toStrictEqual(limit)
+    expect(facilities).toHaveLength(limit)
 
     const nearestFaciity = facilities[0]
     const fartherFaciity = facilities[4]

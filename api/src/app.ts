@@ -18,7 +18,6 @@ import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
 
 import swaggerDocs from './utils/swagger'
-import { KcConnect } from './services/auth/config/keycloakConnect'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
@@ -44,14 +43,6 @@ app.use(
   })
 )
 
-// set up keycloak
-const keycloak = KcConnect.getInstance()
-app.use(keycloak.middleware())
-
-app.get('/test', keycloak.protect(), function (req, res) {
-  console.log('TEST')
-})
-
 app.use(currentUser)
 
 app.use(currentUserRouter)
@@ -64,7 +55,7 @@ app.use(visitRouter)
 // run swagger/openapi docs
 swaggerDocs(app, 3001)
 
-app.all('*', async (req, res) => {
+app.all('*', async () => {
   throw new NotFoundError()
 })
 

@@ -3,7 +3,7 @@ import { constants } from 'http2'
 import mongoose from 'mongoose'
 
 import { app } from '../../../app'
-import { Facility, FacilityDoc } from '../../../models/facility'
+import { FacilityDoc } from '../../../models/facility'
 import { createFacility } from '../../../services/facility'
 import { Person } from '../../../models/person'
 import { User, Role, UserDoc } from '../../../models/user'

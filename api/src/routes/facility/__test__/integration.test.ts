@@ -85,7 +85,7 @@ describe('Facility integration test suite', () => {
       .send()
       .expect(constants.HTTP_STATUS_OK)
 
-    expect(fetchedFacilities.length).toBe(293)
+    expect(fetchedFacilities).toHaveLength(293)
 
     await deleteUserById(user.id!)
   })
@@ -172,7 +172,7 @@ describe('Facility integration test suite', () => {
       .expect(constants.HTTP_STATUS_OK)
 
     // check data
-    expect(nearestFacilities.length).toStrictEqual(5)
+    expect(nearestFacilities).toHaveLength(5)
 
     const nearestFaciity = nearestFacilities[0]
     const fartherFaciity = nearestFacilities[4]
@@ -230,7 +230,7 @@ describe('Facility integration test suite', () => {
       .expect(constants.HTTP_STATUS_OK)
 
     // check data
-    expect(nearestFacilities.length).toStrictEqual(1)
+    expect(nearestFacilities).toHaveLength(1)
 
     const nearestFaciity = nearestFacilities[0]
 

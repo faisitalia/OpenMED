@@ -7,8 +7,6 @@ https.globalAgent.options.rejectUnauthorized = false
 export class KeycloakAdminClientImpl {
   private static instance: KcAdminClient
 
-  private constructor() {}
-
   // Authorize with username / password
   private static async authorizeClient() {
     await KeycloakAdminClientImpl.instance.auth({

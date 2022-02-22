@@ -2,7 +2,7 @@ import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 import { constants } from 'http2'
 
-import { validateRequest, BadRequestError } from '../../common'
+import { validateRequest } from '../../common'
 import { Person } from '../../models/person'
 import { createUser, getUserById } from '../../services/auth'
 

@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { MongoMemoryServer } from 'mongodb-memory-server'
 import mongoose from 'mongoose'
 import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../app'
-import { assignRoleToUser, deleteUserById } from '../services/auth'
+// import { assignRoleToUser, deleteUserById } from '../services/auth'
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
 
 declare global {
@@ -43,7 +44,7 @@ beforeAll(async () => {
 beforeEach(async () => {
   const collections = await mongoose.connection.db.collections()
 
-  for (let collection of collections) {
+  for (const collection of collections) {
     await collection.deleteMany({})
   }
 })
