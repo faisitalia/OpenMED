@@ -31,7 +31,13 @@ const Login = () => {
         password: password,
       })
       .then((response) => {
-        console.log(response)
+        sessionStorage.setItem('accessToken', JSON.stringify(response.data.access_token))
+        // Intercept all requests on this Axios instance
+        apiServer.interceptors.request.use(function (config) {
+          // Append your request headers with an authenticated token
+          config.headers.Authorization = `Bearer ${response.data.access_token}`
+          return config
+        })
         isLogged(true)
       })
       .catch((error) => {

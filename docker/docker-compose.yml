@@ -1,0 +1,70 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:5.0.5
+    container_name: mongo
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./mongo/database:/data/db
+    ports:
+      - 27017:27017
+    restart: unless-stopped
+    networks:
+      - openmed-net
+
+  keycloak-db-postgres:
+    image: postgres:14.1
+    container_name: keycloak-db-postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    volumes:
+      - $PWD/keycloak/volumes/keycloak_db_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U keycloak"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - openmed-net
+
+  keycloak:
+    image: jboss/keycloak:16.1.1
+    container_name: keycloak
+    ports:
+      - 8443:8443
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_IMPORT: /tmp/config/openmed.json
+      KEYCLOAK_WELCOME_THEME: openmed
+      KEYCLOAK_DEFAULT_THEME: openmed
+      # KEYCLOAK_FRONTEND_URL: https://localhost:8080/keycloak/auth
+      DB_VENDOR: POSTGRES
+      DB_ADDR: keycloak-db-postgres
+      DB_USER: keycloak
+      DB_PASSWORD: keycloak
+      DB_DATABASE: keycloak
+      DB_SCHEMA: public
+    volumes:
+      - "$PWD/keycloak/config:/tmp/config"
+      - "$PWD/keycloak/themes/openmed:/opt/jboss/keycloak/themes/openmed"
+    depends_on:
+      keycloak-db-postgres:
+        condition: service_healthy
+    networks:
+      openmed-net:
+        ipv4_address: 172.33.0.100
+
+networks:
+  openmed-net:
+    ipam:
+      config:
+        - subnet: "172.33.0.0/16"
+          gateway: "172.33.0.1"

@@ -1,10 +1,8 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-import jwt from 'jsonwebtoken'
-import { validateRequest, BadRequestError } from '../../common'
 
-import { Password } from '../../services/password'
-import { User } from '../../models/user'
+import { validateRequest, BadRequestError } from '../../common'
+import { getAuthToken, getUserByEmail } from '../../services/auth'
 
 const router = express.Router()
 
@@ -52,31 +50,19 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password } = req.body
 
-    const existingUser = await User.findOne({ email })
+    const existingUser = await getUserByEmail(email)
     if (!existingUser) {
       throw new BadRequestError('Invalid credentials')
     }
 
-    const passwordsMatch = await Password.compare(existingUser.password, password)
-    if (!passwordsMatch) {
-      throw new BadRequestError('Invalid Credentials')
-    }
-
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: existingUser.id,
-        email: existingUser.email,
-      },
-      process.env.JWT_KEY!
-    )
+    const login = await getAuthToken(existingUser.username!, password)
 
     // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    }
+    // req.session = {
+    //   jwt: login.accessToken,
+    // }
 
-    res.status(200).send(existingUser)
+    res.status(200).send(login)
   }
 )
 

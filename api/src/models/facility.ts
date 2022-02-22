@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 import mongoose from 'mongoose'
 
 // An interface that describes the properties
@@ -30,6 +32,7 @@ interface FacilityDoc extends mongoose.Document {
   county: string
   country: string
   postalcode: number
+  // eslint-disable-next-line camelcase
   domain_identifier: string
   location: object
 }
