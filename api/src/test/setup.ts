@@ -28,15 +28,15 @@ declare global {
   }
 }
 
-let mongo: any
+let mongo: MongoMemoryServer
 
 beforeAll(async () => {
   process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = 'CVXrccbQqxTdTJGKqa39kUyhEAlnHdd1'
+  process.env.OPENID_CLIENT_SECRET = 'vQ5n0ntSaXVkMpI76BZgVZu8zriEif8g'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()
-  const mongoUri = await mongo.getUri()
+  const mongoUri = mongo.getUri()
 
   await mongoose.connect(mongoUri)
 })

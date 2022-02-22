@@ -55,8 +55,6 @@ services:
     volumes:
       - "$PWD/keycloak/config:/tmp/config"
       - "$PWD/keycloak/themes/openmed:/opt/jboss/keycloak/themes/openmed"
-      # - "./api/certs:/etc/x509/https"
-      # - "$PWD/keycloak/config/standalone-ha.xml:/opt/jboss/keycloak/standalone/configuration/standalone-ha.xml"
     depends_on:
       keycloak-db-postgres:
         condition: service_healthy
