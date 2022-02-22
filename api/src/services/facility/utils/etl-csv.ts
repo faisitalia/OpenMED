@@ -24,15 +24,15 @@ import { geoServer } from './geoServer'
  *
  * @param {*} data
  */
-async function insertDataOnDatabase(data: any) {
-  // const db = cloudant.db.use(process.env.CLOUDANT_DATABASE)
-  // db.bulk({ docs: data }, function (err: any) {
-  //   if (err) {
-  //     throw err
-  //   }
-  //   console.log('All documents inserted')
-  // })
-}
+// async function insertDataOnDatabase(data: any) {
+// const db = cloudant.db.use(process.env.CLOUDANT_DATABASE)
+// db.bulk({ docs: data }, function (err: any) {
+//   if (err) {
+//     throw err
+//   }
+//   console.log('All documents inserted')
+// })
+// }
 
 /**
  *
@@ -154,13 +154,13 @@ async function importDataFromCSV() {
   }
 
   // read CSV
-  const rawData = await readCSVData()
+  // const rawData = await readCSVData()
 
   // transform raw data
-  const tranformedData = await transformData(rawData)
+  // const tranformedData = await transformData(rawData)
 
   // insert row data
-  insertDataOnDatabase(tranformedData)
+  // insertDataOnDatabase(tranformedData)
 }
 
 export { readCSVData, transformData, importDataFromCSV }

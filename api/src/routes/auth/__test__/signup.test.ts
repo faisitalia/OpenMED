@@ -1,20 +1,25 @@
 import request from 'supertest'
+import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { Role } from '../../../models/user'
+import { deleteUserById } from '../../../services/auth'
 
-it('returns a 201 on successful signup', async () => {
-  return request(app)
+it('returns a 200 on successful signup', async () => {
+  const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
-      email: 'test@test.com',
+      email: 'john@test.com',
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(201)
-    .catch((err) => console.error(err))
+    .expect(constants.HTTP_STATUS_CREATED)
+
+  expect(user.id).toBeDefined()
+  expect(user.email).toStrictEqual('john@test.com')
+
+  await deleteUserById(user.id)
 })
 
 it('returns a 400 with an invalid email', async () => {
@@ -27,7 +32,7 @@ it('returns a 400 with an invalid email', async () => {
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
 
 it('returns a 400 with an invalid password', async () => {
@@ -40,7 +45,7 @@ it('returns a 400 with an invalid password', async () => {
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
 
 it('returns a 400 with missing email and password', async () => {
@@ -49,14 +54,14 @@ it('returns a 400 with missing email and password', async () => {
     .send({
       email: 'test@test.com',
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
   await request(app)
     .post('/v1/users/signup')
     .send({
       password: 'alskjdf',
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
 
 it('returns a 400 with missing fistname, lastname and birthdate', async () => {
@@ -66,7 +71,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       email: 'test@test.com',
       password: 'alskjdf',
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
   await request(app)
     .post('/v1/users/signup')
@@ -76,7 +81,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
   await request(app)
     .post('/v1/users/signup')
@@ -86,7 +91,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       firstname: 'John',
       birthdate: new Date(),
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
   await request(app)
     .post('/v1/users/signup')
@@ -96,44 +101,31 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       firstname: 'John',
       lastname: 'Doe',
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
 
 it('disallows duplicate emails', async () => {
-  await request(app)
+  const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
-      email: 'test@test.com',
+      email: 'john@test.com',
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(201)
+    .expect(constants.HTTP_STATUS_CREATED)
 
   await request(app)
     .post('/v1/users/signup')
     .send({
-      email: 'test@test.com',
+      email: 'john@test.com',
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
       birthdate: new Date(),
     })
-    .expect(400)
-})
+    .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
-it('sets a cookie after successful signup', async () => {
-  const response = await request(app)
-    .post('/v1/users/signup')
-    .send({
-      email: 'test@test.com',
-      password: 'password',
-      firstname: 'John',
-      lastname: 'Doe',
-      birthdate: new Date(),
-    })
-    .expect(201)
-
-  expect(response.get('Set-Cookie')).toBeDefined()
+  await deleteUserById(user.id)
 })

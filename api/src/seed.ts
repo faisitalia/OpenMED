@@ -1,5 +1,3 @@
-require('dotenv').config()
-
 import mongoose from 'mongoose'
 import fs from 'fs-extra'
 
@@ -8,6 +6,9 @@ import { User, Role } from './models/user'
 import { Person } from './models/person'
 import { transformData } from './services/facility/utils/etl-json'
 import facilitiesData from './routes/facility/__test__/facilities.json'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config()
 
 /**
  *
@@ -43,7 +44,7 @@ const populateUsers = async function () {
  *
  * @param writeJSON
  */
-const populateFacilities = async function (writeJSON: boolean = false) {
+const populateFacilities = async function (writeJSON = false) {
   console.log(`Droping facilities....`)
   await Facility.deleteMany({})
 

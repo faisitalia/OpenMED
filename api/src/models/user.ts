@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-use-before-define */
 import mongoose from 'mongoose'
 import { Password } from '../services/password'
 
