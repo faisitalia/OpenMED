@@ -1,5 +1,5 @@
 import { NotFoundError } from '../../common'
-import { Visit, VisitAttrs } from '../../models/visit'
+import { Visit } from '../../models/visit'
 import { Facility } from '../../models/facility'
 import { Role, User } from '../../models/user'
 

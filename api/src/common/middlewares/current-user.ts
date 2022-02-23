@@ -1,35 +1,39 @@
-import { Request, Response, NextFunction } from 'express';
-import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express'
+import { getUserInfo } from '../../services/auth'
 
 interface UserPayload {
-  id: string;
-  email: string;
+  id: string
+  email: string
 }
 
 declare global {
   namespace Express {
     interface Request {
-      currentUser?: UserPayload;
+      currentUser?: UserPayload
     }
   }
 }
 
-export const currentUser = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (!req.session?.jwt) {
-    return next();
+export const currentUser = async (req: Request, res: Response, next: NextFunction) => {
+  if (!req.headers.authorization) {
+    return next()
   }
 
-  try {
-    const payload = jwt.verify(
-      req.session.jwt,
-      process.env.JWT_KEY!
-    ) as UserPayload;
-    req.currentUser = payload;
-  } catch (err) {console.error(err)}
+  const bearer = req.headers.authorization.split(' ')
+  const bearerToken = bearer[1]
+  const userInfo = await getUserInfo(bearerToken)
 
-  next();
-};
+  try {
+    // const payload = jwt.verify(
+    //   req.session.jwt,
+    //   process.env.JWT_KEY!
+    // ) as UserPayload;
+    if (userInfo && userInfo.sub) {
+      req.currentUser = userInfo
+    } else throw new Error(userInfo.error_description)
+  } catch (err) {
+    console.error(err)
+  }
+
+  next()
+}

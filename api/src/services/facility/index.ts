@@ -38,12 +38,7 @@ async function getAllFacilities() {
  * @returns
  */
 async function getFacilityById(facilityId: string) {
-  // TODO check mongo ID
-  if (true) {
-    return Facility.findById(facilityId)
-  } else {
-    throw Error(`The param value ${facilityId} is not a valid id value`)
-  }
+  return Facility.findById(facilityId)
 }
 
 /**
@@ -85,9 +80,9 @@ async function getCoordinatesByAddress(addressToSearch: string) {
 async function findNearest(
   latitude: number,
   longitude: number,
-  minDistance: number = 0,
-  maxDistance: number = 1000,
-  limit: number = 5
+  minDistance = 0,
+  maxDistance = 1000,
+  limit = 5
 ) {
   if (!longitude || !latitude) {
     throw Error('The input params are invalid: longitude or latitude unavailable')

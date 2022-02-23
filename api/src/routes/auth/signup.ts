@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
-import jwt from 'jsonwebtoken'
-import { validateRequest, BadRequestError } from '../../common'
+import { constants } from 'http2'
 
-import { User, Role } from '../../models/user'
+import { validateRequest } from '../../common'
 import { Person } from '../../models/person'
+import { createUser, getUserById } from '../../services/auth'
 
 const router = express.Router()
 
@@ -58,11 +58,11 @@ router.post(
   async (req: Request, res: Response) => {
     const { email, password, firstname, lastname, birthdate } = req.body
 
-    const existingUser = await User.findOne({ email })
+    // const existingUser = await User.findOne({ email })
 
-    if (existingUser) {
-      throw new BadRequestError('Email in use')
-    }
+    // if (existingUser) {
+    //   throw new BadRequestError('Email in use')
+    // }
 
     // TODO transaction
 
@@ -71,24 +71,15 @@ router.post(
     const person = await personDoc.save()
 
     // create the user
-    const user = User.build({ email, password, role: Role.USER, personId: person.id })
-    await user.save()
+    // const user = User.build({ email, password, role: Role.USER, personId: person.id })
+    // await user.save()
+    const username = `person_${person.id}`
+    const userId = await createUser(username, email, password)
 
-    // Generate JWT
-    const userJwt = jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-      },
-      process.env.JWT_KEY!
-    )
+    // retrieve the user just created
+    const user = await getUserById(userId)
 
-    // Store it on session object
-    req.session = {
-      jwt: userJwt,
-    }
-
-    res.status(201).send(user)
+    res.status(constants.HTTP_STATUS_CREATED).send(user)
   }
 )
 

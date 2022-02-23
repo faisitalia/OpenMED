@@ -21,9 +21,8 @@
 //     .then((res) => Promise.resolve(res.data))
 // }
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const Nominatim = require('nominatim-geocoder')
 const geoServer = new Nominatim()
 
-export {
-    geoServer  
-}; 
+export { geoServer }
