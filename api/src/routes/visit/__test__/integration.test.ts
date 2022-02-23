@@ -3,11 +3,12 @@ import { constants } from 'http2'
 import mongoose from 'mongoose'
 
 import { app } from '../../../app'
-import { Facility, FacilityDoc } from '../../../models/facility'
+import { FacilityDoc } from '../../../models/facility'
 import { createFacility } from '../../../services/facility'
 import { Person } from '../../../models/person'
 import { User, Role, UserDoc } from '../../../models/user'
 import { Visit, VisitDoc } from '../../../models/visit'
+import { deleteUserById } from '../../../services/auth'
 
 describe('Visit integration test suite', function () {
   let patient: UserDoc
@@ -102,8 +103,18 @@ describe('Visit integration test suite', function () {
   })
 
   it('should create a visit', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -120,7 +131,7 @@ describe('Visit integration test suite', function () {
     // make the request to create the visit
     const response = await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData)
       .expect(constants.HTTP_STATUS_CREATED)
 
@@ -133,11 +144,23 @@ describe('Visit integration test suite', function () {
     expect(createdVisit.doctor.id).toStrictEqual(doctor.id)
     expect(createdVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
+
+    await deleteUserById(user.id!)
   })
 
-  it.only('should returns a 400 if the slot is not found', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+  it('should returns a 400 if the slot is not found', async () => {
+    // get the access token
+    const email = 'user-no-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -152,7 +175,10 @@ describe('Visit integration test suite', function () {
     }
 
     // make the request to create the visit
-    const response = await request(app).post(`/v1/visits`).set('Cookie', cookie).send(visitData)
+    const response = await request(app)
+      .post(`/v1/visits`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(visitData)
 
     // check data
     expect(response.statusCode).toStrictEqual(400)
@@ -161,21 +187,49 @@ describe('Visit integration test suite', function () {
     const error = errors[0]
     expect(error.message).toStrictEqual('The slot is required')
     expect(error.field).toStrictEqual('slot')
+
+    await deleteUserById(user.id!)
   })
 
   it('returns a 404 if the visit is not found', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-no2-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // create a dummy mongo id
     const id = new mongoose.Types.ObjectId().toHexString()
 
-    await request(app).get(`/v1/visits/${id}`).set('Cookie', cookie).send().expect(404)
+    await request(app)
+      .get(`/v1/visits/${id}`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send()
+      .expect(404)
+
+    await deleteUserById(user.id!)
   })
 
   it('returns the visit if the visit is found', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-id-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -192,7 +246,7 @@ describe('Visit integration test suite', function () {
     // make the request to create the visit
     const response = await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData)
       .expect(constants.HTTP_STATUS_CREATED)
 
@@ -202,7 +256,7 @@ describe('Visit integration test suite', function () {
     // retrieve the visit just created
     const retrievedVisitResponse = await request(app)
       .get(`/v1/visits/${createdVisit.id}`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .expect(constants.HTTP_STATUS_OK)
 
     const retrievedVisit = retrievedVisitResponse.body
@@ -213,11 +267,23 @@ describe('Visit integration test suite', function () {
     expect(retrievedVisit.doctor.id).toStrictEqual(createdVisit.doctor.id)
     expect(retrievedVisit.caregiver.id).toStrictEqual(createdVisit.caregiver.id)
     expect(retrievedVisit.slot).toStrictEqual(createdVisit.slot)
+
+    await deleteUserById(user.id!)
   })
 
   it('should fetch all the available visits', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-all-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot1 = new Date()
@@ -250,29 +316,41 @@ describe('Visit integration test suite', function () {
     // make the request to create the visits
     await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData1)
       .expect(constants.HTTP_STATUS_CREATED)
 
     await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData2)
       .expect(constants.HTTP_STATUS_CREATED)
 
     await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData3)
       .expect(constants.HTTP_STATUS_CREATED)
 
     // check data
     expect(await Visit.countDocuments()).toBe(3)
+
+    await deleteUserById(user.id!)
   })
 
   it('should update the visit', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-update-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -289,7 +367,7 @@ describe('Visit integration test suite', function () {
     // make the request to create the visit
     const response = await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData)
       .expect(constants.HTTP_STATUS_CREATED)
 
@@ -334,7 +412,7 @@ describe('Visit integration test suite', function () {
     // update the visit
     const updateResponse = await request(app)
       .put(`/v1/visits/${createdVisit.id}`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send({
         facilityId: newFacility.id,
         patientId: patient.id,
@@ -352,11 +430,23 @@ describe('Visit integration test suite', function () {
     expect(updatedVisit.doctor.id).toStrictEqual(newDoctor.id)
     expect(updatedVisit.caregiver.id).toStrictEqual(caregiver.id)
     expect(new Date(updatedVisit.slot)).toStrictEqual(newSlot)
+
+    await deleteUserById(user.id!)
   })
 
   it('should delete a visit', async () => {
-    // get the cookie
-    const cookie = await global.signin()
+    // get the access token
+    const email = 'user-delete-visit@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    // signup
+    const user = await global.signup(email, password, firstname, lastname, birthdate)
+
+    // get auth token
+    const accessToken = await global.signin(email, password)
 
     // set the slot
     const slot = new Date()
@@ -373,7 +463,7 @@ describe('Visit integration test suite', function () {
     // make the request to create the visit
     const response = await request(app)
       .post(`/v1/visits`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData)
       .expect(constants.HTTP_STATUS_CREATED)
 
@@ -383,9 +473,11 @@ describe('Visit integration test suite', function () {
     // delete the visit
     await request(app)
       .delete(`/v1/visits/${createdVisit.id}`)
-      .set('Cookie', cookie)
+      .set('Authorization', `Bearer ${accessToken}`)
       .expect(constants.HTTP_STATUS_NO_CONTENT)
 
     expect(await Visit.countDocuments({ _id: createdVisit.id })).toBe(0)
+
+    await deleteUserById(user.id!)
   })
 })

@@ -1,8 +1,11 @@
 import express from 'express'
 import 'express-async-errors'
 import { json } from 'body-parser'
-import cookieSession from 'cookie-session'
+import expressSession from 'express-session'
+// import bodyParser from 'body-parser'
 import cors from 'cors'
+
+import { MemoryStore } from './session-store'
 
 import { errorHandler, NotFoundError, currentUser } from './common'
 
@@ -16,20 +19,30 @@ import { visitRouter } from './routes/visit'
 
 import swaggerDocs from './utils/swagger'
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 // set the express listening port
 const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 
 const app = express()
 app.set('trust proxy', true)
+// app.use(bodyParser.json())
 app.use(json())
-app.use(cors({ origin: ['http://localhost:3000'], credentials: true }))
+app.use(cors({ origin: ['https://localhost:3000', 'https://localhost:5000'], credentials: true }))
+
+// Create a session-store to be used by both the express-session
+// middleware and the keycloak middleware.
+const memoryStore = MemoryStore.getInstance()
+
 app.use(
-  cookieSession({
-    signed: false,
-    secure: process.env.NODE_ENV === 'production',
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+  expressSession({
+    secret: 'some secret',
+    resave: false,
+    saveUninitialized: true,
+    store: memoryStore,
   })
 )
+
 app.use(currentUser)
 
 app.use(currentUserRouter)
@@ -42,7 +55,7 @@ app.use(visitRouter)
 // run swagger/openapi docs
 swaggerDocs(app, 3001)
 
-app.all('*', async (req, res) => {
+app.all('*', async () => {
   throw new NotFoundError()
 })
 
