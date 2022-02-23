@@ -1,75 +1,60 @@
 <script context="module">
   export async function load({ session }) {
-    if(!session?.id) {
+    if (!session?.id) {
       return {
         status: 302,
-        redirect: "/login"
+        redirect: '/login'
       };
     }
 
-    return { };
-  };
+    return { ...session };
+  }
 </script>
 
 <script>
-  import { goto } from "$app/navigation";
-  import DashboardTile from "$lib/shared/DashboardTile.svelte";
+  import { goto } from '$app/navigation';
+  import DashboardTile from '$lib/shared/DashboardTile.svelte';
 
-  export let name = "Fabrizio";
-  export let roles = ["doctor"];
+  export let name = 'Fabrizio';
+  export let roles = ['doctor'];
 
-  $: isDoctor = roles.includes("doctor");
-  $: isPatient = roles.includes("user");
-  $: isAdmin = roles.includes("admin");
+  let isDoctor = roles.includes('doctor');
+  let isPatient = roles.includes('user');
+  let isAdmin = roles.includes('admin');
 </script>
 
 <svelte:head>
   <title>OpenMed</title>
 </svelte:head>
 
+<div id="hello-user" class="px-12 my-16">
+  <h1>
+    Ciao {name},
+  </h1>
+  <p>come desideri procedere?</p>
+</div>
+<div class="spacer" />
 
-<h1>
-  Ciao {name},
-</h1>
-<h2>come desideri procedere?</h2>
-<div class="spacer"></div>
-
-
-{#if isAdmin}
-  <DashboardTile
-    title="Gestisci Utenti"
-    subtitle="Crea, modifica ed elimina i profili utenti"
-  />
-{/if}
-{#if isDoctor}
-  <DashboardTile
-    title="Crea Appuntamento"
-    subtitle="Crea e gestisci nuovi appuntamenti"
-    on:click={() => goto('/appointments/new')}
-  />
-{/if}
-{#if isPatient || isDoctor}
-  <DashboardTile
-    title="Lista Appuntamenti"
-    subtitle="Visualizza i tuoi appuntamenti"
-    on:click={() => goto('/appointments')}
-  />
-{/if}
-{#if isPatient && !isDoctor}
-  <DashboardTile
-    title="Cartella Clinica"
-    subtitle="Consulta la tua cartella clinica"
-  />
-{/if}
-
+<div id="actions" class="flex flex-col justify-center items-start">
+  {#if isAdmin}
+    <DashboardTile title="Gestisci Utenti" subtitle="Crea, modifica ed elimina i profili utenti" />
+  {/if}
+  {#if isDoctor}
+    <DashboardTile
+      title="Crea Appuntamento"
+      subtitle="Crea e gestisci nuovi appuntamenti"
+      on:click={() => goto('/appointments/new')}
+    />
+  {/if}
+  {#if isPatient || isDoctor}
+    <DashboardTile
+      title="Lista Appuntamenti"
+      subtitle="Visualizza i tuoi appuntamenti"
+      on:click={() => goto('/appointments')}
+    />
+  {/if}
+  {#if isPatient && !isDoctor}
+    <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
+  {/if}
+</div>
 <!-- TODO add image -->
-
-<style>
-  h1 {
-    margin: 1rem;
-  }
-  h2 {
-    margin: 1rem;
-    margin-bottom: 2rem;
-  }
-</style>

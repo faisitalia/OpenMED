@@ -1,25 +1,20 @@
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from 'svelte';
   export let title;
   export let subtitle;
 
   const dispatch = createEventDispatcher();
 </script>
 
-<div on:click={() => dispatch('click')}>
-  <h1>
+<div
+  id={title}
+  on:click={() => dispatch('click')}
+  class="flex flex-col justify-center items-start px-10 py-6 my-4"
+>
+  <h2>
     {title}
-  </h1>
+  </h2>
   <p>
     {subtitle}
   </p>
 </div>
-
-<style>
-  div {
-    border: 1px solid black;
-    margin: 1rem;
-    padding: 0.5rem;
-    max-width: 50%;
-  }
-</style>
