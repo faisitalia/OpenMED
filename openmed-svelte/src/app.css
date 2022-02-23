@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  box-sizing: border-box;
+}
+body::-webkit-scrollbar {
+  width: 0;
+}
+
 /* tt norms - regular - latin */
 @font-face {
   font-family: 'TT Norms';
@@ -26,11 +33,11 @@
   }
 
   h1 {
-    @apply text-3xl font-bold;
+    @apply text-3xl font-bold text-brandBlue-500;
   }
 
   h2 {
-    @apply text-2xl font-bold;
+    @apply text-2xl font-bold text-brandBlue-500;
   }
   
   h3 {
