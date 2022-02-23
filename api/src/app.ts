@@ -25,7 +25,7 @@ const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 const app = express()
 app.set('trust proxy', true)
 app.use(json())
-app.use(bodyParser.json({ limit: '50mb', extended: true }));
+// app.use(bodyParser.json({ limit: '50mb' }));
 app.use(cors({ origin: ['http://localhost:3000'], credentials: true }))
 app.use(
   cookieSession({
