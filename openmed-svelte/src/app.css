@@ -1,3 +1,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* tt norms - regular - latin */
+@font-face {
+  font-family: 'TT Norms';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/static/fonts/tt-norms-regular.eot'); /* IE9 Compat Modes */
+  src: local(''),
+       url('/static/fonts/tt-norms-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('/static/fonts/tt-norms-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('/static/fonts/tt-norms-regular.woff') format('woff'), /* Modern Browsers */
+       url('/static/fonts/tt-norms-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('/static/fonts/tt-norms-regular.svg') format('svg'); /* Legacy iOS */
+}
+
+@layer base {
+  html {
+    font-family: 'TT Norms', sans-serif
+  }
+
+  body {
+    @apply text-base font-normal text-brandText-500;
+  }
+
+  h1 {
+    @apply text-3xl font-bold;
+  }
+
+  h2 {
+    @apply text-2xl font-bold;
+  }
+  
+  h3 {
+    @apply text-2xl font-light;
+  }
+
+  h4 {
+    @apply text-xl font-light;
+  }
+}
