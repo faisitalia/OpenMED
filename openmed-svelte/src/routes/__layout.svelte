@@ -62,7 +62,7 @@
 
 <div class="relative min-h-screen flex flex-col">
   <!-- Header / Navigation Bar / Menu / Side Nav Bar -->
-  <header class="p-4">
+  <header class="p-6">
     <!-- Main Navigation Bar -->
     <div class="flex flex-row flex-nowrap justify-between items-center">
       <!-- Use OpenMed's logo here -->
@@ -73,7 +73,7 @@
         class="flex md:hidden w-10 h-10 rounded-lg hover:bg-brandBlue-50/20 justify-center items-center"
       >
         <button
-          class="material-icons focus:outline-none text-4xl text-brandBlue-500"
+          class="material-icons focus:outline-none text-5xl text-brandGreen-500"
           on:click|preventDefault={() => (isDrawerOpen = !isDrawerOpen)}
         >
           menu
