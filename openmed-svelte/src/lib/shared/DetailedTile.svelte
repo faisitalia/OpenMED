@@ -2,7 +2,7 @@
   export let title;
   export let subtitle;
   export let iconImgPath;
-  export let iconImgAlt = "icon";
+  export let iconImgAlt = 'icon';
 
   let isExpanded = false;
   function toggle() {
@@ -10,8 +10,10 @@
   }
 </script>
 
-<div id="container" on:click="{toggle}">
-  <img src="{iconImgPath}" alt="{iconImgAlt}">
+<div id="container" on:click={toggle}>
+  {#if iconImgPath}
+    <img src={iconImgPath} alt={iconImgAlt} />
+  {/if}
   <h2>{title}</h2>
   {#if !isExpanded}
     <p>{subtitle}</p>
