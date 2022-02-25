@@ -13,8 +13,8 @@ const TheLayout = () => {
       apiServer
         .get('/v1/users/currentuser')
         .then((response) => {
-          console.log(response)
           if (!response.data.currentUser) {
+            sessionStorage.clear()
             isLogged(false)
           } else {
             isLogged(true)

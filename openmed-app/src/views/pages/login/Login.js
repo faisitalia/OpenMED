@@ -20,8 +20,8 @@ import CIcon from '@coreui/icons-react'
 import { apiServer } from '../../../api/config'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState('user@openmed.cloud')
+  const [password, setPassword] = useState('password')
   const [logged, isLogged] = useState(false)
 
   function submitLogin() {
@@ -32,15 +32,12 @@ const Login = () => {
       })
       .then((response) => {
         sessionStorage.setItem('accessToken', JSON.stringify(response.data.access_token))
-        // Intercept all requests on this Axios instance
-        apiServer.interceptors.request.use(function (config) {
-          // Append your request headers with an authenticated token
-          config.headers.Authorization = `Bearer ${response.data.access_token}`
-          return config
-        })
+        sessionStorage.setItem('refreshToken', JSON.stringify(response.data.refresh_token))
+
         isLogged(true)
       })
       .catch((error) => {
+        sessionStorage.clear()
         console.log(error)
       })
   }
