@@ -1,52 +1,95 @@
 <script context="module">
-  import { visitsEndpoint} from "$lib/uri.js";
-  
+  import { visitsEndpoint } from '$lib/uri.js';
+
   export async function load({ session, fetch }) {
-    if(!session?.id) {
-      return {
-        status: 302,
-        redirect: "/login"
-      };
-    }
+    // if(!session?.id) {
+    //   return {
+    //     status: 302,
+    //     redirect: "/login"
+    //   };
+    // }
 
-    // Get the visits list
-    const response = await fetch(
-        visitsEndpoint,
-        { credentials: 'include' }
-      );
+    // // Get the visits list
+    // const response = await fetch(
+    //     visitsEndpoint,
+    //     { credentials: 'include' }
+    //   );
 
-    if(!response.ok) {
-      console.log("Lookout: something went wrong!");
-      console.log(response.status);
-      console.log(await response.json().errors);
+    // if(!response.ok) {
+    //   console.log("Lookout: something went wrong!");
+    //   console.log(response.status);
+    //   console.log(await response.json().errors);
 
-      // TODO redirect to an error page and not the home
-      return {
-        status: 302,
-        redirect: "/"
-      };
-    }
+    //   // TODO redirect to an error page and not the home
+    //   return {
+    //     status: 302,
+    //     redirect: "/"
+    //   };
+    // }
 
-    const visitsList = await response.json();
-    if(visitsList.length === 0) {
-      console.log("warn: there are no appointments!");
+    // const visitsList = await response.json();
+    // if(visitsList.length === 0) {
+    //   console.log("warn: there are no appointments!");
 
-      // TODO redirect to an error page
-    }
+    //   // TODO redirect to an error page
+    // }
 
-    console.log(visitsList);
+    // console.log(visitsList);
+
+    const visitsList = [
+      {
+        date: '25/02/2022',
+        time: '18:00',
+        clinic: 'San Raffaele di Milano',
+        doctor: {
+          name: 'Francesco',
+          surname: 'Vénir',
+          qualification: 'Stomaterapista'
+        },
+        patient: {
+          name: 'Ornella',
+          surname: 'Calabrese',
+          ssn: 'VNRLCU92S27D962A'
+        },
+        caregiver: {
+          name: 'Douglas',
+          surname: 'Calabrese',
+          relation: 'Fratello'
+        }
+      },
+      {
+        date: '26/02/2022',
+        time: '17:00',
+        clinic: 'San Raffaele di Milano',
+        doctor: {
+          name: 'Giuseppe',
+          surname: 'Pezzella',
+          qualification: 'Stomaterapista'
+        },
+        patient: {
+          name: 'Franco',
+          surname: 'Beppe',
+          ssn: 'VNRLCU92S27D962A'
+        },
+        caregiver: {
+          name: 'Maria',
+          surname: 'Santa',
+          relation: 'Sorella'
+        }
+      }
+    ];
 
     return {
       props: {
-        'visits': visitsList,
+        visits: visitsList
         // 'userId': session.id,
       }
     };
-  };
+  }
 </script>
 
 <script>
-  import DetailedTile from "$lib/shared/DetailedTile.svelte";
+  import DetailedTile from '$lib/shared/DetailedTile.svelte';
 
   export let visits;
   // export let userId;
@@ -62,8 +105,6 @@
   // TODO
 </script>
 
-
-
 <svelte:head>
   <title>I tuoi appuntamenti - OpenMed</title>
 </svelte:head>
@@ -74,12 +115,13 @@
     All the data below is made-up
     TODO: check and implement the correct properties
   -->
-  <DetailedTile
+  <!-- <DetailedTile
     title="Visita"
     subtitle={v.date}
     iconImgPath="/myImg.svg"
     iconImgAlt="da remoto / in presenza"
-  >
+  > -->
+  <DetailedTile title="Visita" subtitle={v.date}>
     <p>{v.date}</p>
 
     <h3>Data</h3>
@@ -101,22 +143,9 @@
     <p>{v.caregiver.name} {v.caregiver.surname}</p>
     <p>{v.caregiver.relation}</p>
 
-    <button on:click|preventDefault="{() => callStart(v)}">
-      Inizio chiamata
-    </button>
+    <button on:click|preventDefault={() => callStart(v)}> Inizio chiamata </button>
     <div on:click={() => edit(v)}>Modifica</div>
   </DetailedTile>
 {:else}
   <p>Non hai appuntamenti da poter mostrare qui.</p>
 {/each}
-
-
-
-<style>
-  h1 {
-    margin: 1rem;
-  }
-  p {
-    margin: 1rem;
-  }
-</style>

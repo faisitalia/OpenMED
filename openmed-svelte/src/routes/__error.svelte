@@ -1,18 +1,14 @@
 <script context="module">
   export async function load() {
-    return { };
+    return {};
   }
 </script>
-
 
 <script>
 </script>
 
-
 <h1>Something went wrong</h1>
 
-
-
+<!-- TODO: implement something here -->
 <style>
-
 </style>
