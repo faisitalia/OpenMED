@@ -7,7 +7,7 @@
 </svelte:head>
 
 <div
-  class="flex flex-col justify-start items-center rounded-3xl bg-brandBlue-50/50 p-10 mx-20 my-36"
+  class="flex flex-col justify-start items-center rounded-3xl bg-brandBlue-50/40 p-10 mx-20 my-36"
 >
   <h1 class="font-bold text-center">Appuntamento registrato correttamente</h1>
   <p class="my-2">Continua la navigazione</p>
