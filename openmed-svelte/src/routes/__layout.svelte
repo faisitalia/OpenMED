@@ -66,7 +66,9 @@
     <!-- Main Navigation Bar -->
     <div class="flex flex-row flex-nowrap justify-between items-center">
       <!-- Use OpenMed's logo here -->
-      <div>Logo</div>
+      <div>
+        <a href="/">Logo</a>
+      </div>
 
       <!-- Drawer Menu on mobile screens -->
       <div
