@@ -10,5 +10,3 @@
 <h1>Something went wrong</h1>
 
 <!-- TODO: implement something here -->
-<style>
-</style>

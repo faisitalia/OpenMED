@@ -1,11 +1,11 @@
 <script context="module">
   export async function load({ session }) {
     // If the user is logged in already, re-route him to the index
-    if(session?.id) {
+    if (session?.id) {
       return {
         status: 302,
         redirect: '/'
-      }
+      };
     }
 
     return {};
@@ -13,17 +13,17 @@
 </script>
 
 <script>
-  import { validate } from "validate.js";
-  import { goto } from "$app/navigation";
-  import { session } from "$app/stores";
-  import { usersEndpoint } from "$lib/uri.js";
+  import { validate } from 'validate.js';
+  import { goto } from '$app/navigation';
+  import { session } from '$app/stores';
+  import { usersEndpoint } from '$lib/uri.js';
 
   let hasStarted = false;
 
   // Initialize form values
   const form = {
     username: undefined,
-    password: undefined,
+    password: undefined
   };
 
   // Initialize form constraints
@@ -32,7 +32,7 @@
       presence: {
         allowEmpty: false,
         message: `^Devi inserire un username`
-      },
+      }
       // We are NOT checking a proper email since this mode is deprecated
     },
     password: {
@@ -41,14 +41,11 @@
         message: `^Devi inserire la tua password`
       }
     }
-  }
+  };
   let errors;
 
   async function getUserData() {
-    const response = await fetch(
-      `${usersEndpoint}/currentuser`,
-      { credentials: 'include' }
-    );
+    const response = await fetch(`${usersEndpoint}/currentuser`, { credentials: 'include' });
     // If something goes wrong with this call, we can't authenticate
     if (!response.ok) return null;
 
@@ -63,27 +60,24 @@
   async function logIn() {
     // Form validation
     errors = validate(form, formConstraints);
-    if(errors) {
+    if (errors) {
       console.log(errors);
       return;
     }
 
     // Log in request
-    const response = await fetch(
-      `${usersEndpoint}/signin`,
-      {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          "email": form.username,
-          "password": form.password
-        })
-      }
-    );
-    
+    const response = await fetch(`${usersEndpoint}/signin`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: form.username,
+        password: form.password
+      })
+    });
+
     if (response.ok) {
       $session = await getUserData();
       goto('/');
@@ -93,16 +87,14 @@
       console.log(errors);
     }
   }
-</script> 
-
-
+</script>
 
 <svelte:head>
   <title>Log-in - OpenMed</title>
 </svelte:head>
 
 {#if !hasStarted}
-  <button on:click={() => hasStarted=true} class="start">Inizia</button>
+  <button on:click={() => (hasStarted = true)} class="start">Inizia</button>
 {:else}
   <form on:submit|preventDefault={logIn} id="signin">
     <!-- TODO: valutare se aggiungere delle label per accessibilità -->
@@ -149,22 +141,3 @@
 <img src="sponsor1.svg" alt=""/>
 <img src="sponsor2.svg" alt=""/>
 <img src="sponsor2.svg" alt=""/> -->
-
-
-<style>
-  .error {
-    color: red;
-  }
-  .start {
-    margin: 1rem;
-  }
-  fieldset {
-    margin: 1rem;
-    padding: 0.5rem;
-    max-width: 35%;
-    border: 1px dashed black;
-  }
-  .submit {
-    margin: 1rem;
-  }
-</style>
