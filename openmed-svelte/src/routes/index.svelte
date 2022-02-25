@@ -27,34 +27,39 @@
   <title>OpenMed</title>
 </svelte:head>
 
-<div id="hello-user" class="px-12 my-16">
-  <h1>
-    Ciao {name},
-  </h1>
-  <p>come desideri procedere?</p>
-</div>
-<div class="spacer" />
+<div class="mx-10 my-4">
+  <div id="hello-user" class="px-8">
+    <h1>
+      Ciao {name},
+    </h1>
+    <p>come desideri procedere?</p>
+  </div>
+  <div class="my-7" />
 
-<div id="actions" class="flex flex-col justify-center items-start">
-  {#if isAdmin}
-    <DashboardTile title="Gestisci Utenti" subtitle="Crea, modifica ed elimina i profili utenti" />
-  {/if}
-  {#if isDoctor}
-    <DashboardTile
-      title="Crea Appuntamento"
-      subtitle="Crea e gestisci nuovi appuntamenti"
-      on:click={() => goto('/appointments/new')}
-    />
-  {/if}
-  {#if isPatient || isDoctor}
-    <DashboardTile
-      title="Lista Appuntamenti"
-      subtitle="Visualizza i tuoi appuntamenti"
-      on:click={() => goto('/appointments')}
-    />
-  {/if}
-  {#if isPatient && !isDoctor}
-    <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
-  {/if}
+  <div id="actions" class="flex flex-col justify-center items-start">
+    {#if isAdmin}
+      <DashboardTile
+        title="Gestisci Utenti"
+        subtitle="Crea, modifica ed elimina i profili utenti"
+      />
+    {/if}
+    {#if isDoctor}
+      <DashboardTile
+        title="Crea Appuntamento"
+        subtitle="Crea e gestisci nuovi appuntamenti"
+        on:click={() => goto('/appointments/new')}
+      />
+    {/if}
+    {#if isPatient || isDoctor}
+      <DashboardTile
+        title="Lista Appuntamenti"
+        subtitle="Visualizza i tuoi appuntamenti"
+        on:click={() => goto('/appointments')}
+      />
+    {/if}
+    {#if isPatient && !isDoctor}
+      <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
+    {/if}
+  </div>
+  <!-- TODO add image -->
 </div>
-<!-- TODO add image -->
