@@ -11,7 +11,7 @@ const TheLayout = () => {
   useEffect(() => {
     function fetchCurrentUser() {
       apiServer
-        .get('/v1/users/currentuser')
+        .get('/v1/users/currentUser')
         .then((response) => {
           if (!response.data.currentUser) {
             sessionStorage.clear()

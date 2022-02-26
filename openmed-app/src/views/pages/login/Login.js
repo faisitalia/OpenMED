@@ -31,8 +31,8 @@ const Login = () => {
         password: password,
       })
       .then((response) => {
-        sessionStorage.setItem('accessToken', JSON.stringify(response.data.access_token))
-        sessionStorage.setItem('refreshToken', JSON.stringify(response.data.refresh_token))
+        sessionStorage.setItem('accessToken', response.data.access_token)
+        sessionStorage.setItem('refreshToken', response.data.refresh_token)
 
         isLogged(true)
       })

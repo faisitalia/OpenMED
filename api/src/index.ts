@@ -7,8 +7,8 @@ import { app, PORT } from './app'
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 
-const key = fs.readFileSync('./certs/openmed.dev+5-key.pem')
-const cert = fs.readFileSync('./certs/openmed.dev+5.pem')
+const key = fs.readFileSync('./certs/key.pem')
+const cert = fs.readFileSync('./certs/cert.pem')
 
 const start = async () => {
   if (!process.env.OPENID_CLIENT_ID) {
