@@ -14,6 +14,7 @@ describe('Facility integration test suite', () => {
 
   it('should create a facility', async () => {
     // get the access token
+    const username = 'facility'
     const email = 'user-facility@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -21,10 +22,10 @@ describe('Facility integration test suite', () => {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // create the facility
     const facilityToCreate = {
@@ -66,6 +67,7 @@ describe('Facility integration test suite', () => {
 
   it('should fetch all the facilities', async () => {
     // get the access token
+    const username = 'facility-all'
     const email = 'user-all-facility@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -73,10 +75,10 @@ describe('Facility integration test suite', () => {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // make the request to fetch all the facilities
     const { body: fetchedFacilities } = await request(app)
@@ -97,6 +99,7 @@ describe('Facility integration test suite', () => {
 
   it('should return the facility coordinates', async () => {
     // get the access token
+    const username = 'facility-coord'
     const email = 'user-coord-facility@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -104,10 +107,10 @@ describe('Facility integration test suite', () => {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // get coordinates by town
     const townToSearch = 'Torino'
@@ -142,6 +145,7 @@ describe('Facility integration test suite', () => {
 
   it('should return the nearest facilities to a particular point (lat, long)', async () => {
     // get the access token
+    const username = 'facility-near'
     const email = 'user-near-facilities@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -149,10 +153,10 @@ describe('Facility integration test suite', () => {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the params
     const latitude = 38.1041882
@@ -200,6 +204,7 @@ describe('Facility integration test suite', () => {
 
   it('should return the nearest facility to a particular point (lat, long)', async () => {
     // get the access token
+    const username = 'facility-coord'
     const email = 'user-coord-facility@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -207,10 +212,10 @@ describe('Facility integration test suite', () => {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the params
     const latitude = 38.1041882

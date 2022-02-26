@@ -4,11 +4,11 @@ import { constants } from 'http2'
 import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
-it('fails when a email that does not exist is supplied', async () => {
+it('fails when a username that does not exist is supplied', async () => {
   await request(app)
     .post('/v1/users/signin')
     .send({
-      email: 'test-fail@test.com',
+      username: 'test-fail',
       password: 'password',
     })
     .expect(400)
@@ -18,7 +18,7 @@ it('fails when an incorrect password is supplied', async () => {
   await request(app)
     .post('/v1/users/signin')
     .send({
-      email: 'test@test.com',
+      username: 'test',
       password: 'aslkdfjalskdfj',
     })
     .expect(400)
@@ -28,6 +28,7 @@ it('responds with a access token when given valid credentials', async () => {
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
+      username: 'john',
       email: 'john@test.com',
       password: 'password',
       firstname: 'John',
@@ -39,7 +40,7 @@ it('responds with a access token when given valid credentials', async () => {
   const { body: login } = await request(app)
     .post('/v1/users/signin')
     .send({
-      email: 'john@test.com',
+      username: 'john',
       password: 'password',
     })
     .expect(constants.HTTP_STATUS_OK)

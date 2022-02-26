@@ -5,12 +5,14 @@ import { app } from '../../../app'
 import { deleteUserById, getUserInfo } from '../../../services/auth'
 
 it('clears the session after signing out', async () => {
+  const username = 'john1'
   const email = 'user-session@test.com'
   const password = 'password'
 
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
+      username,
       email,
       password,
       firstname: 'John',
@@ -19,7 +21,7 @@ it('clears the session after signing out', async () => {
     })
     .expect(constants.HTTP_STATUS_CREATED)
 
-  const accessToken = await global.signin(email, password)
+  const accessToken = await global.signin(username, password)
 
   // logout
   await request(app)

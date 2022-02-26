@@ -8,6 +8,7 @@ it('responds with a refresh token when given valid refresh token', async () => {
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
+      username: 'john',
       email: 'john@test.com',
       password: 'password',
       firstname: 'John',
@@ -19,7 +20,7 @@ it('responds with a refresh token when given valid refresh token', async () => {
   const { body: login } = await request(app)
     .post('/v1/users/signin')
     .send({
-      email: 'john@test.com',
+      username: 'john',
       password: 'password',
     })
     .expect(constants.HTTP_STATUS_OK)
@@ -29,7 +30,7 @@ it('responds with a refresh token when given valid refresh token', async () => {
   const { body: newToken } = await request(app)
     .post('/v1/users/refreshToken')
     .send({
-      email: 'john@test.com',
+      username: 'john',
       password: 'password',
       refreshToken,
     })

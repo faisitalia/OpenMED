@@ -39,20 +39,15 @@ const router = express.Router()
 router.post(
   '/v1/users/refreshToken',
   [
-    body('email').isEmail().withMessage('Email must be valid'),
+    body('username').trim().notEmpty().withMessage('Username must be valid'),
     body('password').trim().notEmpty().withMessage('You must supply a password'),
     body('refreshToken').trim().notEmpty().withMessage('You must supply a refresh token'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, refreshToken } = req.body
+    const { username, password, refreshToken } = req.body
 
-    const existingUser = await getUserByEmail(email)
-    if (!existingUser) {
-      throw new BadRequestError('Invalid credentials')
-    }
-
-    const newAccessToken = await refreshAuthToken(existingUser.username!, password, refreshToken)
+    const newAccessToken = await refreshAuthToken(username, password, refreshToken)
 
     res.status(200).send(newAccessToken)
   }

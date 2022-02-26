@@ -43,25 +43,14 @@ const router = express.Router()
 router.post(
   '/v1/users/signin',
   [
-    body('email').isEmail().withMessage('Email must be valid'),
+    body('username').trim().notEmpty().withMessage('Username must be valid'),
     body('password').trim().notEmpty().withMessage('You must supply a password'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body
+    const { username, password } = req.body
 
-    const existingUser = await getUserByEmail(email)
-    if (!existingUser) {
-      throw new BadRequestError('Invalid credentials')
-    }
-
-    const login = await getAuthToken(existingUser.username!, password)
-
-    // Store it on session object
-    // req.session = {
-    //   jwt: login.accessToken,
-    // }
-
+    const login = await getAuthToken(username, password)
     res.status(200).send(login)
   }
 )

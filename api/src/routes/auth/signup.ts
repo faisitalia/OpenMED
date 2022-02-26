@@ -45,6 +45,7 @@ const router = express.Router()
 router.post(
   '/v1/users/signup',
   [
+    body('username').trim().notEmpty().withMessage('Username is required'),
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
       .trim()
@@ -56,7 +57,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, firstname, lastname, birthdate } = req.body
+    const { username, email, password, firstname, lastname, birthdate } = req.body
 
     // const existingUser = await User.findOne({ email })
 
@@ -73,7 +74,6 @@ router.post(
     // create the user
     // const user = User.build({ email, password, role: Role.USER, personId: person.id })
     // await user.save()
-    const username = `person_${person.id}`
     const userId = await createUser(username, email, password)
 
     // retrieve the user just created
