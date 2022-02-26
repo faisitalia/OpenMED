@@ -17,21 +17,21 @@ apiServer.interceptors.request.use((config) => {
 
   return config
 })
-// apiServer.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     // extracting response and config objects
-//     const { response, config } = error
-//     // checking if error is Aunothorized error
-//     if (response.status === 401) {
-//       config.headers.Authorization = ``
-//       sessionStorage.clear()
-//     }
-//     // if none above worked clear local storage and log user out
-//     // sessionStorage.clear()
-//     return error
-//   }
-// )
+apiServer.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    // extracting response and config objects
+    const { response, config } = error
+    // checking if error is Aunothorized error
+    if (response.status === 401) {
+      config.headers.Authorization = ``
+      sessionStorage.clear()
+    }
+    // if none above worked clear local storage and log user out
+    // sessionStorage.clear()
+    return error
+  }
+)
 
 const mediaServer = axios.create({
   baseURL: 'https://localhost:5000',
