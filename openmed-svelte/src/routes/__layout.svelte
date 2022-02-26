@@ -95,7 +95,7 @@
     </div>
   </header>
 
-  <main class="{isDrawerOpen ? 'blur-sm' : 'blur-none'} flex-1">
+  <main class="{isDrawerOpen ? 'blur-sm' : 'blur-none'} flex-1 mx-10 my-4">
     <slot />
   </main>
 

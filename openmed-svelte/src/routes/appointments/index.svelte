@@ -109,18 +109,19 @@
   <title>I tuoi appuntamenti - OpenMed</title>
 </svelte:head>
 
-<h1>Scegli il tuo appuntamento</h1>
+<h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
+<p class="font-normal mb-8">Le tue visite programmate sono qui.</p>
 {#each visits as v}
   <!--
-    All the data below is made-up
-    TODO: check and implement the correct properties
-  -->
+      All the data below is made-up
+      TODO: check and implement the correct properties
+    -->
   <!-- <DetailedTile
-    title="Visita"
-    subtitle={v.date}
-    iconImgPath="/myImg.svg"
-    iconImgAlt="da remoto / in presenza"
-  > -->
+      title="Visita"
+      subtitle={v.date}
+      iconImgPath="/myImg.svg"
+      iconImgAlt="da remoto / in presenza"
+    > -->
   <DetailedTile title="Visita" subtitle={v.date}>
     <p>{v.date}</p>
 
