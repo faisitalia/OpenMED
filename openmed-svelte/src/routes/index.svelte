@@ -14,6 +14,7 @@
 <script>
   import { goto } from '$app/navigation';
   import DashboardTile from '$lib/shared/DashboardTile.svelte';
+  import Container from '$lib/shared/Container.svelte';
 
   export let name = 'Fabrizio';
   export let roles = ['doctor'];
@@ -27,7 +28,7 @@
   <title>OpenMed</title>
 </svelte:head>
 
-<div class="mx-10 my-4">
+<Container>
   <div id="hello-user" class="px-8">
     <h1>
       Ciao {name},
@@ -62,4 +63,4 @@
     {/if}
   </div>
   <!-- TODO add image -->
-</div>
+</Container>

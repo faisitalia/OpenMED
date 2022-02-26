@@ -58,6 +58,8 @@
   import { yyyyMMdd } from '$lib/utils';
   import { goto } from '$app/navigation';
 
+  import Container from '$lib/shared/Container.svelte';
+
   export let patients;
   export let clinics;
   export let doctorId;
@@ -89,7 +91,7 @@
     minute: minutes[0],
     duration: durations[0],
     clinic: 'Virtuale',
-    patient: patients[0]
+    patient: undefined
   };
   $: startDate = new Date(choices.date + 'T' + choices.hour + ':' + choices.minute + ':00.000');
 
@@ -192,71 +194,123 @@
   <title>Nuova visita - OpenMed</title>
 </svelte:head>
 
-<h1>Nuovo Appuntamento</h1>
-<p>Compila tutti i campi.</p>
+<Container>
+  <h1 class="font-bold my-2">Nuovo Appuntamento</h1>
+  <p class="font-normal mb-8">Compila tutti i campi.</p>
 
-<form on:submit|preventDefault={submit} id="newAppointment">
-  <fieldset>
-    <label for="clinic">Seleziona Ambulatorio</label>
-    <select bind:value={choices.clinic} name="Ambulatorio" id="clinic" required>
-      <option value="Virtuale">Virtuale</option>
-      {#each clinics as c}
-        <!-- <option value={c}>{c?.name}</option> -->
-        <option value={c}>{c}</option>
-        <!-- TODO: use expression above-->
-      {:else}
-        <option value="null" disabled="true">Nessuna clinica disponibile</option>
-      {/each}
-    </select>
-  </fieldset>
-  {#if errors?.clinic}
-    <div class="text-red-500">{errors.clinic[0]}</div>
+  <form
+    on:submit|preventDefault={submit}
+    id="newAppointment"
+    class="flex flex-col justify-center items-stretch"
+  >
+    <fieldset class="flex flex-col items-stretch my-3">
+      <label for="clinic">Seleziona Ambulatorio</label>
+      <select
+        bind:value={choices.clinic}
+        name="Ambulatorio"
+        id="clinic"
+        required
+        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+      >
+        <option value="Virtuale" class="font-bold">Virtuale</option>
+        {#each clinics as c}
+          <!-- <option value={c}>{c?.name}</option> -->
+          <option value={c}>{c}</option>
+          <!-- TODO: use expression above-->
+        {:else}
+          <option value="null" disabled="true">Nessuna clinica disponibile</option>
+        {/each}
+      </select>
+      {#if errors?.clinic}
+        <div class="text-red-500">{errors.clinic[0]}</div>
+      {/if}
+    </fieldset>
+    <fieldset class="flex flex-col items-stretch my-3">
+      <label for="date">Seleziona una data</label>
+      <input
+        type="date"
+        name="Data"
+        id="date"
+        class="appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        bind:value={choices.date}
+        required
+      />
+    </fieldset>
+    <fieldset class="flex flex-col items-stretch">
+      <label for="date">Seleziona orario</label>
+      <select
+        bind:value={choices.hour}
+        name="Ore"
+        id="hours"
+        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+      >
+        {#each hours as h}
+          <option value={h}>{h}</option>
+        {/each}
+      </select>
+      <select
+        bind:value={choices.minute}
+        name="Minuti"
+        id="minutes"
+        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+      >
+        {#each minutes as m}
+          <option value={m}>{m}</option>
+        {/each}
+      </select>
+      {#if errors?.startDate}
+        <div class="text-red-500">{errors.startDate[0]}</div>
+      {/if}
+    </fieldset>
+    <fieldset class="flex flex-col items-stretch my-3">
+      <label for="duration">Durata Visita (min.)</label>
+      <select
+        bind:value={choices.duration}
+        name="Durata"
+        id="duration"
+        class="appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+      >
+        {#each durations as d}
+          <option value={d}>{d}</option>
+        {/each}
+      </select>
+    </fieldset>
+    <fieldset class="flex flex-col items-stretch my-4">
+      <label for="patient">Seleziona Paziente</label>
+      <select
+        bind:value={choices.patient}
+        name="Paziente"
+        id="patient"
+        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+      >
+        <option selected disabled hidden />
+        {#each patients as p}
+          <!-- <option value={p}>{p?.name}</option> -->
+          <option value={p}>{p}</option>
+          <!-- TODO use expression above -->
+        {:else}
+          <option value="null" disabled="true">Nessun Paziente disponibile</option>
+        {/each}
+      </select>
+      {#if errors?.patient}
+        <div class="text-red-500">{errors.patient[0]}</div>
+      {/if}
+    </fieldset>
+    <button
+      type="submit"
+      on:submit={submit}
+      class="mx-10 my-7 px-2 py-1 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
+    >
+      Crea appuntamento
+    </button>
+  </form>
+  {#if asyncErrors?.errors}
+    <div class="text-red-500">Woops! Qualcosa è andato storto, riprova.</div>
   {/if}
-  <fieldset>
-    <label for="date">Seleziona una data</label>
-    <input type="date" name="Data" id="date" bind:value={choices.date} required />
-  </fieldset>
-  <fieldset>
-    <label for="date">Seleziona orario</label>
-    <select bind:value={choices.hour} name="Ore" id="hours">
-      {#each hours as h}
-        <option value={h}>{h}</option>
-      {/each}
-    </select>
-    <select bind:value={choices.minute} name="Minuti" id="minutes">
-      {#each minutes as m}
-        <option value={m}>{m}</option>
-      {/each}
-    </select>
-  </fieldset>
-  {#if errors?.startDate}
-    <div class="text-red-500">{errors.startDate[0]}</div>
-  {/if}
-  <fieldset>
-    <label for="duration">Durata Visita</label>
-    <select bind:value={choices.duration} name="Durata" id="duration">
-      {#each durations as d}
-        <option value={d}>{d}</option>
-      {/each}
-    </select>
-  </fieldset>
-  <fieldset>
-    <label for="patient">Seleziona Paziente</label>
-    <select bind:value={choices.patient} name="Paziente" id="patient">
-      {#each patients as p}
-        <!-- <option value={p}>{p?.name}</option> -->
-        <option value={p}>{p}</option>
-        <!-- TODO use expression above -->
-      {:else}
-        <option value="null" disabled="true">Nessun Paziente disponibile</option>
-      {/each}
-    </select>
-  </fieldset>
-  {#if errors?.patient}
-    <div class="text-red-500">{errors.patient[0]}</div>
-  {/if}
-  <button type="submit" on:submit={submit}> Crea appuntamento </button>
-</form>
-{#if asyncErrors?.errors}
-  <div class="text-red-500">Woops! Qualcosa è andato storto, riprova.</div>
-{/if}
+</Container>
+
+<style>
+  #date::-webkit-calendar-picker-indicator {
+    @apply px-4 mx-3 bg-brandBlue-100/60 rounded-lg;
+  }
+</style>
