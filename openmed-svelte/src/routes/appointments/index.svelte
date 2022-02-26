@@ -90,12 +90,13 @@
 
 <script>
   import DetailedTile from '$lib/shared/DetailedTile.svelte';
+  import { goto } from '$app/navigation';
 
   export let visits;
   // export let userId;
 
   function callStart(visit) {
-    //TODO
+    // TODO
   }
 
   function edit(visit) {
@@ -110,7 +111,7 @@
 </svelte:head>
 
 <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
-<p class="font-normal mb-8">Le tue visite programmate sono qui.</p>
+<p class="font-normal mb-8">Le visite programmate sono qui.</p>
 {#each visits as v}
   <!--
       All the data below is made-up
@@ -122,30 +123,47 @@
       iconImgPath="/myImg.svg"
       iconImgAlt="da remoto / in presenza"
     > -->
-  <DetailedTile title="Visita" subtitle={v.date}>
-    <p>{v.date}</p>
-
-    <h3>Data</h3>
-    <p>{v.date}</p>
-    <p>{v.time}</p>
-
-    <h3>Ambulatorio</h3>
-    <p>{v.clinic}</p>
-
-    <h3>Medico</h3>
-    <p>{v.doctor.name} {v.doctor.surname}</p>
-    <p>{v.doctor.qualification}</p>
-
-    <h3>Paziente</h3>
-    <p>{v.patient.name} {v.patient.surname}</p>
-    <p>{v.patient.ssn}</p>
-
-    <h3>Caregiver / Familiare</h3>
-    <p>{v.caregiver.name} {v.caregiver.surname}</p>
-    <p>{v.caregiver.relation}</p>
-
-    <button on:click|preventDefault={() => callStart(v)}> Inizio chiamata </button>
-    <div on:click={() => edit(v)}>Modifica</div>
+  <DetailedTile title="Visita" subtitle={`${v.date} h ${v.time}`}>
+    <div class="px-7 py-2">
+      <div class="py-3">
+        <h3>Appuntamento</h3>
+        <p>il {v.date}</p>
+        <p>h {v.time}</p>
+      </div>
+      <div class="py-3">
+        <h3>Ambulatorio</h3>
+        <p>{v.clinic}</p>
+      </div>
+      <div class="py-3">
+        <h3>Medico</h3>
+        <p>{v.doctor.name} {v.doctor.surname}</p>
+        <p class="font-light text-brandText-400">{v.doctor.qualification}</p>
+      </div>
+      <div class="py-3">
+        <h3>Paziente</h3>
+        <p>{v.patient.name} {v.patient.surname}</p>
+        <p class="font-light">{v.patient.ssn}</p>
+      </div>
+      <div class="py-3">
+        <h3>Caregiver / Familiare</h3>
+        <p>{v.caregiver.name} {v.caregiver.surname}</p>
+        <p class="font-light text-brandText-400">{v.caregiver.relation}</p>
+      </div>
+    </div>
+    <div slot="actions" class="px-7 py-5 mx-7 mt-4 flex flex-col items-stretch">
+      <button
+        on:click|preventDefault={() => callStart(v)}
+        class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
+      >
+        <span class="material-icons align-middle pr-2">call</span> Inizio chiamata
+      </button>
+      <div
+        on:click={() => edit(v)}
+        class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
+      >
+        Modifica
+      </div>
+    </div>
   </DetailedTile>
 {:else}
   <p>Non hai appuntamenti da poter mostrare qui.</p>
