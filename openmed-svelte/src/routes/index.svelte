@@ -27,9 +27,9 @@
   <title>OpenMed</title>
 </svelte:head>
 
-<div id="hello-user" class="px-8">
-  <h1>
-    Ciao {name},
+<div id="hello-user" class="px-4">
+  <h1 class="font-bold text-4xl">
+    Ciao {name}
   </h1>
   <p>come desideri procedere?</p>
 </div>
@@ -43,7 +43,7 @@
     <DashboardTile
       title="Crea Appuntamento"
       subtitle="Crea e gestisci nuovi appuntamenti"
-      on:click={() => goto('/appointments/new')}
+      on:click={() => goto('/appointments/edit')}
     />
   {/if}
   {#if isPatient || isDoctor}
