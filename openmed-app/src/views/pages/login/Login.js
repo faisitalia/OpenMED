@@ -20,14 +20,14 @@ import CIcon from '@coreui/icons-react'
 import { apiServer } from '../../../api/config'
 
 const Login = () => {
-  const [email, setEmail] = useState('user@openmed.cloud')
+  const [username, setUsername] = useState('user')
   const [password, setPassword] = useState('password')
   const [logged, isLogged] = useState(false)
 
   function submitLogin() {
     apiServer
       .post(`/v1/users/signin`, {
-        email: email,
+        username: username,
         password: password,
       })
       .then((response) => {
@@ -63,10 +63,10 @@ const Login = () => {
                       </CInputGroupPrepend>
                       <CInput
                         type="text"
-                        placeholder="Email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="Username"
+                        autoComplete="user"
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
