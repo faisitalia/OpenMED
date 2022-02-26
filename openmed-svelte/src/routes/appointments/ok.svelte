@@ -10,7 +10,7 @@
   class="flex flex-col justify-start items-center rounded-3xl bg-brandBlue-50/40 p-10 mx-20 my-36"
 >
   <h1 class="font-bold text-center">Appuntamento registrato correttamente</h1>
-  <p class="my-2">Continua la navigazione</p>
+  <p class="my-2 text-center">Continua la navigazione</p>
   <div class="my-7" />
   <a href="/" class="bg-brandBlue-500 text-white px-3 py-2 rounded-3xl font-bold">
     Torna in Home

@@ -210,7 +210,7 @@
         name="Ambulatorio"
         id="clinic"
         required
-        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
       >
         <option value="Virtuale" class="font-bold">Virtuale</option>
         {#each clinics as c}
@@ -231,7 +231,7 @@
         type="date"
         name="Data"
         id="date"
-        class="appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
         bind:value={choices.date}
         required
       />
@@ -242,7 +242,7 @@
         bind:value={choices.hour}
         name="Ore"
         id="hours"
-        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
       >
         {#each hours as h}
           <option value={h}>{h}</option>
@@ -252,7 +252,7 @@
         bind:value={choices.minute}
         name="Minuti"
         id="minutes"
-        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
       >
         {#each minutes as m}
           <option value={m}>{m}</option>
@@ -268,7 +268,7 @@
         bind:value={choices.duration}
         name="Durata"
         id="duration"
-        class="appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
       >
         {#each durations as d}
           <option value={d}>{d}</option>
@@ -281,7 +281,7 @@
         bind:value={choices.patient}
         name="Paziente"
         id="patient"
-        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/40 hover:bg-brandBlue-50/50"
+        class="appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
       >
         <option selected disabled hidden />
         {#each patients as p}
