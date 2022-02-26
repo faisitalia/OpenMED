@@ -154,6 +154,7 @@ function dashboardController(req, res) {
       // Value stored in req.session allows us to identify the user in future requests
       console.log("'" + user + "' has logged in");
       req.session.loggedUser = user;
+
       res.render("dashboard.ejs", {
         user: user,
       });
@@ -179,14 +180,16 @@ app.post("/session", async (req, res) => {
       res.redirect("/");
     }
 
-    // console.log(currentUser);
+    console.log(currentUser);
 
-    req.session.loggedUser = currentUser;
+    req.session.loggedUser = currentUser.preferred_username;
 
     // The nickname sent by the client
     var clientData = req.body.data;
+    console.log("clientData", clientData);
     // The video-call to connect
     var sessionName = req.body.sessionname;
+    console.log("sessionName", sessionName);
 
     // Role associated to this user
     // var role = users.find((u) => u.user === req.session.loggedUser).role;

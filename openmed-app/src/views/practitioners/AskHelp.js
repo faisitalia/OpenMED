@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { mediaServer } from '../../api/config'
 
 const AskHelp = () => {
-  const [roomLoaded, isRoomtoLoad] = useState(null)
+  const [room, setRoom] = useState(null)
 
   function openTheRoom(e) {
     e.preventDefault()
@@ -15,27 +15,28 @@ const AskHelp = () => {
     mediaServer
       .post('/session', params)
       .then((response) => {
-        console.log(response)
-        isRoomtoLoad(true)
+        setRoom(response.data)
       })
       .catch((error) => {
         console.log(error)
-        isRoomtoLoad(false)
+        setRoom(null)
       })
   }
 
   function renderRoom() {
-    return (
-      <object data="https://localhost:5000/" width="800" height="800" type="text/html"></object>
-    )
+    console.log(room)
+    return <div dangerouslySetInnerHTML={{ __html: room }}></div>
   }
 
   return (
     <div>
-      <a href="#" onClick={openTheRoom}>
-        Open the room
-      </a>
-      {roomLoaded ? renderRoom() : ''}
+      {room ? (
+        renderRoom()
+      ) : (
+        <a href="#" onClick={openTheRoom}>
+          Open the room
+        </a>
+      )}
     </div>
   )
 }
