@@ -24,10 +24,10 @@ const router = express.Router()
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
  *                 description: The user's name.
- *                 example: user@openmed.test
+ *                 example: user
  *               password:
  *                 type: string
  *                 description: The user's name.
@@ -35,12 +35,12 @@ const router = express.Router()
  *     security: []    # no authentication
  *     responses:
  *      '200':
- *         description: Successfully signed up. The session ID is returned in a cookie named `jwt`. You need to include this cookie in subsequent requests.
+ *         description: Successfully signed up. The user just created is returned in a response body.
  *         headers:
- *           Set-Cookie:
+ *           Authorization:
  *             schema:
  *               type: string
- *               example: jwt=abcde12345; Path=/; HttpOnly
+ *               example: Bearer fadsuyhds876fd789yfdadjsfhasdf789
  */
 router.post(
   '/v1/users/signup',
@@ -69,7 +69,7 @@ router.post(
 
     // create the person
     const personDoc = Person.build({ firstname, lastname, birthdate })
-    const person = await personDoc.save()
+    await personDoc.save()
 
     // create the user
     // const user = User.build({ email, password, role: Role.USER, personId: person.id })
