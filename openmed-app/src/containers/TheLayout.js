@@ -22,6 +22,7 @@ const TheLayout = () => {
         })
         .catch((error) => {
           console.log(error)
+          sessionStorage.clear()
         })
     }
 
