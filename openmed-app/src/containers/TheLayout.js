@@ -14,6 +14,7 @@ const TheLayout = () => {
         .get('/v1/users/currentUser')
         .then((response) => {
           if (!response.data.currentUser) {
+            console.log('first ', response)
             sessionStorage.clear()
             isLogged(false)
           } else {
@@ -23,6 +24,7 @@ const TheLayout = () => {
         .catch((error) => {
           console.log(error)
           sessionStorage.clear()
+          isLogged(false)
         })
     }
 
