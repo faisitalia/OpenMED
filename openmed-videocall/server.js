@@ -222,12 +222,12 @@ app.post("/session", async (req, res) => {
           mapSessionNamesTokens[sessionName].push(connection.token);
 
           // Return session template with all the needed attributes
-          res.render("session.ejs", {
+          res.send({
             sessionId: mySession.getSessionId(),
+            sessionName: sessionName,
             token: connection.token,
             nickName: clientData,
             userName: req.session.loggedUser,
-            sessionName: sessionName,
           });
         })
         .catch((error) => {
