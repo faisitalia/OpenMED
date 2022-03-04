@@ -279,50 +279,46 @@ app.post("/session", async (req, res) => {
 });
 
 app.post("/leave-session", (req, res) => {
-  if (!isLogged(req.session)) {
-    req.session.destroy();
-    // res.render("index.ejs");
-    res.send("session destroyed");
-  } else {
-    // Retrieve params from POST body
-    var sessionName = req.body.sessionname;
-    var token = req.body.token;
-    console.log(
-      "Removing user | {sessionName, token}={" +
-        sessionName +
-        ", " +
-        token +
-        "}"
-    );
+  // if (!isLogged(req.session)) {
+  //   req.session.destroy();
+  //   // res.render("index.ejs");
+  //   res.send("session destroyed");
+  // } else {
+  // Retrieve params from POST body
+  var sessionName = req.body.sessionname;
+  var token = req.body.token;
+  console.log(
+    "Removing user | {sessionName, token}={" + sessionName + ", " + token + "}"
+  );
 
-    // If the session exists
-    if (mapSessions[sessionName] && mapSessionNamesTokens[sessionName]) {
-      var tokens = mapSessionNamesTokens[sessionName];
-      var index = tokens.indexOf(token);
+  // If the session exists
+  if (mapSessions[sessionName] && mapSessionNamesTokens[sessionName]) {
+    var tokens = mapSessionNamesTokens[sessionName];
+    var index = tokens.indexOf(token);
 
-      // If the token exists
-      if (index !== -1) {
-        // Token removed
-        tokens.splice(index, 1);
-        console.log(sessionName + ": " + tokens.toString());
-      } else {
-        var msg = "Problems in the app server: the TOKEN wasn't valid";
-        console.log(msg);
-        // res.redirect("/dashboard");
-        res.status(500).send(msg);
-      }
-      if (tokens.length == 0) {
-        // Last user left: session must be removed
-        console.log(sessionName + " empty!");
-        delete mapSessions[sessionName];
-      }
-      res.redirect("/dashboard");
+    // If the token exists
+    if (index !== -1) {
+      // Token removed
+      tokens.splice(index, 1);
+      console.log(sessionName + ": " + tokens.toString());
     } else {
-      var msg = "Problems in the app server: the SESSION does not exist";
+      var msg = "Problems in the app server: the TOKEN wasn't valid";
       console.log(msg);
+      // res.redirect("/dashboard");
       res.status(500).send(msg);
     }
+    if (tokens.length == 0) {
+      // Last user left: session must be removed
+      console.log(sessionName + " empty!");
+      delete mapSessions[sessionName];
+    }
+    res.redirect("/dashboard");
+  } else {
+    var msg = "Problems in the app server: the SESSION does not exist";
+    console.log(msg);
+    res.status(500).send(msg);
   }
+  // }
 });
 
 /* REST API */
