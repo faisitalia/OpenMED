@@ -1,8 +1,11 @@
 import React, { useState } from 'react'
+import { Redirect } from 'react-router-dom'
+
 import { mediaServer } from '../../api/config'
 
 const AskHelp = () => {
   const [room, setRoom] = useState(null)
+  const [stopSession, setStopSession] = useState(false)
 
   function openTheRoom(e) {
     e.preventDefault()
@@ -20,6 +23,26 @@ const AskHelp = () => {
       .catch((error) => {
         console.log(error)
         setRoom(null)
+      })
+  }
+
+  function leaveSession(e) {
+    e.preventDefault()
+
+    const params = {
+      sessionname: document.getElementById('openviduSession').value,
+      token: document.getElementById('openviduToken').value,
+    }
+
+    mediaServer
+      .post('/leave-session', params)
+      .then((response) => {
+        console.log(response)
+        // TODO check session id
+        setStopSession(true)
+      })
+      .catch((error) => {
+        console.log(error)
       })
   }
 
@@ -48,7 +71,7 @@ const AskHelp = () => {
             <div id="session">
               <div id="session-header">
                 <h1 id="session-title">{room.sessionName}</h1>
-                <form action="/leave-session" method="post">
+                <form method="post">
                   <input
                     id="openviduSession"
                     type="hidden"
@@ -72,7 +95,7 @@ const AskHelp = () => {
                     id="buttonLeaveSession"
                     className="btn btn-large btn-danger"
                     type="submit"
-                    // onClick="leaveSession()"
+                    onClick={leaveSession}
                   >
                     Leave session
                   </button>
@@ -93,7 +116,9 @@ const AskHelp = () => {
 
   return (
     <div>
-      {room ? (
+      {stopSession ? (
+        <Redirect to="/" />
+      ) : room ? (
         renderRoom()
       ) : (
         <a href="#" onClick={openTheRoom}>

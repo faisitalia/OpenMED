@@ -281,7 +281,8 @@ app.post("/session", async (req, res) => {
 app.post("/leave-session", (req, res) => {
   if (!isLogged(req.session)) {
     req.session.destroy();
-    res.render("index.ejs");
+    // res.render("index.ejs");
+    res.send("session destroyed");
   } else {
     // Retrieve params from POST body
     var sessionName = req.body.sessionname;
@@ -307,7 +308,8 @@ app.post("/leave-session", (req, res) => {
       } else {
         var msg = "Problems in the app server: the TOKEN wasn't valid";
         console.log(msg);
-        res.redirect("/dashboard");
+        // res.redirect("/dashboard");
+        res.status(500).send(msg);
       }
       if (tokens.length == 0) {
         // Last user left: session must be removed
