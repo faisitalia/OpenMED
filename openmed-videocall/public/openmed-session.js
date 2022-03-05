@@ -1,5 +1,4 @@
-// Get all the attributes from the template in EJS style
-
+// Get all the attributes
 var sessionName = document.getElementById("openviduSession").value;
 var token = document.getElementById("openviduToken").value;
 var nickName = document.getElementById("openviduNickName").value;

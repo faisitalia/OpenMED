@@ -1,18 +1,38 @@
 import React, { useState } from 'react'
 import { Redirect } from 'react-router-dom'
 
-import { mediaServer } from '../../api/config'
+import { apiServer, mediaServer } from '../../api/config'
 
 const AskHelp = () => {
   const [room, setRoom] = useState(null)
   const [stopSession, setStopSession] = useState(false)
 
-  function openTheRoom(e) {
+  /**
+   *
+   * @param {*} e
+   */
+  async function createTheRoom(e) {
     e.preventDefault()
 
+    // get current user
+    const currentUserResponse = await apiServer.get('/v1/users/currentUser')
+
+    if (!currentUserResponse.data.currentUser) {
+      sessionStorage.clear()
+      window.location.reload(false)
+    }
+
+    const currentUser = currentUserResponse.data.currentUser
+
+    // check create / open a room
+    const existingRoom = document.getElementById('existingRoom').value
+    const sessionName = !existingRoom
+      ? `${currentUser.preferred_username}_${new Date().getMilliseconds()}`
+      : existingRoom
+
     const params = {
-      data: 'nick',
-      sessionname: 'myroom',
+      data: currentUser.preferred_username,
+      sessionname: sessionName,
     }
 
     mediaServer
@@ -26,6 +46,10 @@ const AskHelp = () => {
       })
   }
 
+  /**
+   *
+   * @param {*} e
+   */
   function leaveSession(e) {
     e.preventDefault()
 
@@ -46,6 +70,10 @@ const AskHelp = () => {
       })
   }
 
+  /**
+   *
+   * @returns
+   */
   function renderRoom() {
     console.log(room)
 
@@ -121,9 +149,17 @@ const AskHelp = () => {
       ) : room ? (
         renderRoom()
       ) : (
-        <a href="#" onClick={openTheRoom}>
-          Open the room
-        </a>
+        <div>
+          <a href="#" onClick={createTheRoom}>
+            Create a new room
+          </a>
+          <br />
+          <br />
+          <input id="existingRoom" type="text" name="existingRoom" />
+          <a href="#" onClick={createTheRoom}>
+            Enter in a room
+          </a>
+        </div>
       )}
     </div>
   )

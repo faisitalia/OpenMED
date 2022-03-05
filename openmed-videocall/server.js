@@ -174,11 +174,13 @@ app.post("/session", async (req, res) => {
     req.session.destroy();
     res.redirect("/");
   } else {
-    const currentUser = await getCurrentUser(req.headers.authorization);
-    if (!currentUser || !currentUser.currentUser) {
+    const currentUserResponse = await getCurrentUser(req.headers.authorization);
+    if (!currentUserResponse || !currentUserResponse.currentUser) {
       req.session.destroy();
       res.redirect("/");
     }
+
+    const currentUser = currentUserResponse.currentUser;
 
     console.log(currentUser);
 
