@@ -5,6 +5,8 @@
 La variabile OPENVIDU_SECRET è la secret per accedere al server OpenVidu.
 E' possibile modificare la secret di openvidu in package.json (consigliato in ambienti diversi da quello di sviluppo), presente negli script `start` e `openvidu-dev`.
 
+[Apertura del firewall](https://docs.openvidu.io/en/2.21.0/deployment/allow-users-behind-firewalls/)
+
 ## Utilizzo
 
 Per lanciare la videocall app:
@@ -20,6 +22,7 @@ L'applicazione di videoconferenza sarà disponibile all indirizzo:
 https://localhost:5000
 
 ## Integrazione
+
 Per integrare il modulo di videoconferenza con un app esterna (es. Openmed-app) è sufficiente chiamare l'entry point `session` con una chiamata POST, specificando i parametri nel body specificati di seguito:
 
 ```bash

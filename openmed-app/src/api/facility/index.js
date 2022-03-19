@@ -11,7 +11,7 @@ async function getFacilities() {
       return res.data
     })
     .catch((err) => {
-      throw new Error(err.response.data.errors)
+      throw err.response.data.errors
     })
 }
 
@@ -27,7 +27,7 @@ async function getFacilityByFacilityId(facilityId) {
       return res.data
     })
     .catch((err) => {
-      throw new Error(err.response.data.errors)
+      throw err.response.data.errors
     })
 }
 
@@ -43,7 +43,7 @@ async function getCoordinatesByAddress(address) {
       return res.data
     })
     .catch((err) => {
-      throw new Error(err.response.data.errors)
+      throw err.response.data.errors
     })
 }
 
@@ -60,7 +60,7 @@ async function getNearestFacilities(latitude, longitude) {
       return res.data
     })
     .catch((err) => {
-      throw new Error(err.response.data.errors)
+      throw err.response.data.errors
     })
 }
 
