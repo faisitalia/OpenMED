@@ -155,7 +155,7 @@
         on:click|preventDefault={() => callStart(v)}
         class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
       >
-        <span class="material-icons align-middle pr-2">call</span> Inizio chiamata
+        <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
       </button>
       <div
         on:click={() => edit(v)}

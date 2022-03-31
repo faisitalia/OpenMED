@@ -75,7 +75,7 @@
         class="flex md:hidden w-10 h-10 rounded-lg hover:bg-brandBlue-50/20 justify-center items-center"
       >
         <button
-          class="material-icons focus:outline-none text-5xl text-brandGreen-500"
+          class="material-icons-round focus:outline-none text-5xl text-brandGreen-500"
           on:click|preventDefault={() => (isDrawerOpen = !isDrawerOpen)}
         >
           menu

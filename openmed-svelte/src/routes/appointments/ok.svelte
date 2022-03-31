@@ -1,7 +1,3 @@
-<script>
-  import { goto } from '$app/navigation';
-</script>
-
 <svelte:head>
   <title>Tutto fatto! - OpenMed</title>
 </svelte:head>
@@ -19,9 +15,45 @@
 
   <!-- Aggiungere il + in fondo a dx -->
 </div>
-<a
-  href="/appointments/edit"
-  class="fixed bottom-7 right-7 material-icons p-1 rounded-full bg-brandBlue-500 font-bold text-white"
->
-  add
-</a>
+<div class="fixed bottom-20 right-8">
+  <div class="my-3 group flex flex-row justify-end items-center">
+    <p
+      class="font-bold group-hover:inline-block hidden px-3 mx-2 py-2 text-right bg-brandBlue-50/50 rounded-xl"
+    >
+      Aggiungi un altro appuntamento
+    </p>
+    <a
+      href="/appointments/edit"
+      class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
+    >
+      add
+    </a>
+  </div>
+  <div class="my-3 group flex flex-row justify-end items-center">
+    <p
+      class="font-bold group-hover:inline-block hidden px-3 mx-2 py-2 text-right bg-brandBlue-50/50 rounded-xl"
+    >
+      Torna indietro e modifica
+    </p>
+    <a
+      href="/appointments/edit"
+      class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
+    >
+      edit
+    </a>
+  </div>
+  <div class="my-3 group flex flex-row justify-end items-center">
+    <p
+      class="font-bold group-hover:inline-block hidden px-3 mx-2 py-2 text-right bg-brandBlue-50/50 rounded-xl"
+    >
+      Annulla e cancella l'appuntamento
+    </p>
+    <!-- TODO change this so that an appointments get deleted after a confirmation message -->
+    <a
+      href=""
+      class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
+    >
+      delete_forever
+    </a>
+  </div>
+</div>
