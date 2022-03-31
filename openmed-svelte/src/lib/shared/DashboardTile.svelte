@@ -1,21 +1,20 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
   export let title;
   export let subtitle;
-
-  const dispatch = createEventDispatcher();
+  export let href;
 </script>
 
 <!-- TODO this is a grid layout so that we can add a navigate_next material icon -->
-<div
+<a
   id={title}
-  on:click={() => dispatch('click')}
-  class="flex flex-col justify-center items-start rounded-xl my-2 py-3 px-8 w-96 hover:bg-brandBlue-50/50 bg-brandBlue-50/40 cursor-pointer"
+  {href}
+  class="transition-all grid grid-cols-[auto_auto] gap-3 rounded-xl my-2 py-4 px-4 w-full hover:bg-brandBlue-50/50 bg-brandBlue-50/40 cursor-pointer"
 >
-  <h2>
+  <h2 class="self-start place-self-start">
     {title}
   </h2>
-  <p>
+  <span class="material-icons-round self-center place-self-end row-span-2"> navigate_next </span>
+  <p class="self-start place-self-start">
     {subtitle}
   </p>
-</div>
+</a>

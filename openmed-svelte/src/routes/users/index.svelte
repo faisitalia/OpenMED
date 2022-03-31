@@ -80,24 +80,77 @@
 </script>
 
 <script>
-  export let userId;
-  export let usersList;
+  export let users;
+
+  import Title from '$lib/shared/Title.svelte';
+  import Subtitle from '$lib/shared/Subtitle.svelte';
+  import FilterButton from '$lib/pages/users/FilterButton.svelte';
+  import DetailedTile from '$lib/shared/DetailedTile.svelte';
 
   let filter = 'all';
-  $: filteredList = usersList.filter((user) => {
-    if (filter === 'all') return true;
-    return user.role === filter;
-  });
+  let search = '';
+  $: filteredList = users
+    .filter((user) => {
+      if (filter === 'all') return true;
+      return user.role === filter;
+    })
+    .filter((user) => {
+      if (search === '') return true;
+      return user.name.toLowerCase().includes(search.toLowerCase());
+    });
 </script>
 
 <svelte:head>
   <title>Gestione utenti - OpenMed</title>
 </svelte:head>
 
-<h1 class="font-bold">Gestione Utenti</h1>
-<p>Lista Utenti</p>
+<Title>Gestione Utenti</Title>
+<Subtitle>Lista Utenti</Subtitle>
 
-<div class="mt-5">
-  <div id="search">search</div>
-  <div id="users-table">utenti</div>
+<div class="mt-16">
+  <div
+    id="search"
+    class="flex flex-row px-4 py-2 items-center w-full bg-brandBlue-50/50 rounded-full text-center"
+  >
+    <span class="material-icons-round"> search </span>
+    <input
+      id="search-input"
+      class="mx-4 w-full bg-transparent focus:outline-none"
+      type="text"
+      placeholder="Cerca utente"
+      bind:value={search}
+    />
+  </div>
+  <div id="filters" class="my-1">
+    <div class="flex flex-wrap flex-row justify-evenly">
+      <FilterButton>Tutti</FilterButton>
+      <FilterButton>Medici</FilterButton>
+      <FilterButton>Infermieri</FilterButton>
+      <FilterButton>Pazienti</FilterButton>
+    </div>
+  </div>
+  <div id="users-table" class="my-4">
+    {#each filteredList as user}
+      <DetailedTile title={`${user.name} ${user.surname}`} subtitle={user.email}>
+        <div slot="content" class="gap-x-6 gap-y-2 py-4 mx-2 grid grid-cols-[auto_auto]">
+          <div class="col-span-1">
+            <span class="font-bold">Email</span>
+            <span>{user.email}</span>
+          </div>
+          <div class="col-span-1">
+            <span class="font-bold">Ruolo</span>
+            <span>{user.role}</span>
+          </div>
+          <div class="col-span-1">
+            <span class="font-bold">Telefono:</span>
+            <span>{user.phone}</span>
+          </div>
+          <div class="col-span-1">
+            <span class="font-bold">Città:</span>
+            <span>{user.city}</span>
+          </div>
+        </div>
+      </DetailedTile>
+    {/each}
+  </div>
 </div>

@@ -13,6 +13,7 @@
   import { goto } from '$app/navigation';
   import { session } from '$app/stores';
   import { usersEndpoint } from '$lib/uri';
+  import { fade } from 'svelte/transition';
   import '../app.css';
 
   // export let userId;
@@ -32,9 +33,6 @@
 <!-- {#if userId}
   <p on:click|preventDefault={() => logout()}>Done? Logout here</p>
 {/if} -->
-<!-- TODO: add static assets -->
-<!-- <img src="./logo/openmed-logo.svg" alt=""/> -->
-<!-- TODO: add drawer conditionally (it depends on the page we're looking at!) -->
 
 <div
   class="{isDrawerOpen
@@ -44,21 +42,23 @@
 />
 
 <!-- Mobile Nav Bar -->
-<div
-  class="top-20 z-40 p-4 md:hidden bg-brandBlack-50 right-0
-  {isDrawerOpen ? 'fixed' : 'hidden'}"
->
-  <nav>
-    <!-- TODO: use a loop -->
-    <ul class="flex flex-col items-end list-none">
-      <a href="/"><li class="font-light py-2">Home</li></a>
-      <a href="/"><li class="font-light py-2">Gestisci Utenti</li></a>
-      <a href="/"><li class="font-light py-2">Crea Appuntamento</li></a>
-      <a href="/"><li class="font-light py-2">Lista Appuntamenti</li></a>
-      <a href="/"><li class="font-light py-2">Contatti</li></a>
-    </ul>
-  </nav>
-</div>
+{#if isDrawerOpen}
+  <div
+    transition:fade
+    class="fixed transition-all top-20 z-40 p-4 pb-20 md:hidden bg-white w-full right-0"
+  >
+    <nav>
+      <!-- TODO: use a loop -->
+      <ul class="flex flex-col items-end list-none">
+        <a href="/"><li class="font-light py-2">Home</li></a>
+        <a href="/"><li class="font-light py-2">Gestisci Utenti</li></a>
+        <a href="/"><li class="font-light py-2">Crea Appuntamento</li></a>
+        <a href="/"><li class="font-light py-2">Lista Appuntamenti</li></a>
+        <a href="/"><li class="font-light py-2">Contatti</li></a>
+      </ul>
+    </nav>
+  </div>
+{/if}
 
 <div class="relative min-h-screen flex flex-col">
   <!-- Header / Navigation Bar / Menu / Side Nav Bar -->
@@ -67,7 +67,9 @@
     <div class="flex flex-row flex-nowrap justify-between items-center">
       <!-- Use OpenMed's logo here -->
       <div>
-        <a href="/">Logo</a>
+        <a href="/">
+          <img src="/static/img/openmed-logo.svg" alt="Il logo di openmed." />
+        </a>
       </div>
 
       <!-- Drawer Menu on mobile screens -->
@@ -95,7 +97,7 @@
     </div>
   </header>
 
-  <main class="{isDrawerOpen ? 'blur-sm' : 'blur-none'} flex-1 mx-10 my-4">
+  <main class="{isDrawerOpen ? 'blur-sm' : 'blur-none'} flex-1 mx-4 my-4">
     <slot />
   </main>
 

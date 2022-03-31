@@ -1,8 +1,8 @@
 <script>
   export let title;
   export let subtitle;
-  export let iconImgPath;
-  export let iconImgAlt = 'icon';
+
+  import { slide } from 'svelte/transition';
 
   let isExpanded = false;
   function toggle() {
@@ -15,21 +15,30 @@
 <div
   id="container"
   on:click={toggle}
-  class="bg-brandBlue-50/40 hover:bg-brandBlue-50/50 my-1 rounded-lg {cursorProperty} group"
+  class="group px-1 py-5 grid grid-cols-[auto_60%_auto] place-items-center bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all my-1 rounded-lg {cursorProperty} group"
 >
-  {#if iconImgPath}
-    <img src={iconImgPath} alt={iconImgAlt} />
-  {/if}
-  <div class="px-7 py-5">
-    <h2>{title}</h2>
-    <p class="font-light text-sm">{subtitle}</p>
+  <div class="{isExpanded ? 'row-span-full' : 'row-span-2'} p-5">
+    <slot name="leading">
+      <span class="material-icons-round"> event </span>
+    </slot>
   </div>
 
+  <h2 transition:slide class="place-self-start self-center">{title}</h2>
+  {#if !isExpanded}
+    <p class="place-self-start font-light row-start-2 col-start-2">{subtitle}</p>
+  {/if}
+
   {#if isExpanded}
-    <slot />
-    <div on:click|stopPropagation={() => null} class="group-hover:cursor-default">
-      <slot name="actions" />
+    <div class="group- row-start-3 col-start-2" transition:slide>
+      <slot name="content" />
     </div>
   {/if}
-  <!-- TODO add reactive arrow -->
+
+  <div class="{isExpanded ? 'row-span-full' : 'row-span-2'} col-start-3 p-3">
+    {#if isExpanded}
+      <span class="material-icons-round"> expand_more </span>
+    {:else}
+      <span class="material-icons-round"> navigate_next </span>
+    {/if}
+  </div>
 </div>
