@@ -4,7 +4,7 @@
 
   import { slide } from 'svelte/transition';
 
-  let isExpanded = true;
+  let isExpanded = false;
   function toggle() {
     isExpanded = !isExpanded;
   }
