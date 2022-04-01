@@ -134,20 +134,40 @@
       <DetailedTile title={`${user.name} ${user.surname}`} subtitle={user.email}>
         <div slot="content" class="gap-x-6 gap-y-2 py-4 mx-2 grid grid-cols-[auto_auto]">
           <div class="col-span-1">
-            <span class="font-bold">Email</span>
-            <span>{user.email}</span>
+            <p class="font-bold">Email</p>
+            <p>{user.email}</p>
           </div>
           <div class="col-span-1">
-            <span class="font-bold">Ruolo</span>
-            <span>{user.role}</span>
+            <p class="font-bold">Ruolo</p>
+            <p>{user.role}</p>
           </div>
           <div class="col-span-1">
-            <span class="font-bold">Telefono:</span>
-            <span>{user.phone}</span>
+            <p class="font-bold">Telefono:</p>
+            <p>{user.phone}</p>
           </div>
           <div class="col-span-1">
-            <span class="font-bold">Città:</span>
-            <span>{user.city}</span>
+            <p class="font-bold">Città:</p>
+            <p>{user.city}</p>
+          </div>
+        </div>
+        <div
+          on:click|stopPropagation={() => null}
+          slot="trailing"
+          class="py-5 px-4 mx-2 mt-4 flex flex-col items-stretch cursor-pointer"
+        >
+          <!-- TODO implement the edit function -->
+          <button
+            on:click|preventDefault|stopPropagation={() => null}
+            class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
+          >
+            Modifica
+          </button>
+          <!-- TODO implement the delete function -->
+          <div
+            on:click|stopPropagation={() => null}
+            class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
+          >
+            Elimina
           </div>
         </div>
       </DetailedTile>

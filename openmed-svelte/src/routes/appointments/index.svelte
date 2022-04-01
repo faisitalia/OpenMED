@@ -113,16 +113,6 @@
 <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
 <p class="font-normal mb-8">Le visite programmate sono qui.</p>
 {#each visits as v}
-  <!--
-      All the data below is made-up
-      TODO: check and implement the correct properties
-    -->
-  <!-- <DetailedTile
-      title="Visita"
-      subtitle={v.date}
-      iconImgPath="/myImg.svg"
-      iconImgAlt="da remoto / in presenza"
-    > -->
   <DetailedTile title="Visita" subtitle={`${v.date} h ${v.time}`}>
     <div slot="content" class="py-2">
       <div class="py-3">
@@ -149,20 +139,19 @@
         <p>{v.caregiver.name} {v.caregiver.surname}</p>
         <p class="font-light text-brandText-400">{v.caregiver.relation}</p>
       </div>
-
-      <div class="py-5 mx-7 mt-4 flex flex-col items-stretch">
-        <button
-          on:click|preventDefault|stopPropagation={() => callStart(v)}
-          class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
-        >
-          <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
-        </button>
-        <div
-          on:click|stopPropagation={() => edit(v)}
-          class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
-        >
-          Modifica
-        </div>
+    </div>
+    <div slot="trailing" class="py-5 mx-7 mt-4 flex flex-col items-stretch">
+      <button
+        on:click|preventDefault|stopPropagation={() => callStart(v)}
+        class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
+      >
+        <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
+      </button>
+      <div
+        on:click|stopPropagation={() => edit(v)}
+        class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
+      >
+        Modifica
       </div>
     </div>
   </DetailedTile>
