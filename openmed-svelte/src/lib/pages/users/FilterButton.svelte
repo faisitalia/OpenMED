@@ -1,4 +1,5 @@
 <script>
+  import StyledButton from '$lib/shared/StyledButton.svelte';
   import { createEventDispatcher } from 'svelte';
 
   const dispatch = createEventDispatcher();
@@ -13,9 +14,11 @@
   $: color = isApplied ? 'text-brandBlue-500' : 'text-brandBlue-50';
 </script>
 
-<span
-  on:click|preventDefault={apply}
-  class="hover:bg-brandBlue-50/50 cursor-pointer rounded-full my-2 {color} hover:text-brandBlue-500 text-center {isBold} px-3 py-1"
+<StyledButton
+  on:click={apply}
+  colours="{color} hover:text-brandBlue-500 hover:bg-brandBlue-50/50"
+  spaces="my-2 px-3 py-1"
+  class="rounded-full {isBold}"
 >
   <slot />
-</span>
+</StyledButton>

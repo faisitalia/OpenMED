@@ -91,6 +91,7 @@
 <script>
   import DetailedTile from '$lib/shared/DetailedTile.svelte';
   import { goto } from '$app/navigation';
+  import StyledButton from '$lib/shared/StyledButton.svelte';
 
   export let visits;
   // export let userId;
@@ -114,7 +115,7 @@
 <p class="font-normal mb-8">Le visite programmate sono qui.</p>
 {#each visits as v}
   <DetailedTile title="Visita" subtitle={`${v.date} h ${v.time}`}>
-    <div slot="content" class="py-2">
+    <div slot="content">
       <div class="py-3">
         <h3>Appuntamento</h3>
         <p>il {v.date}</p>
@@ -140,19 +141,20 @@
         <p class="font-light text-brandText-400">{v.caregiver.relation}</p>
       </div>
     </div>
-    <div slot="trailing" class="py-5 mx-7 mt-4 flex flex-col items-stretch">
-      <button
-        on:click|preventDefault|stopPropagation={() => callStart(v)}
-        class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
-      >
+    <div
+      on:click|stopPropagation={() => null}
+      slot="trailing"
+      class="flex flex-col items-stretch cursor-default"
+    >
+      <StyledButton on:click={() => callStart(v)}>
         <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
-      </button>
-      <div
-        on:click|stopPropagation={() => edit(v)}
-        class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
+      </StyledButton>
+      <StyledButton
+        colours="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
+        on:click={() => edit(v)}
       >
         Modifica
-      </div>
+      </StyledButton>
     </div>
   </DetailedTile>
 {:else}

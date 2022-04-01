@@ -87,6 +87,7 @@
   import FilterButton from '$lib/pages/users/FilterButton.svelte';
   import DetailedTile from '$lib/shared/DetailedTile.svelte';
   import { goto } from '$app/navigation';
+  import StyledButton from '$lib/shared/StyledButton.svelte';
 
   let filter = 'all';
   let search = '';
@@ -116,7 +117,7 @@
     <span class="material-icons-round"> search </span>
     <input
       id="search-input"
-      class="mx-4 w-full bg-transparent focus:outline-none"
+      class="focus:bg-white/30 rounded-xl px-4 w-full bg-transparent focus:outline-none"
       type="text"
       placeholder="Cerca utente"
       bind:value={search}
@@ -124,7 +125,7 @@
   </div>
   <div id="filters" class="my-1">
     <div class="flex flex-wrap flex-row justify-evenly">
-      <FilterButton>Tutti</FilterButton>
+      <!-- TODO implement on:click events -->
       <FilterButton>Medici</FilterButton>
       <FilterButton>Infermieri</FilterButton>
       <FilterButton>Pazienti</FilterButton>
@@ -133,7 +134,7 @@
   <div id="users-table" class="my-4">
     {#each filteredList as user}
       <DetailedTile title={`${user.name} ${user.surname}`} subtitle={user.email}>
-        <div slot="content" class="gap-x-6 gap-y-2 py-4 mx-2 grid grid-cols-[auto_auto]">
+        <div slot="content" class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]">
           <div class="col-span-1">
             <p class="font-bold">Email</p>
             <p>{user.email}</p>
@@ -154,23 +155,17 @@
         <div
           on:click|stopPropagation={() => null}
           slot="trailing"
-          class="py-5 px-4 mx-2 mt-4 flex flex-col items-stretch cursor-pointer"
+          class="flex flex-col items-stretch cursor-default"
         >
-          <button
-            on:click|preventDefault|stopPropagation={() => goto(`/users/edit?id=${user.id}`)}
-            class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
-          >
-            Modifica
-          </button>
+          <StyledButton on:click={() => goto(`/users/edit?id=${user.id}`)}>Modifica</StyledButton>
           <!-- TODO implement the delete function -->
-          <div
-            on:click|stopPropagation={() => null}
-            class="px-4 py-2 my-1 bg-brandBlue-50/20 hover:bg-brandBlue-50/40 rounded-3xl cursor-pointer text-center"
-          >
+          <StyledButton on:click={() => null} colours="bg-brandBlue-50/20 hover:bg-brandBlue-50/40">
             Elimina
-          </div>
+          </StyledButton>
         </div>
       </DetailedTile>
+    {:else}
+      <h3>Nessun utente trovato.</h3>
     {/each}
   </div>
 </div>
