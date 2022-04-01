@@ -29,41 +29,43 @@
   <title>OpenMed</title>
 </svelte:head>
 
-<div id="hello-user">
-  <Title>Ciao {name}</Title>
-  <Subtitle>come desideri procedere?</Subtitle>
-</div>
-<div class="my-7" />
+<div class="mx-4 my-4">
+  <div id="hello-user">
+    <Title>Ciao {name}</Title>
+    <Subtitle>come desideri procedere?</Subtitle>
+  </div>
+  <div class="my-7" />
 
-<div id="actions" class="flex flex-col justify-center items-start">
-  {#if isAdmin}
-    <DashboardTile
-      title="Gestisci Utenti"
-      subtitle="Crea, modifica ed elimina i profili utenti"
-      href="/users"
-    />
-  {/if}
-  {#if isDoctor}
-    <DashboardTile
-      title="Crea Appuntamento"
-      subtitle="Crea e gestisci nuovi appuntamenti"
-      href="/appointments/edit"
-    />
-  {/if}
-  {#if isPatient || isDoctor}
-    <DashboardTile
-      title="Lista Appuntamenti"
-      subtitle="Visualizza i tuoi appuntamenti"
-      href="/appointments"
-    />
-  {/if}
-  {#if isPatient && !isDoctor}
-    <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
-  {/if}
+  <div id="actions" class="flex flex-col justify-center items-start">
+    {#if isAdmin}
+      <DashboardTile
+        title="Gestisci Utenti"
+        subtitle="Crea, modifica ed elimina i profili utenti"
+        href="/users"
+      />
+    {/if}
+    {#if isDoctor}
+      <DashboardTile
+        title="Crea Appuntamento"
+        subtitle="Crea e gestisci nuovi appuntamenti"
+        href="/appointments/edit"
+      />
+    {/if}
+    {#if isPatient || isDoctor}
+      <DashboardTile
+        title="Lista Appuntamenti"
+        subtitle="Visualizza i tuoi appuntamenti"
+        href="/appointments"
+      />
+    {/if}
+    {#if isPatient && !isDoctor}
+      <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
+    {/if}
 
-  <img
-    src="/static/img/doctors.svg"
-    alt="Un gruppo di dottori ti aspetta"
-    class="self-center my-16"
-  />
+    <img
+      src="/static/img/doctors.svg"
+      alt="Un gruppo di dottori ti aspetta"
+      class="self-center my-16"
+    />
+  </div>
 </div>

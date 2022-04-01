@@ -111,52 +111,54 @@
   <title>I tuoi appuntamenti - OpenMed</title>
 </svelte:head>
 
-<h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
-<p class="font-normal mb-8">Le visite programmate sono qui.</p>
-{#each visits as v}
-  <DetailedTile title="Visita" subtitle={`${v.date} h ${v.time}`}>
-    <div slot="content">
-      <div class="py-3">
-        <h3>Appuntamento</h3>
-        <p>il {v.date}</p>
-        <p>h {v.time}</p>
+<div class="mx-4 my-4">
+  <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
+  <p class="font-normal mb-8">Le visite programmate sono qui.</p>
+  {#each visits as v}
+    <DetailedTile title="Visita" subtitle={`${v.date} h ${v.time}`}>
+      <div slot="content">
+        <div class="py-3">
+          <h3>Appuntamento</h3>
+          <p>il {v.date}</p>
+          <p>h {v.time}</p>
+        </div>
+        <div class="py-3">
+          <h3>Ambulatorio</h3>
+          <p>{v.clinic}</p>
+        </div>
+        <div class="py-3">
+          <h3>Medico</h3>
+          <p>{v.doctor.name} {v.doctor.surname}</p>
+          <p class="font-light text-brandText-400">{v.doctor.qualification}</p>
+        </div>
+        <div class="py-3">
+          <h3>Paziente</h3>
+          <p>{v.patient.name} {v.patient.surname}</p>
+          <p class="font-light">{v.patient.ssn}</p>
+        </div>
+        <div class="py-3">
+          <h3>Caregiver / Familiare</h3>
+          <p>{v.caregiver.name} {v.caregiver.surname}</p>
+          <p class="font-light text-brandText-400">{v.caregiver.relation}</p>
+        </div>
       </div>
-      <div class="py-3">
-        <h3>Ambulatorio</h3>
-        <p>{v.clinic}</p>
-      </div>
-      <div class="py-3">
-        <h3>Medico</h3>
-        <p>{v.doctor.name} {v.doctor.surname}</p>
-        <p class="font-light text-brandText-400">{v.doctor.qualification}</p>
-      </div>
-      <div class="py-3">
-        <h3>Paziente</h3>
-        <p>{v.patient.name} {v.patient.surname}</p>
-        <p class="font-light">{v.patient.ssn}</p>
-      </div>
-      <div class="py-3">
-        <h3>Caregiver / Familiare</h3>
-        <p>{v.caregiver.name} {v.caregiver.surname}</p>
-        <p class="font-light text-brandText-400">{v.caregiver.relation}</p>
-      </div>
-    </div>
-    <div
-      on:click|stopPropagation={() => null}
-      slot="trailing"
-      class="flex flex-col items-stretch cursor-default"
-    >
-      <StyledButton on:click={() => callStart(v)}>
-        <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
-      </StyledButton>
-      <StyledButton
-        colours="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
-        on:click={() => edit(v)}
+      <div
+        on:click|stopPropagation={() => null}
+        slot="trailing"
+        class="flex flex-col items-stretch cursor-default"
       >
-        Modifica
-      </StyledButton>
-    </div>
-  </DetailedTile>
-{:else}
-  <p>Non hai appuntamenti da poter mostrare qui.</p>
-{/each}
+        <StyledButton on:click={() => callStart(v)}>
+          <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
+        </StyledButton>
+        <StyledButton
+          colours="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
+          on:click={() => edit(v)}
+        >
+          Modifica
+        </StyledButton>
+      </div>
+    </DetailedTile>
+  {:else}
+    <p>Non hai appuntamenti da poter mostrare qui.</p>
+  {/each}
+</div>
