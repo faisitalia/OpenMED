@@ -86,6 +86,7 @@
   import Subtitle from '$lib/shared/Subtitle.svelte';
   import FilterButton from '$lib/pages/users/FilterButton.svelte';
   import DetailedTile from '$lib/shared/DetailedTile.svelte';
+  import { goto } from '$app/navigation';
 
   let filter = 'all';
   let search = '';
@@ -155,9 +156,8 @@
           slot="trailing"
           class="py-5 px-4 mx-2 mt-4 flex flex-col items-stretch cursor-pointer"
         >
-          <!-- TODO implement the edit function -->
           <button
-            on:click|preventDefault|stopPropagation={() => null}
+            on:click|preventDefault|stopPropagation={() => goto(`/users/edit?id=${user.id}`)}
             class="px-4 py-2 my-1 bg-brandBlue-500 hover:bg-brandBlue-700 text-white rounded-3xl align-middle"
           >
             Modifica

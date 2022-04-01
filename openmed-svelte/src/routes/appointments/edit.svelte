@@ -61,7 +61,6 @@
   export let patients;
   export let clinics;
   export let doctorId;
-  console.log(doctorId);
 
   const hours = [
     '06',
@@ -197,7 +196,7 @@
 
 <form
   on:submit|preventDefault={submit}
-  id="newAppointment"
+  id="editAppointment"
   class="flex flex-col justify-center items-stretch"
 >
   <fieldset class="flex flex-col items-stretch my-3">
