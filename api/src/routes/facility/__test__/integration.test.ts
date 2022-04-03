@@ -99,7 +99,7 @@ describe('Facility integration test suite', () => {
 
   it('should return the facility coordinates', async () => {
     // get the access token
-    const username = 'facility-coord'
+    const username = 'facility-coord1'
     const email = 'user-coord-facility@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -123,7 +123,7 @@ describe('Facility integration test suite', () => {
     expect(townCoordinates).toBeDefined()
     expect(townCoordinates.latitude).toStrictEqual(45.0677551)
     expect(townCoordinates.longitude).toStrictEqual(7.6824892)
-    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, 10100, Italia')
+    expect(townCoordinates.address).toStrictEqual('Torino, Piemonte, Italia')
 
     // get coordinates by address
     const addressToSearch = 'Via Dei Ponderanesi 2, Biella Piemonte'
@@ -204,8 +204,8 @@ describe('Facility integration test suite', () => {
 
   it('should return the nearest facility to a particular point (lat, long)', async () => {
     // get the access token
-    const username = 'facility-coord'
-    const email = 'user-coord-facility@test.com'
+    const username = 'facility-point'
+    const email = 'user-point-facility@test.com'
     const password = 'password'
     const firstname = 'john'
     const lastname = 'doe'

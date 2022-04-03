@@ -28,7 +28,7 @@ npm run seed    # popolamento del database mongo
 
 ## Test
 
-Per verificare che la configurazione sia corretta e completa è possibile lanciare i test con il comando:
+Per verificare che la configurazione sia corretta e completa è possibile lanciare i test con il comando (i container docker devono essere operativi):
 
 ```bash
 npm run test
