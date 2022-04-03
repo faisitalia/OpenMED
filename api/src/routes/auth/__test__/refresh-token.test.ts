@@ -4,27 +4,7 @@ import { constants } from 'http2'
 import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
-it('fails when a username that does not exist is supplied', async () => {
-  await request(app)
-    .post('/v1/users/signin')
-    .send({
-      username: 'test-fail',
-      password: 'password',
-    })
-    .expect(400)
-})
-
-it('fails when an incorrect password is supplied', async () => {
-  await request(app)
-    .post('/v1/users/signin')
-    .send({
-      username: 'test',
-      password: 'aslkdfjalskdfj',
-    })
-    .expect(400)
-})
-
-it('responds with a access token when given valid credentials', async () => {
+it('responds with a refresh token when given valid refresh token', async () => {
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
@@ -45,7 +25,19 @@ it('responds with a access token when given valid credentials', async () => {
     })
     .expect(constants.HTTP_STATUS_OK)
 
-  expect(login.access_token).toBeDefined()
+  const refreshToken = login.refresh_token
+
+  const { body: newToken } = await request(app)
+    .post('/v1/users/refreshToken')
+    .send({
+      username: 'john',
+      password: 'password',
+      refreshToken,
+    })
+    .expect(constants.HTTP_STATUS_OK)
+
+  expect(newToken.access_token).toBeDefined()
+  expect(newToken.access_token).not.toBe(login.access_token)
 
   await deleteUserById(user.id)
 })

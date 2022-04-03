@@ -11,10 +11,10 @@ const TheLayout = () => {
   useEffect(() => {
     function fetchCurrentUser() {
       apiServer
-        .get('/v1/users/currentuser')
+        .get('/v1/users/currentUser')
         .then((response) => {
-          console.log(response)
           if (!response.data.currentUser) {
+            sessionStorage.clear()
             isLogged(false)
           } else {
             isLogged(true)
@@ -22,6 +22,8 @@ const TheLayout = () => {
         })
         .catch((error) => {
           console.log(error)
+          sessionStorage.clear()
+          isLogged(false)
         })
     }
 

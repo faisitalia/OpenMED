@@ -93,7 +93,6 @@ const Facilities = () => {
           <CSpinner color="primary" />
         ) : (
           <CListGroup>
-            {/* {console.log(facilities)} */}
             {facilities.map((facility, idx) => (
               <CListGroupItem key={idx}>
                 <CLink

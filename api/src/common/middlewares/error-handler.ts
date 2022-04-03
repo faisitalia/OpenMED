@@ -10,7 +10,7 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   console.log(err.stack)
-  console.log(err)
+  console.log(' err ', err)
 
   res.status(constants.HTTP_STATUS_BAD_REQUEST).send({
     errors: [{ message: `Something went wrong: ${err.message}` }],

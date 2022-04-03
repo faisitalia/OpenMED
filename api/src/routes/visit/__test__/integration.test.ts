@@ -104,6 +104,7 @@ describe('Visit integration test suite', function () {
 
   it('should create a visit', async () => {
     // get the access token
+    const username = 'visit'
     const email = 'user-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -111,10 +112,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot = new Date()
@@ -150,6 +151,7 @@ describe('Visit integration test suite', function () {
 
   it('should returns a 400 if the slot is not found', async () => {
     // get the access token
+    const username = 'visit-no'
     const email = 'user-no-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -157,10 +159,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot = new Date()
@@ -193,6 +195,7 @@ describe('Visit integration test suite', function () {
 
   it('returns a 404 if the visit is not found', async () => {
     // get the access token
+    const username = 'visit-no-2'
     const email = 'user-no2-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -200,10 +203,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // create a dummy mongo id
     const id = new mongoose.Types.ObjectId().toHexString()
@@ -219,6 +222,7 @@ describe('Visit integration test suite', function () {
 
   it('returns the visit if the visit is found', async () => {
     // get the access token
+    const username = 'visit-id'
     const email = 'user-id-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -226,10 +230,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot = new Date()
@@ -273,6 +277,7 @@ describe('Visit integration test suite', function () {
 
   it('should fetch all the available visits', async () => {
     // get the access token
+    const username = 'visit-all'
     const email = 'user-all-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -280,10 +285,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot1 = new Date()
@@ -340,6 +345,7 @@ describe('Visit integration test suite', function () {
 
   it('should update the visit', async () => {
     // get the access token
+    const username = 'visit-update'
     const email = 'user-update-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -347,10 +353,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot = new Date()
@@ -436,6 +442,7 @@ describe('Visit integration test suite', function () {
 
   it('should delete a visit', async () => {
     // get the access token
+    const username = 'visit-delete'
     const email = 'user-delete-visit@test.com'
     const password = 'password'
     const firstname = 'john'
@@ -443,10 +450,10 @@ describe('Visit integration test suite', function () {
     const birthdate = new Date()
 
     // signup
-    const user = await global.signup(email, password, firstname, lastname, birthdate)
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
     // get auth token
-    const accessToken = await global.signin(email, password)
+    const accessToken = await global.signin(username, password)
 
     // set the slot
     const slot = new Date()

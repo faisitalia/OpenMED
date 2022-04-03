@@ -13,6 +13,7 @@ import { currentUserRouter } from './routes/auth/current-user'
 import { signinRouter } from './routes/auth/signin'
 import { signoutRouter } from './routes/auth/signout'
 import { signupRouter } from './routes/auth/signup'
+import { refreshTokenRouter } from './routes/auth/refresh-token'
 
 import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
@@ -26,7 +27,6 @@ const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
 
 const app = express()
 app.set('trust proxy', true)
-// app.use(bodyParser.json())
 app.use(json())
 app.use(cors({ origin: ['https://localhost:3000', 'https://localhost:5000'], credentials: true }))
 
@@ -49,6 +49,7 @@ app.use(currentUserRouter)
 app.use(signinRouter)
 app.use(signoutRouter)
 app.use(signupRouter)
+app.use(refreshTokenRouter)
 app.use(facilityRouter)
 app.use(visitRouter)
 
