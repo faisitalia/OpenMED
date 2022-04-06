@@ -16,7 +16,7 @@
 
 <StyledButton
   on:click={apply}
-  colours="{color} hover:text-brandBlue-500 hover:bg-brandBlue-50/50"
+  colors="{color} hover:text-brandBlue-500 hover:bg-brandBlue-50/50"
   spaces="my-2 px-3 py-1"
   class="rounded-full {isBold}"
 >

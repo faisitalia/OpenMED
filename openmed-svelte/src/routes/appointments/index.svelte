@@ -151,7 +151,7 @@
           <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
         </StyledButton>
         <StyledButton
-          colours="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
+          colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
           on:click={() => edit(v)}
         >
           Modifica

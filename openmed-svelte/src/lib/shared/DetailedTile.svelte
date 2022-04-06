@@ -29,10 +29,10 @@
   {/if}
 
   {#if isExpanded}
-    <div class="py-4 mx-2 row-start-3 col-start-2" transition:slide>
+    <div class="py-4 mx-2 row-start-3 col-start-2" transition:slide|local>
       <slot name="content" />
     </div>
-    <div class="pt-4 px-8 mt-4 place-self-center row-start-4 col-start-2" transition:slide>
+    <div class="pt-4 px-8 mt-4 place-self-center row-start-4 col-start-2" transition:slide|local>
       <slot name="trailing" />
     </div>
   {/if}
