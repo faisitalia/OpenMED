@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
-import { validateRequest, BadRequestError } from '../../common'
-import { getAuthToken, getUserByEmail } from '../../services/auth'
+import { validateRequest } from '../../common'
+import { getAuthToken } from '../../services/auth'
 
 const router = express.Router()
 
@@ -22,10 +22,10 @@ const router = express.Router()
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
- *                 description: The user's name.
- *                 example: user@openmed.test
+ *                 description: The username.
+ *                 example: user
  *               password:
  *                 type: string
  *                 description: The user's password.
@@ -33,35 +33,24 @@ const router = express.Router()
  *     security: []    # no authentication
  *     responses:
  *      '200':
- *         description: Successfully authenticated. The session ID is returned in a cookie named `jwt`. You need to include this cookie in subsequent requests.
+ *         description: Successfully authenticated. The access token is returned in the response body. You need to include this token in subsequent requests.
  *         headers:
- *           Set-Cookie:
+ *           Authorization:
  *             schema:
  *               type: string
- *               example: jwt=abcde12345; Path=/; HttpOnly
+ *               example: Bearer fadsuyhds876fd789yfdadjsfhasdf789
  */
 router.post(
   '/v1/users/signin',
   [
-    body('email').isEmail().withMessage('Email must be valid'),
+    body('username').trim().notEmpty().withMessage('Username must be valid'),
     body('password').trim().notEmpty().withMessage('You must supply a password'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password } = req.body
+    const { username, password } = req.body
 
-    const existingUser = await getUserByEmail(email)
-    if (!existingUser) {
-      throw new BadRequestError('Invalid credentials')
-    }
-
-    const login = await getAuthToken(existingUser.username!, password)
-
-    // Store it on session object
-    // req.session = {
-    //   jwt: login.accessToken,
-    // }
-
+    const login = await getAuthToken(username, password)
     res.status(200).send(login)
   }
 )

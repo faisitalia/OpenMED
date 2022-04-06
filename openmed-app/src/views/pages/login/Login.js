@@ -20,27 +20,24 @@ import CIcon from '@coreui/icons-react'
 import { apiServer } from '../../../api/config'
 
 const Login = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('user')
+  const [password, setPassword] = useState('password')
   const [logged, isLogged] = useState(false)
 
   function submitLogin() {
     apiServer
       .post(`/v1/users/signin`, {
-        email: email,
+        username: username,
         password: password,
       })
       .then((response) => {
-        sessionStorage.setItem('accessToken', JSON.stringify(response.data.access_token))
-        // Intercept all requests on this Axios instance
-        apiServer.interceptors.request.use(function (config) {
-          // Append your request headers with an authenticated token
-          config.headers.Authorization = `Bearer ${response.data.access_token}`
-          return config
-        })
+        sessionStorage.setItem('accessToken', response.data.access_token)
+        sessionStorage.setItem('refreshToken', response.data.refresh_token)
+
         isLogged(true)
       })
       .catch((error) => {
+        sessionStorage.clear()
         console.log(error)
       })
   }
@@ -66,10 +63,10 @@ const Login = () => {
                       </CInputGroupPrepend>
                       <CInput
                         type="text"
-                        placeholder="Email"
-                        autoComplete="email"
-                        value={email}
-                        onChange={(event) => setEmail(event.target.value)}
+                        placeholder="Username"
+                        autoComplete="user"
+                        value={username}
+                        onChange={(event) => setUsername(event.target.value)}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">

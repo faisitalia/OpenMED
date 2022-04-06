@@ -33,5 +33,5 @@ La procedura di [seed](../api/README.md) genera alcuni utenti di default che pos
 
 ### Utente
 
-email: `user@openmed.test`
+username: `user`
 password: `password`

@@ -24,10 +24,10 @@ const router = express.Router()
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
  *                 description: The user's name.
- *                 example: user@openmed.test
+ *                 example: user
  *               password:
  *                 type: string
  *                 description: The user's name.
@@ -35,16 +35,17 @@ const router = express.Router()
  *     security: []    # no authentication
  *     responses:
  *      '200':
- *         description: Successfully signed up. The session ID is returned in a cookie named `jwt`. You need to include this cookie in subsequent requests.
+ *         description: Successfully signed up. The user just created is returned in a response body.
  *         headers:
- *           Set-Cookie:
+ *           Authorization:
  *             schema:
  *               type: string
- *               example: jwt=abcde12345; Path=/; HttpOnly
+ *               example: Bearer fadsuyhds876fd789yfdadjsfhasdf789
  */
 router.post(
   '/v1/users/signup',
   [
+    body('username').trim().notEmpty().withMessage('Username is required'),
     body('email').isEmail().withMessage('Email must be valid'),
     body('password')
       .trim()
@@ -56,7 +57,7 @@ router.post(
   ],
   validateRequest,
   async (req: Request, res: Response) => {
-    const { email, password, firstname, lastname, birthdate } = req.body
+    const { username, email, password, firstname, lastname, birthdate } = req.body
 
     // const existingUser = await User.findOne({ email })
 
@@ -68,12 +69,11 @@ router.post(
 
     // create the person
     const personDoc = Person.build({ firstname, lastname, birthdate })
-    const person = await personDoc.save()
+    await personDoc.save()
 
     // create the user
     // const user = User.build({ email, password, role: Role.USER, personId: person.id })
     // await user.save()
-    const username = `person_${person.id}`
     const userId = await createUser(username, email, password)
 
     // retrieve the user just created

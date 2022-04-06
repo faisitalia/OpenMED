@@ -12,6 +12,7 @@ declare global {
   namespace NodeJS {
     interface Global {
       signup(
+        username: string,
         email: string,
         password: string,
         firstname: string,
@@ -32,7 +33,7 @@ let mongo: MongoMemoryServer
 
 beforeAll(async () => {
   process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = 'vQ5n0ntSaXVkMpI76BZgVZu8zriEif8g'
+  process.env.OPENID_CLIENT_SECRET = 'CVXrccbQqxTdTJGKqa39kUyhEAlnHdd1'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()
@@ -54,10 +55,18 @@ afterAll(async () => {
   // await mongoose.connection.close();
 })
 
-global.signup = async (email: string, password: string, firstname, lastname, birthdate) => {
+global.signup = async (
+  username: string,
+  email: string,
+  password: string,
+  firstname,
+  lastname,
+  birthdate
+) => {
   const signup = await request(app)
     .post('/v1/users/signup')
     .send({
+      username,
       email,
       password,
       firstname,
@@ -74,11 +83,11 @@ global.signup = async (email: string, password: string, firstname, lastname, bir
   return user
 }
 
-global.signin = async (email: string, password: string) => {
+global.signin = async (username: string, password: string) => {
   const response = await request(app)
     .post('/v1/users/signin')
     .send({
-      email,
+      username,
       password,
     })
     .expect(constants.HTTP_STATUS_OK)

@@ -10,6 +10,8 @@ Lanciati i container (vedere il seguente [README.md](../docker/README.md) si pu�
 - crea una directory "certs"
 - entrare nella directory "certs" e lanciare:
 
+https://github.com/FiloSottile/mkcert/
+
 ```bash
 openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
 openssl rsa -in keytmp.pem -out key.pem
@@ -26,7 +28,7 @@ npm run seed    # popolamento del database mongo
 
 ## Test
 
-Per verificare che la configurazione sia corretta e completa è possibile lanciare i test con il comando:
+Per verificare che la configurazione sia corretta e completa è possibile lanciare i test con il comando (i container docker devono essere operativi):
 
 ```bash
 npm run test

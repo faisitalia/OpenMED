@@ -16,7 +16,7 @@ services:
       - openmed-net
 
   keycloak-db-postgres:
-    image: postgres:14.1
+    image: postgres:14.2
     container_name: keycloak-db-postgres
     ports:
       - 5432:5432

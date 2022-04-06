@@ -18,7 +18,8 @@ const TheHeaderDropdown = () => {
   async function logout() {
     await apiServer
       .post(`/v1/users/signout`)
-      .then(function (response) {
+      .then(() => {
+        sessionStorage.clear()
         isLoggedOut(true)
         return <Redirect to="/" />
       })

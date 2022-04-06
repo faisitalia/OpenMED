@@ -98,6 +98,36 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
   // console.log('payload', payload)
 
   const { data } = await axios.post(`${openidURI}/token`, payload.toString())
+  // console.log('getAuthToken', data)
+  return data
+}
+
+/**
+ *
+ * @returns
+ */
+async function refreshAuthToken(
+  username: string,
+  password: string,
+  refreshToken: string
+): Promise<TokenResponse> {
+  // Construct URL
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+  const openidURI = getOpenIDConnectURI(kcAdminClient)
+
+  // Prepare credentials for openid-connect token request
+  // ref: http://openid.net/specs/openid-connect-core-1_0.html#TokenEndpoint
+  const payload = new url.URLSearchParams({
+    refresh_token: refreshToken,
+    username: username,
+    password: password,
+    grant_type: 'password',
+    client_id: process.env.OPENID_CLIENT_ID,
+    client_secret: process.env.OPENID_CLIENT_SECRET,
+  })
+
+  const { data } = await axios.post(`${openidURI}/token`, payload.toString())
+
   return data
 }
 
@@ -171,6 +201,7 @@ export {
   deleteUserById,
   getUserByEmail,
   getAuthToken,
+  refreshAuthToken,
   assignRoleToUser,
   getUserInfo,
   logout,

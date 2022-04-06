@@ -5,6 +5,7 @@ import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
 it('responds with details about the current user', async () => {
+  const username = 'john'
   const email = 'user-current@test.com'
   const password = 'password'
   const firstname = 'john'
@@ -12,10 +13,10 @@ it('responds with details about the current user', async () => {
   const birthdate = new Date()
 
   // signup
-  const user = await global.signup(email, password, firstname, lastname, birthdate)
+  const user = await global.signup(username, email, password, firstname, lastname, birthdate)
 
   // get auth token
-  const accessToken = await global.signin(email, password)
+  const accessToken = await global.signin(username, password)
 
   const response = await request(app)
     .get('/v1/users/currentuser')

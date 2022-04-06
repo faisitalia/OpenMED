@@ -1,0 +1,35 @@
+
+
+	<!-- Bootstrap -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"></link>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+	<!-- Bootstrap -->
+
+	<link rel="styleSheet" href="https://localhost:5000/style.css" type="text/css" media="screen"></link>
+	<script src="https://localhost:5000/openvidu-browser-2.20.0.js"></script>
+
+
+	<div id="main-container" class="container">
+		<div id="logged">
+			<div id="session">
+				<div id="session-header">
+					<h1 id="session-title"><%= sessionName %></h1>
+					<form action="https://localhost:5000/leave-session" method="post">
+						<input type="hidden" name="sessionname" value="<%= sessionName %>"></input>
+						<input type="hidden" name="token" value="<%= token %>"></input>
+						<button id="buttonLeaveSession" class="btn btn-large btn-danger" type="submit" onclick="leaveSession()">
+							Leave session</button>
+					</form>
+				</div>
+				<div id="main-video" class="col-md-6">
+					<p class="nickName"></p>
+					<p class="userName"></p>
+					<video autoplay="true" playsinline="true"></video>
+				</div>
+				<div id="video-container" class="col-md-6"></div>
+			</div>
+		</div>
+	</div>
+

@@ -16,7 +16,7 @@ const router = express.Router()
  *      - application/json
  *     responses:
  *      '200':
- *         description: Successfully signed out. The session ID is removed.
+ *         description: Successfully signed out. The access token is removed.
  */
 router.post('/v1/users/signout', async (req: Request, res: Response) => {
   if (req.headers.authorization) {
