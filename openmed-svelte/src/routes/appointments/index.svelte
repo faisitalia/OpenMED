@@ -100,10 +100,6 @@
     // TODO
   }
 
-  function edit(visit) {
-    //TODO
-  }
-
   // TODO
 </script>
 
@@ -147,12 +143,12 @@
         slot="trailing"
         class="flex flex-col items-stretch cursor-default"
       >
-        <StyledButton on:click={() => callStart(v)}>
+        <StyledButton on:click={() => goto(`/call/test?id=${v.id}`)}>
           <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
         </StyledButton>
         <StyledButton
           colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
-          on:click={() => edit(v)}
+          on:click={() => goto(`/appointments/edit?id=${v.id}`)}
         >
           Modifica
         </StyledButton>
