@@ -5,6 +5,12 @@
 L'API server necessita di una installazione di mongo per la gestione dei dati applicativi e di una installazione di keycloak per la gestione dell'autenticazione e dell'autorizzazione.
 Nella directory [docker](../docker) è disponibile un docker-compose con un ambiente pre-configurato che installa i due componenti ed esegue una configurazione di base per il primo utilizzo.
 
+Per lanciare i servizi ausiliari si può anche utilizzare il seguento comando:
+
+```bash
+npm run start:services
+```
+
 Lanciati i container (vedere il seguente [README.md](../docker/README.md) si può passare alla configurazione dell'API server:
 
 - crea una directory "certs"

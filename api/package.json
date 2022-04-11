@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest --watchAll --no-cache",
     "eslint": "eslint . --ext .ts",
+    "start:services": "cd ../docker && docker-compose up -d",
     "start": "HTTPS=true ts-node-dev src/index.ts",
     "build": "webpack --mode production",
     "seed": "ts-node-dev src/seed.ts"
