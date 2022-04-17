@@ -87,7 +87,7 @@ describe('Facility integration test suite', () => {
       .send()
       .expect(constants.HTTP_STATUS_OK)
 
-    expect(fetchedFacilities).toHaveLength(293)
+    expect(fetchedFacilities).toHaveLength(55)
 
     await deleteUserById(user.id!)
   })
@@ -176,10 +176,10 @@ describe('Facility integration test suite', () => {
       .expect(constants.HTTP_STATUS_OK)
 
     // check data
-    expect(nearestFacilities).toHaveLength(5)
+    expect(nearestFacilities).toHaveLength(3)
 
     const nearestFaciity = nearestFacilities[0]
-    const fartherFaciity = nearestFacilities[4]
+    const fartherFaciity = nearestFacilities[2]
 
     expect(nearestFaciity).toBeDefined()
     expect(nearestFaciity.id).toBeDefined()
@@ -192,12 +192,14 @@ describe('Facility integration test suite', () => {
 
     expect(fartherFaciity).toBeDefined()
     expect(fartherFaciity.id).toBeDefined()
-    expect(fartherFaciity.name).toStrictEqual('Ospedale Civico')
-    expect(fartherFaciity.street).toStrictEqual('---')
+    expect(fartherFaciity.name).toStrictEqual(
+      'Ospedali Riuniti Villa Sofia-cervello (presidio Villa Sofia)'
+    )
+    expect(fartherFaciity.street).toStrictEqual('Piazza Salerno1')
     expect(fartherFaciity.town).toStrictEqual('Palermo')
     expect(fartherFaciity.state).toStrictEqual('Sicilia')
     expect(fartherFaciity.county).toStrictEqual('Pa')
-    expect(fartherFaciity.postalcode).toStrictEqual(90127)
+    expect(fartherFaciity.postalcode).toStrictEqual(90146)
 
     await deleteUserById(user.id!)
   })
