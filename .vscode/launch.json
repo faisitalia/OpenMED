@@ -1,0 +1,19 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "name": "🧪 Debug API Server Integration Tests",
+      "request": "launch",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "disableOptimisticBPs": true,
+      "program": "${workspaceFolder}/api/node_modules/.bin/jest",
+      "cwd": "${workspaceFolder}/api",
+      "args": ["api/src", "--no-cache", "--watchAll=false", "--coverage=false"]
+    }
+  ]
+}
