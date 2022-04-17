@@ -3,6 +3,7 @@ import https from 'https'
 import fs from 'fs-extra'
 
 import { app, PORT } from './app'
+import { logger } from './utils/logger'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
@@ -29,7 +30,8 @@ const start = async () => {
   }
 
   https.createServer({ key: key, cert: cert }, app).listen(PORT, () => {
-    console.log(`The API server is running at port ${PORT}`)
+    logger.info(`The API server is running at port ${PORT}`)
+    // console.log(`The API server is running at port ${PORT}`)
   })
 }
 

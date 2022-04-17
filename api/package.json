@@ -7,7 +7,7 @@
     "test": "jest --watchAll --no-cache",
     "eslint": "eslint . --ext .ts",
     "start:services": "cd ../docker && docker-compose up -d",
-    "start": "HTTPS=true ts-node-dev src/index.ts",
+    "start:dev": "NODE_ENV=development HTTPS=true ts-node-dev src/index.ts",
     "build": "webpack --mode production",
     "seed": "ts-node-dev src/seed.ts"
   },
@@ -44,7 +44,8 @@
     "swagger-jsdoc": "^6.1.0",
     "swagger-ui-express": "^4.3.0",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.4"
+    "typescript": "^4.5.4",
+    "winston": "^3.7.2"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
