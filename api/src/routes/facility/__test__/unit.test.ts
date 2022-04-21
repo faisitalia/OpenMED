@@ -41,10 +41,10 @@ describe('Facility unit test suite', function () {
 
     // check data
     expect(Array.isArray(facilities)).toBeTruthy()
-    expect(facilities).toHaveLength(limit)
+    expect(facilities).toHaveLength(3)
 
     const nearestFaciity = facilities[0]
-    const fartherFaciity = facilities[4]
+    const fartherFaciity = facilities[2]
 
     // check data
     expect(nearestFaciity).toBeDefined()
@@ -58,11 +58,13 @@ describe('Facility unit test suite', function () {
 
     expect(fartherFaciity).toBeDefined()
     expect(fartherFaciity.id).toBeDefined()
-    expect(fartherFaciity.name).toStrictEqual('Ospedale Civico')
-    expect(fartherFaciity.street).toStrictEqual('---')
+    expect(fartherFaciity.name).toStrictEqual(
+      'Ospedali Riuniti Villa Sofia-cervello (presidio Villa Sofia)'
+    )
+    expect(fartherFaciity.street).toStrictEqual('Piazza Salerno1')
     expect(fartherFaciity.town).toStrictEqual('Palermo')
     expect(fartherFaciity.state).toStrictEqual('Sicilia')
     expect(fartherFaciity.county).toStrictEqual('Pa')
-    expect(fartherFaciity.postalcode).toStrictEqual(90127)
+    expect(fartherFaciity.postalcode).toStrictEqual(90146)
   })
 })
