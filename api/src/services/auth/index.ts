@@ -195,6 +195,30 @@ async function assignRoleToUser(roleName: string, user: UserRepresentation) {
   console.log(response)
 }
 
+async function createRole(roleName: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+
+  const createdRole = await kcAdminClient.roles.create({
+    name: roleName,
+  })
+
+  return createdRole
+}
+
+async function findRoleByRoleName(roleName: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+
+  const role = await kcAdminClient.roles.findOneByName({ name: roleName })
+
+  return role
+}
+
+async function deleteRoleByRoleName(roleName: string) {
+  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+
+  await kcAdminClient.roles.delByName({ name: roleName })
+}
+
 export {
   createUser,
   getUserById,
@@ -202,7 +226,10 @@ export {
   getUserByEmail,
   getAuthToken,
   refreshAuthToken,
-  assignRoleToUser,
   getUserInfo,
   logout,
+  createRole,
+  findRoleByRoleName,
+  deleteRoleByRoleName,
+  assignRoleToUser,
 }
