@@ -2,9 +2,9 @@
   export async function load({ session }) {
     // If the user is logged in already, let this component know
     return {
-      // props: {
-      //   userId: session?.id
-      // }
+      props: {
+        userId: session?.id
+      }
     };
   }
 </script>
@@ -68,7 +68,7 @@
       <!-- Use OpenMed's logo here -->
       <div>
         <a href="/">
-          <img src="/static/img/openmed-logo.svg" alt="Il logo di openmed." />
+          <img src="img/openmed-logo.svg" alt="Il logo di openmed." />
         </a>
       </div>
 

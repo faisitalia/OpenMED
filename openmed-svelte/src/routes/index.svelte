@@ -62,10 +62,6 @@
       <DashboardTile title="Cartella Clinica" subtitle="Consulta la tua cartella clinica" />
     {/if}
 
-    <img
-      src="/static/img/doctors.svg"
-      alt="Un gruppo di dottori ti aspetta"
-      class="self-center my-16"
-    />
+    <img src="img/doctors.svg" alt="Un gruppo di dottori ti aspetta" class="self-center my-16" />
   </div>
 </div>

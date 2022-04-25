@@ -8,11 +8,11 @@
   <div class="flex flex-col items-stretch bg-brandBlue-50/50 rounded-3xl p-5 mt-16">
     <div id="audio-test" class="my-4 grid grid-cols-[10%_auto] gap-y-2 gap-x-4">
       <div class="row-span-3 p-2">
-        <img src="/static/icons/audio-test-icon.svg" alt="a microphone" class="w-6 h-6" />
+        <img src="icons/audio-test-icon.svg" alt="a microphone" class="w-6 h-6" />
       </div>
       <div class="col-start-2 flex flex-row items-center justify-evenly">
         <span class="px-1">Prova a parlare!</span>
-        <img class="px-1 inline-block" src="/static/icons/check.svg" alt="✅" />
+        <img class="px-1 inline-block" src="icons/check.svg" alt="✅" />
       </div>
       <div class="col-start-2 flex flex-row items-center justify-evenly">
         <div class="rounded-3xl bg-brandBlue-50 py-1 w-[calc(100%-5rem)] h-2">
@@ -30,11 +30,11 @@
     </div>
     <div id="video-test" class="my-4 grid grid-cols-[10%_auto] gap-y-2 gap-x-4">
       <div class="row-span-3 p-2">
-        <img src="/static/icons/video-test-icon.svg" alt="a camera" class="w-6 h-6" />
+        <img src="icons/video-test-icon.svg" alt="a camera" class="w-6 h-6" />
       </div>
       <div class="col-start-2 flex flex-row items-center justify-evenly">
         <span class="px-1">Riesci a vederti?</span>
-        <img class="px-1 inline-block" src="/static/icons/red-cross.svg" alt="❌" />
+        <img class="px-1 inline-block" src="icons/red-cross.svg" alt="❌" />
       </div>
       <div
         class="place-self-center col-start-2 bg-brandText-500 w-32 h-32 text-white flex flex-col justify-center items-center"
