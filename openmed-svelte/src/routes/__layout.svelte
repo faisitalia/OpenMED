@@ -68,7 +68,7 @@
       <!-- Use OpenMed's logo here -->
       <div>
         <a href="/">
-          <img src="img/openmed-logo.svg" alt="Il logo di openmed." />
+          <img src="img/logo-openmed/openmed-logo.svg" alt="Il logo di openmed." />
         </a>
       </div>
 
@@ -97,7 +97,7 @@
     </div>
   </header>
 
-  <main class={isDrawerOpen ? 'blur-sm' : 'blur-none'}>
+  <main class="transition-all px-4 {isDrawerOpen ? 'blur-sm' : 'blur-none'}">
     <slot />
   </main>
 

@@ -1,3 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="22.243" height="22.243" viewBox="0 0 22.243 22.243">
-  <line id="Linea_108" data-name="Linea 108" x1="18" y2="18" transform="translate(20.121 2.121) rotate(90)" fill="none" stroke="red" stroke-linecap="round" stroke-width="3"/>
+  <g id="Raggruppa_60" data-name="Raggruppa 60" transform="translate(-238.379 -408.379)">
+    <line id="Linea_107" data-name="Linea 107" x1="18" y2="18" transform="translate(240.5 410.5)" fill="none" stroke="red" stroke-linecap="round" stroke-width="3"/>
+    <line id="Linea_108" data-name="Linea 108" x1="18" y2="18" transform="translate(258.5 410.5) rotate(90)" fill="none" stroke="red" stroke-linecap="round" stroke-width="3"/>
+  </g>
 </svg>

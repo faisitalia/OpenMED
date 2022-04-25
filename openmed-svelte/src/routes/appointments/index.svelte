@@ -143,7 +143,7 @@
         slot="trailing"
         class="flex flex-col items-stretch cursor-default"
       >
-        <StyledButton on:click={() => goto(`/call/test?id=${v.id}`)}>
+        <StyledButton on:click={() => goto(`/call?id=${v.id}`)}>
           <span class="material-icons-round align-middle pr-2">call</span> Inizio chiamata
         </StyledButton>
         <StyledButton
