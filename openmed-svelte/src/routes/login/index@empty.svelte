@@ -13,9 +13,10 @@
 </script>
 
 <script>
-  import { async, validate } from 'validate.js';
+  import { validate } from 'validate.js';
   import { goto } from '$app/navigation';
   import { session } from '$app/stores';
+  import { fade } from 'svelte/transition';
   import { usersEndpoint } from '$lib/uri.js';
   import StyledButton from '$lib/shared/StyledButton.svelte';
 
@@ -76,7 +77,7 @@
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          email: form.username,
+          username: form.username,
           password: form.password
         })
       });
@@ -104,57 +105,59 @@
   class="bg-no-repeat bg-center bg-cover bg-[url('img/login-background.png')] h-screen flex flex-col px-8 py-16 items-center justify-between"
 >
   <img src="img/logo-openmed/openmed-logo-full.svg" alt="Il logo di Openmed" />
-  <div id="login">
+  <div id="login" class="grid grid-rows-1 grid-cols-1" transition:fade>
     {#if !hasStarted}
       <StyledButton on:click={() => (hasStarted = true)} class="font-bold" spaces="px-16 py-2">
         Inizia
       </StyledButton>
     {:else}
-      <p class="my-4">Inserisci il tuo username e la tua password</p>
-      <form
-        on:submit|preventDefault={logIn}
-        id="signin"
-        class="flex flex-col justify-center items-center"
-      >
-        <!-- TODO: valutare se aggiungere delle label per accessibilità -->
-        <fieldset>
-          <input
-            type="text"
-            name="Username"
-            placeholder="username"
-            id="username"
-            class="my-1 text-center align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-            bind:value={form.username}
-          />
-        </fieldset>
-        {#if errors?.username}
-          <div class="my-4 text-red-500">{errors.username[0]}</div>
-        {/if}
-        <fieldset>
-          <input
-            bind:value={form.password}
-            label="Password"
-            placeholder="password"
-            id="psw"
-            name="psw"
-            type="password"
-            class="my-1 appearance-none px-2 py-1 bg-brandBlue-50/25 hover:bg-brandBlue-50/40 shadow-sm rounded-3xl"
-          />
-        </fieldset>
-        {#if errors?.password}
-          <div class="my-4 text-red-500">{errors.password[0]}</div>
-        {/if}
-        <button
-          type="submit"
-          class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-          on:click={logIn}
+      <div transition:fade>
+        <p class="my-4">Inserisci il tuo username e la tua password</p>
+        <form
+          on:submit|preventDefault={logIn}
+          id="signin"
+          class="flex flex-col justify-center items-center"
         >
-          Accedi
-        </button>
-      </form>
-      {#if asyncErrors}
-        <div class="my-4 text-center text-red-500">{asyncErrors}</div>
-      {/if}
+          <!-- TODO: valutare se aggiungere delle label per accessibilità -->
+          <fieldset>
+            <input
+              type="text"
+              name="Username"
+              placeholder="username"
+              id="username"
+              class="my-1 text-center align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+              bind:value={form.username}
+            />
+          </fieldset>
+          {#if errors?.username}
+            <div class="my-4 text-red-500">{errors.username[0]}</div>
+          {/if}
+          <fieldset>
+            <input
+              bind:value={form.password}
+              label="Password"
+              placeholder="password"
+              id="psw"
+              name="psw"
+              type="password"
+              class="my-1 appearance-none px-2 py-1 bg-brandBlue-50/25 hover:bg-brandBlue-50/40 shadow-sm rounded-3xl"
+            />
+          </fieldset>
+          {#if errors?.password}
+            <div class="my-4 text-red-500">{errors.password[0]}</div>
+          {/if}
+          <button
+            type="submit"
+            class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            on:click={logIn}
+          >
+            Accedi
+          </button>
+        </form>
+        {#if asyncErrors}
+          <div class="my-4 text-center text-red-500">{asyncErrors}</div>
+        {/if}
+      </div>
     {/if}
   </div>
 
