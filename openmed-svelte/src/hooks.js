@@ -7,15 +7,21 @@ export async function getSession(event) {
   // if (!cookie) return null;
 
   // // If there's a cookie, then we can fetch the session
-  // const response = await fetch(
-  //   `${usersEndpoint}/currentuser`,
-  //   {
-  //     method: 'GET',
-  //     headers: {
-  //       'cookie': cookie
+  // let response;
+  // try {
+  //   response = await fetch(
+  //     `${usersEndpoint}/currentuser`,
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         'cookie': cookie
+  //       }
   //     }
-  //   }
-  // );
+  //   );
+  // } catch (err) {
+  //   console.log(err);
+  //   return null;
+  // }
 
   // // If something goes wrong with this call, we can't authenticate
   // if (!response.ok) return null;

@@ -8,14 +8,12 @@
   function toggle() {
     isExpanded = !isExpanded;
   }
-
-  $: cursorProperty = 'hover:cursor-pointer';
 </script>
 
 <div
   id="container"
   on:click={toggle}
-  class="px-1 py-4 grid grid-cols-[auto_70%_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all my-1 rounded-lg {cursorProperty}"
+  class="px-1 py-4 grid grid-cols-[auto_auto_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all my-1 rounded-xl hover:cursor-pointer"
 >
   <div class="{isExpanded ? 'row-span-full' : 'row-span-2'} p-5">
     <slot name="leading">
@@ -31,9 +29,6 @@
   {#if isExpanded}
     <div class="py-4 mx-2 row-start-3 col-start-2" transition:slide|local>
       <slot name="content" />
-    </div>
-    <div class="pt-4 px-8 mt-4 place-self-center row-start-4 col-start-2" transition:slide|local>
-      <slot name="trailing" />
     </div>
   {/if}
 
