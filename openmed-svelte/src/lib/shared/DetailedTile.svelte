@@ -2,6 +2,9 @@
   export let title;
   export let subtitle;
 
+  export { additionalClasses as class };
+  let additionalClasses = 'rounded-lg px-1 py-4 my-1';
+
   import { slide } from 'svelte/transition';
 
   let isExpanded = false;
@@ -15,7 +18,7 @@
 <div
   id="container"
   on:click={toggle}
-  class="px-1 py-4 grid grid-cols-[auto_70%_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all my-1 rounded-lg {cursorProperty}"
+  class="grid grid-cols-[auto_70%_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all {additionalClasses} {cursorProperty}"
 >
   <div class="{isExpanded ? 'row-span-full' : 'row-span-2'} p-5">
     <slot name="leading">

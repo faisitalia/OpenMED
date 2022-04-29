@@ -75,7 +75,7 @@
 
   <!-- Prossimi appuntamenti -->
   <div
-    class="w-full col-start-2 row-span-3 justify-self-center hidden md:flex md:flex-col md:justify-start md:items-stretch"
+    class="w-full col-start-2 row-span-3 justify-self-center hidden lg:flex lg:flex-col lg:justify-start lg:items-stretch"
   >
     <h3 class="mt-4 mb-8 text-center">PROSSIMI APPUNTAMENTI</h3>
     <SummaryTile title="Visita" subtitle={`24 Gennaio | h 11.30 / 12.30`}>

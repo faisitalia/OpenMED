@@ -111,31 +111,35 @@
 <Title>Gestione Utenti</Title>
 <Subtitle>Lista Utenti</Subtitle>
 
-<div class="m-4 mt-16">
+<div class="m-4 mt-16 md:grid md:place-items-start md:grid-cols-[auto_auto] md:px-8">
   <div
     id="search"
-    class="flex flex-row px-4 py-2 items-center w-full bg-brandBlue-50/50 rounded-full text-center"
+    class="col-start-1 row-start-1 flex flex-row px-4 py-2 items-center w-full md:w-96 bg-brandBlue-50/50 rounded-full text-center"
   >
     <span class="material-icons-round"> search </span>
     <input
       id="search-input"
-      class="focus:bg-white/30 rounded-xl px-4 w-full bg-transparent focus:outline-none"
+      class="focus:bg-white/30 rounded-xl px-4 bg-transparent focus:outline-none"
       type="text"
       placeholder="Cerca utente"
       bind:value={search}
     />
   </div>
-  <div id="filters" class="my-1">
-    <div class="flex flex-wrap flex-row justify-evenly">
+  <div id="filters" class="my-1 col-start-1 row-start-2">
+    <div class="flex flex-wrap flex-row justify-evenly md:justify-start">
       <!-- TODO implement on:click events -->
       <FilterButton>Medici</FilterButton>
       <FilterButton>Infermieri</FilterButton>
       <FilterButton>Pazienti</FilterButton>
     </div>
   </div>
-  <div id="users-table" class="my-4">
+  <div id="users-table" class="my-4 col-start-1 row-start-3 place-self-stretch md:pr-40">
     {#each filteredList as user}
-      <DetailedTile title={`${user.name} ${user.surname}`} subtitle={user.email}>
+      <DetailedTile
+        title={`${user.name} ${user.surname}`}
+        subtitle={user.email}
+        class="rounded-3xl my-1 px-4 py-1"
+      >
         <div slot="content" class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]">
           <div class="col-span-1">
             <p class="font-bold">Email</p>
@@ -167,5 +171,17 @@
     {:else}
       <h3>Nessun utente trovato.</h3>
     {/each}
+  </div>
+
+  <!-- Crea nuovo utente-->
+  <div
+    class="w-full xl:px-40 col-start-2 row-span-3 justify-self-center hidden lg:flex lg:flex-col lg:justify-start lg:items-stretch"
+  >
+    <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
+    <StyledButton class="font-bold" on:click={() => goto('/users/new')}>Crea Nuovo</StyledButton>
+    <div class="my-20" />
+    <!-- TODO -->
+    <h3 class="mt-4 mb-8 text-center">SERVE AIUTO?</h3>
+    <StyledButton class="font-bold" on:click={() => null}>Clicca qui</StyledButton>
   </div>
 </div>
