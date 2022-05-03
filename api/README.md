@@ -45,7 +45,7 @@ npm run test
 Per lanciare l'API server:
 
 ```bash
-npm run start
+npm run start:dev
 ```
 
 Una volta lanciato il server sarà disponibile lo [Swagger](https://swagger.io/docs) delle [API](http://localhost:3001/docs/).
