@@ -12,6 +12,7 @@ enum Role {
   PATIENT = 'PATIENT',
   CAREGIVER = 'CAREGIVER',
   USER = 'USER',
+  PUBLISHER = 'PUBLISHER'
 }
 
 // An interface that describes the properties

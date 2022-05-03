@@ -1,7 +1,10 @@
+import { constants } from 'http2'
+
 import { createRole, findRoleByRoleName, deleteRoleByRoleName } from '..'
+import { Role } from '../../../models/user'
 
 it('should create a role', async () => {
-  const newRole = 'publisher'
+  const newRole = Role.PUBLISHER
 
   const findRoleBefore = await findRoleByRoleName(newRole)
   expect(findRoleBefore).toBeNull()
@@ -18,11 +21,19 @@ it('should create a role', async () => {
   await deleteRoleByRoleName(newRole)
 })
 
-it.skip('should failed creating an already existing role', async () => {
-  const newRole = 'publisher'
-  await createRole(newRole)
+it('should return a conflict error creating an already existing role', async () => {
+  const newRole = Role.PUBLISHER
+
   await createRole(newRole)
 
-  // find the role on keycloak to check the creation
-  // await deleteUserById(userId)
+  try {
+    await createRole(newRole)
+  } catch (error: any) {
+    const response = error.response
+
+    expect(response.status).toStrictEqual(constants.HTTP_STATUS_CONFLICT)
+    expect(response.data.errorMessage).toStrictEqual('Role with name PUBLISHER already exists')
+
+    await deleteRoleByRoleName(newRole)
+  }
 })
