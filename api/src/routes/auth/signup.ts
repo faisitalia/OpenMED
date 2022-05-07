@@ -12,7 +12,7 @@ const router = express.Router()
  * @openapi
  * /users/signup:
  *   post:
- *     description: Returns the nearest facilities to the coordinates sent via query parameters
+ *     description: Returns the just created user
  *     tags:
  *      - User
  *     produces:
@@ -59,21 +59,12 @@ router.post(
   async (req: Request, res: Response) => {
     const { username, email, password, firstname, lastname, birthdate } = req.body
 
-    // const existingUser = await User.findOne({ email })
-
-    // if (existingUser) {
-    //   throw new BadRequestError('Email in use')
-    // }
-
     // TODO transaction
 
     // create the person
     const personDoc = Person.build({ firstname, lastname, birthdate })
     await personDoc.save()
 
-    // create the user
-    // const user = User.build({ email, password, role: Role.USER, personId: person.id })
-    // await user.save()
     const userId = await createUser(username, email, password)
 
     // retrieve the user just created

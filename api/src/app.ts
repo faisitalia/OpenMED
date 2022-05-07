@@ -14,6 +14,7 @@ import { signinRouter } from './routes/auth/signin'
 import { signoutRouter } from './routes/auth/signout'
 import { signupRouter } from './routes/auth/signup'
 import { refreshTokenRouter } from './routes/auth/refresh-token'
+import { createRoleRouter } from './routes/auth/create-role'
 
 import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
@@ -50,6 +51,7 @@ app.use(signinRouter)
 app.use(signoutRouter)
 app.use(signupRouter)
 app.use(refreshTokenRouter)
+app.use(createRoleRouter)
 app.use(facilityRouter)
 app.use(visitRouter)
 
