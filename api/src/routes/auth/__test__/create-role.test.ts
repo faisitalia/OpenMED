@@ -14,7 +14,7 @@ it('returns a 200 on successful role creation', async () => {
     .expect(constants.HTTP_STATUS_CREATED)
 
   expect(role).toBeDefined()
+  expect(role.roleName).toStrictEqual(roleName)
 
-  console.log(role)
   await deleteRoleByRoleName(roleName)
 })
