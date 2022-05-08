@@ -15,6 +15,7 @@ const config: Configuration = {
     node: true, // in order to ignore built-in modules like path, fs, etc.
   },
   entry: './src/index.ts',
+  devtool: 'inline-source-map',
   module: {
     rules: [
       {
