@@ -270,11 +270,13 @@ app.post("/session", async (req, res) => {
               });
             })
             .catch((error) => {
-              console.error(error);
+              console.error(
+                `Error creating a connection: ${JSON.stringify(error)}`
+              );
             });
         })
         .catch((error) => {
-          console.error(error);
+          console.error(`Error creating a session: ${JSON.stringify(error)}`);
         });
     }
   }
