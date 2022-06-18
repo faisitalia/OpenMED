@@ -17,9 +17,31 @@
 // });
 useHead({
   titleTemplate: (title) => `OpenMed - ${title}`,
+  link: [
+    {
+      rel: "stylesheet",
+      href: "https://fonts.googleapis.com/icon?family=Material+Icons+Round",
+    },
+  ],
 });
+const router = useRouter();
+const emptyLayoutRoutes = [
+  "/login",
+  "/register",
+  "/forgot-password",
+  "/reset-password",
+  "/call",
+];
+const useEmptyLayout = emptyLayoutRoutes.some((emptyLayoutRoute) =>
+  router.currentRoute.value.path.startsWith(emptyLayoutRoute)
+);
 </script>
 
 <template>
-  <slot />
+  <NuxtLayout v-if="useEmptyLayout" name="empty">
+    <slot />
+  </NuxtLayout>
+  <NuxtLayout v-else name="layout">
+    <slot />
+  </NuxtLayout>
 </template>
