@@ -1,3 +1,3 @@
 <h1>This is the about page</h1>
 
-<a href="/">go back</a>
+<NuxtLink to="/">go back</NuxtLink>
