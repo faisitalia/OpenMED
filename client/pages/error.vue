@@ -1,10 +1,8 @@
 <!-- TODO: implement something here -->
-<script setup>
-async function load() {
-  return {};
-}
-</script>
+<script setup></script>
 
 <template>
-  <h1>Something went wrong</h1>
+  <div>
+    <h1>Something went wrong</h1>
+  </div>
 </template>

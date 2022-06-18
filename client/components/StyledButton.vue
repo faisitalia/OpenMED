@@ -1,8 +1,11 @@
 <script setup>
 const props = defineProps({
   class: String,
-  colors: "text-white bg-brandBlue-500 hover:bg-brandBlue-700",
-  spaces: "px-4 py-2 my-1",
+  colors: {
+    type: String,
+    default: "text-white bg-brandBlue-500 hover:bg-brandBlue-700",
+  },
+  spaces: { type: String, default: "px-4 py-2 my-1" },
 });
 const emit = defineEmits(["click"]);
 </script>

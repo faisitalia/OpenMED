@@ -38,10 +38,12 @@ const useEmptyLayout = emptyLayoutRoutes.some((emptyLayoutRoute) =>
 </script>
 
 <template>
-  <NuxtLayout v-if="useEmptyLayout" name="empty">
-    <slot />
-  </NuxtLayout>
-  <NuxtLayout v-else name="layout">
-    <slot />
-  </NuxtLayout>
+  <div>
+    <NuxtLayout v-if="useEmptyLayout" name="empty">
+      <slot />
+    </NuxtLayout>
+    <NuxtLayout v-else name="layout">
+      <slot />
+    </NuxtLayout>
+  </div>
 </template>

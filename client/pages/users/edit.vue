@@ -1,14 +1,11 @@
 <script setup>
 import { validate } from "validate.js";
-const props = defineProps({
-  userId: String,
-});
-// TODO ??? is this really necessary?
-// import { yyyyMMdd } from '$lib/utils';
+
+const props = defineProps({ userId: String });
+
 useRouter();
-useHead({
-  title: `${userId ? "Modifica" : "Crea"} Utente`,
-});
+useHead({ title: `${props.userId ? "Modifica" : "Crea"} Utente` });
+
 // TODO check old svelte logic
 async function load({ fetch, url }) {
   const params = url.searchParams;
@@ -177,145 +174,151 @@ async function submit() {
 </script>
 
 <template>
-  <h1 class="font-bold my-2">Gestione Utenti</h1>
-  <p class="font-normal mb-8">Nuovo Profilo</p>
+  <div>
+    <h1 class="font-bold my-2">Gestione Utenti</h1>
+    <p class="font-normal mb-8">Nuovo Profilo</p>
 
-  <form
-    @submit.prevent="submit"
-    id="editUser"
-    class="flex flex-col justify-center items-stretch"
-    novalidate
-  >
-    <fieldset class="flex flex-col items-stretch my-3">
-      <label for="role">Ruolo</label>
-      <select
-        :value="choices.role"
-        name="Ruolo"
-        id="role"
-        required
-        class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-      >
-        <option value="{null}" />
-        <option v-for="r in roles" value="{r}">{r?.name}</option>
-        <option v-if="!roles" value="{null}" disabled="true">
-          Nessun ruolo disponibile
-        </option>
-      </select>
-      <div v-if="errors?.role" class="text-red-500">{{ errors.role[0] }}</div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-3">
-      <label for="ssn">Codice Fiscale</label>
-      <input
-        type="text"
-        name="Codice Fiscale"
-        id="ssn"
-        class="uppercase transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.ssn"
-        required
-      />
-      <div v-if="errors?.ssn" class="text-red-500">{{ errors.ssn[0] }}</div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch">
-      <label for="name">Nome</label>
-      <input
-        type="text"
-        name="Nome"
-        id="name"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.name"
-        required
-      />
-      <div v-if="errors?.name" class="text-red-500">{{ errors.name[0] }}</div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-3">
-      <label for="surname">Cognome</label>
-      <input
-        type="text"
-        name="Cognome"
-        id="surname"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.surname"
-        required
-      />
-      <div v-if="errors?.surname" class="text-red-500">
-        {{ errors.surname[0] }}
-      </div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-4">
-      <label for="address">Indirizzo</label>
-      <input
-        type="text"
-        name="Indirizzo"
-        id="address"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.address"
-        required
-      />
-      <div v-if="errors?.address" class="text-red-500">
-        {{ errors.address[0] }}
-      </div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-4">
-      <label for="phone">Telefono</label>
-      <input
-        type="text"
-        name="Telefono"
-        id="phone"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.phone"
-        required
-      />
-      <div v-if="errors?.phone" class="text-red-500">{{ errors.phone[0] }}</div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-4">
-      <label for="email">Email</label>
-      <input
-        type="email"
-        name="Email"
-        id="email"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.email"
-        required
-      />
-      <div v-if="errors?.email" class="text-red-500">{{ errors.email[0] }}</div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-4">
-      <label for="password">Password</label>
-      <input
-        type="text"
-        name="Password"
-        id="password"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.password"
-        required
-      />
-      <div v-if="errors?.password" class="text-red-500">
-        {{ errors.password[0] }}
-      </div>
-    </fieldset>
-    <fieldset class="flex flex-col items-stretch my-4">
-      <label for="confirmPassword">Conferma Passowrd</label>
-      <input
-        type="text"
-        name="Conferma Passowrd"
-        id="confirmPassword"
-        class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        :value="choices.confirmPassword"
-        required
-      />
-      <div v-if="errors?.confirmPassword" class="text-red-500">
-        {{ errors.confirmPassword[0] }}
-      </div>
-    </fieldset>
-    <button
-      type="submit"
-      @submit="submit"
-      class="mx-10 my-7 px-2 py-1 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
+    <form
+      @submit.prevent="submit"
+      id="editUser"
+      class="flex flex-col justify-center items-stretch"
+      novalidate
     >
-      {{ action }} Account
-    </button>
-  </form>
-  <div v-if="asyncErrors?.errors" class="text-red-500">
-    Woops! Qualcosa è andato storto, riprova.
+      <fieldset class="flex flex-col items-stretch my-3">
+        <label for="role">Ruolo</label>
+        <select
+          v-model="choices.role"
+          name="Ruolo"
+          id="role"
+          required
+          class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+        >
+          <option />
+          <option v-for="r in roles" :value="r">{r?.name}</option>
+          <option v-if="!roles" disabled="true">
+            Nessun ruolo disponibile
+          </option>
+        </select>
+        <div v-if="errors?.role" class="text-red-500">{{ errors.role[0] }}</div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-3">
+        <label for="ssn">Codice Fiscale</label>
+        <input
+          type="text"
+          name="Codice Fiscale"
+          id="ssn"
+          class="uppercase transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.ssn"
+          required
+        />
+        <div v-if="errors?.ssn" class="text-red-500">{{ errors.ssn[0] }}</div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch">
+        <label for="name">Nome</label>
+        <input
+          type="text"
+          name="Nome"
+          id="name"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.name"
+          required
+        />
+        <div v-if="errors?.name" class="text-red-500">{{ errors.name[0] }}</div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-3">
+        <label for="surname">Cognome</label>
+        <input
+          type="text"
+          name="Cognome"
+          id="surname"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.surname"
+          required
+        />
+        <div v-if="errors?.surname" class="text-red-500">
+          {{ errors.surname[0] }}
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-4">
+        <label for="address">Indirizzo</label>
+        <input
+          type="text"
+          name="Indirizzo"
+          id="address"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.address"
+          required
+        />
+        <div v-if="errors?.address" class="text-red-500">
+          {{ errors.address[0] }}
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-4">
+        <label for="phone">Telefono</label>
+        <input
+          type="text"
+          name="Telefono"
+          id="phone"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.phone"
+          required
+        />
+        <div v-if="errors?.phone" class="text-red-500">
+          {{ errors.phone[0] }}
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-4">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          name="Email"
+          id="email"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.email"
+          required
+        />
+        <div v-if="errors?.email" class="text-red-500">
+          {{ errors.email[0] }}
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-4">
+        <label for="password">Password</label>
+        <input
+          type="text"
+          name="Password"
+          id="password"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.password"
+          required
+        />
+        <div v-if="errors?.password" class="text-red-500">
+          {{ errors.password[0] }}
+        </div>
+      </fieldset>
+      <fieldset class="flex flex-col items-stretch my-4">
+        <label for="confirmPassword">Conferma Passowrd</label>
+        <input
+          type="text"
+          name="Conferma Passowrd"
+          id="confirmPassword"
+          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          v-model="choices.confirmPassword"
+          required
+        />
+        <div v-if="errors?.confirmPassword" class="text-red-500">
+          {{ errors.confirmPassword[0] }}
+        </div>
+      </fieldset>
+      <button
+        type="submit"
+        @submit="submit"
+        class="mx-10 my-7 px-2 py-1 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
+      >
+        {{ action }} Account
+      </button>
+    </form>
+    <div v-if="asyncErrors?.errors" class="text-red-500">
+      Woops! Qualcosa è andato storto, riprova.
+    </div>
   </div>
 </template>

@@ -8,7 +8,7 @@ let isAdmin = roles.includes("admin");
 </script>
 
 <template>
-  <div class="font-bold">
+  <div>
     <div
       class="mx-4 my-4 md:grid md:place-items-start md:grid-cols-[auto_auto]"
     >

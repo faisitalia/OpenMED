@@ -1,13 +1,8 @@
 <script setup>
 // import { visitsEndpoint } from '$lib/uri.js';
-const props = defineProps({
-  visits: [],
-  // userId: String,
-});
+const props = defineProps({ visits: [] });
 useRouter();
-useHead({
-  title: `I tuoi appuntamenti`,
-});
+useHead({ title: `I tuoi appuntamenti` });
 
 async function load({ session, fetch }) {
   // if(!session?.id) {

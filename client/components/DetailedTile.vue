@@ -1,6 +1,6 @@
 <script setup>
 const props = defineProps({
-  class: "rounded-lg px-1 py-4 my-1",
+  class: { type: String, default: "rounded-lg px-1 py-4 my-1" },
   title: String,
   subtitle: String,
 });
