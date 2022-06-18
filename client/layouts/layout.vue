@@ -5,7 +5,7 @@ const isDrawerOpen = ref(false);
 
 // Old SvelteKit code:
 // async function logout() {  // TODO reimplement here on Nuxt3
-//   await fetch(`${usersEndpoint}/signout`, {
+//   await fetch(`${usersEndpoint}/signout`, {  // TODO use a composable
 //     method: 'POST',
 //     credentials: 'include'
 //   });

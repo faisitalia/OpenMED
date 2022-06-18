@@ -15,6 +15,9 @@
 // const props = defineProps({
 //   userId: "",
 // });
+useHead({
+  titleTemplate: (title) => `OpenMed - ${title}`,
+});
 </script>
 
 <template>
