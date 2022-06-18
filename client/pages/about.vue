@@ -1,3 +1,5 @@
-<h1>This is the about page</h1>
+<template>
+  <h1>This is the about page</h1>
 
-<NuxtLink to="/">go back</NuxtLink>
+  <NuxtLink to="/">go back</NuxtLink>
+</template>

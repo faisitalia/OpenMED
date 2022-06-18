@@ -13,7 +13,7 @@ function toggle() {}
   <div
     id="container"
     @click="isExpanded = !isExpanded"
-    class="grid grid-cols-[auto_70%_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all hover:cursor-pointer {{additionalClasses}}"
+    class="grid grid-cols-[auto_70%_auto] place-items-start bg-brandBlue-50/40 hover:bg-brandBlue-50/50 transition-all hover:cursor-pointer {{class}}"
   >
     <div class="{{isExpanded ? 'row-span-full' : 'row-span-2'}} p-5">
       <slot name="leading">

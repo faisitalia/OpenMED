@@ -5,4 +5,6 @@ async function load() {
 }
 </script>
 
-<h1>Something went wrong</h1>
+<template>
+  <h1>Something went wrong</h1>
+</template>

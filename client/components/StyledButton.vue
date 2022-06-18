@@ -1,4 +1,4 @@
-<script>
+<script setup>
 const props = defineProps({
   class: String,
   colors: "text-white bg-brandBlue-500 hover:bg-brandBlue-700",

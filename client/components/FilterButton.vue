@@ -1,4 +1,4 @@
-<script>
+<script setup>
 const emit = defineEmits(["click"]);
 
 const isApplied = ref(false);

@@ -1,0 +1,17 @@
+<svg id="openmed_Tavola_disegno_1_copia_2" data-name="openmed_Tavola disegno 1 copia 2" xmlns="http://www.w3.org/2000/svg" width="58" height="58" viewBox="0 0 58 58">
+  <path id="Tracciato_1" data-name="Tracciato 1" d="M60.721,362.745v16.186a6.07,6.07,0,0,1-6.07,6.07H38.465a6.07,6.07,0,0,1-6.07-6.07V362.745a6.07,6.07,0,0,1,6.07-6.07H54.651a5.989,5.989,0,0,1,.674.038V351.28H33.07A6.07,6.07,0,0,0,27,357.35v26.977a6.07,6.07,0,0,0,6.07,6.07H60.047a6.07,6.07,0,0,0,6.07-6.07V362.745h-5.4Z" transform="translate(-27 -332.396)" fill="#39b54a"/>
+  <g id="Raggruppa_1" data-name="Raggruppa 1" transform="translate(33.721 12.14)">
+    <rect id="Rettangolo_1" data-name="Rettangolo 1" width="6.07" height="6.07" transform="translate(0 6.07)" fill="#006837"/>
+    <rect id="Rettangolo_2" data-name="Rettangolo 2" width="6.07" height="6.07" transform="translate(12.139)" fill="#006837"/>
+  </g>
+  <g id="Raggruppa_2" data-name="Raggruppa 2" transform="translate(26.977 12.14)">
+    <rect id="Rettangolo_3" data-name="Rettangolo 3" width="6.07" height="6.07" transform="translate(12.814 6.07)" fill="#8cc63f"/>
+    <rect id="Rettangolo_4" data-name="Rettangolo 4" width="3.372" height="3.372" fill="#8cc63f"/>
+  </g>
+  <g id="Raggruppa_3" data-name="Raggruppa 3" transform="translate(33.721)">
+    <rect id="Rettangolo_5" data-name="Rettangolo 5" width="3.372" height="3.372" transform="translate(20.907 14.837)" fill="#39b54a"/>
+    <rect id="Rettangolo_6" data-name="Rettangolo 6" width="6.07" height="6.07" transform="translate(12.139)" fill="#39b54a"/>
+    <rect id="Rettangolo_7" data-name="Rettangolo 7" width="6.07" height="6.07" transform="translate(0 12.14)" fill="#39b54a"/>
+    <rect id="Rettangolo_8" data-name="Rettangolo 8" width="6.07" height="6.07" transform="translate(6.07 6.07)" fill="#39b54a"/>
+  </g>
+</svg>
