@@ -1,18 +1,17 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
-
-  export { additionalClasses as class };
-  let additionalClasses = '';
-
-  export let colors = 'text-white bg-brandBlue-500 hover:bg-brandBlue-700';
-  export let spaces = 'px-4 py-2 my-1';
-
-  const dispatch = createEventDispatcher();
+const props = defineProps({
+  class: String,
+  colors: "text-white bg-brandBlue-500 hover:bg-brandBlue-700",
+  spaces: "px-4 py-2 my-1",
+});
+const emit = defineEmits(["click"]);
 </script>
 
-<button
-  class="rounded-3xl {additionalClasses} {colors} {spaces}"
-  on:click|stopPropagation|preventDefault={() => dispatch('click')}
->
-  <slot />
-</button>
+<template>
+  <button
+    class="rounded-3xl {{class}} {{colors}} {{spaces}}"
+    @click.prevent.stop="emit('click')"
+  >
+    <slot />
+  </button>
+</template>
