@@ -8,7 +8,7 @@ let isAdmin = roles.includes("admin");
 </script>
 
 <template>
-  <div>
+  <NuxtLayout name="layout">
     <div
       class="mx-4 my-4 md:grid md:place-items-start md:grid-cols-[auto_auto]"
     >
@@ -94,5 +94,5 @@ let isAdmin = roles.includes("admin");
         </SummaryTile>
       </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>

@@ -95,61 +95,63 @@ function callStart(visit) {
 </script>
 
 <template>
-  <div class="mx-4 my-4">
-    <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
-    <p class="font-normal mb-8">Le visite programmate sono qui.</p>
-    <DetailedTile
-      v-for="v in visits"
-      title="Visita"
-      :subtitle="`${v.date} h ${v.time}`"
-    >
-      <div slot="content">
-        <div class="py-3">
-          <h3>Appuntamento</h3>
-          <p>il {{ v.date }}</p>
-          <p>h {{ v.time }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Ambulatorio</h3>
-          <p>{{ v.clinic }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Medico</h3>
-          <p>{{ v.doctor.name }} {{ v.doctor.surname }}</p>
-          <p class="font-light text-brandText-400">
-            {{ v.doctor.qualification }}
-          </p>
-        </div>
-        <div class="py-3">
-          <h3>Paziente</h3>
-          <p>{{ v.patient.name }} {{ v.patient.surname }}</p>
-          <p class="font-light">{{ v.patient.ssn }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Caregiver / Familiare</h3>
-          <p>{{ v.caregiver.name }} {{ v.caregiver.surname }}</p>
-          <p class="font-light text-brandText-400">
-            {{ v.caregiver.relation }}
-          </p>
-        </div>
-      </div>
-      <div
-        @click.stop="() => null"
-        slot="trailing"
-        class="flex flex-col items-stretch cursor-default"
+  <NuxtLayout name="layout">
+    <div class="mx-4 my-4">
+      <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
+      <p class="font-normal mb-8">Le visite programmate sono qui.</p>
+      <DetailedTile
+        v-for="v in visits"
+        title="Visita"
+        :subtitle="`${v.date} h ${v.time}`"
       >
-        <StyledButton @click="() => navigateTo(`/call?id=${v.id}`)">
-          <span class="material-icons-round align-middle pr-2">call</span>
-          Inizio chiamata
-        </StyledButton>
-        <StyledButton
-          colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
-          @click="() => navigateTo(`/appointments/edit?id=${v.id}`)"
+        <div slot="content">
+          <div class="py-3">
+            <h3>Appuntamento</h3>
+            <p>il {{ v.date }}</p>
+            <p>h {{ v.time }}</p>
+          </div>
+          <div class="py-3">
+            <h3>Ambulatorio</h3>
+            <p>{{ v.clinic }}</p>
+          </div>
+          <div class="py-3">
+            <h3>Medico</h3>
+            <p>{{ v.doctor.name }} {{ v.doctor.surname }}</p>
+            <p class="font-light text-brandText-400">
+              {{ v.doctor.qualification }}
+            </p>
+          </div>
+          <div class="py-3">
+            <h3>Paziente</h3>
+            <p>{{ v.patient.name }} {{ v.patient.surname }}</p>
+            <p class="font-light">{{ v.patient.ssn }}</p>
+          </div>
+          <div class="py-3">
+            <h3>Caregiver / Familiare</h3>
+            <p>{{ v.caregiver.name }} {{ v.caregiver.surname }}</p>
+            <p class="font-light text-brandText-400">
+              {{ v.caregiver.relation }}
+            </p>
+          </div>
+        </div>
+        <div
+          @click.stop="() => null"
+          slot="trailing"
+          class="flex flex-col items-stretch cursor-default"
         >
-          Modifica
-        </StyledButton>
-      </div>
-    </DetailedTile>
-    <p v-if="!visits">Non hai appuntamenti da poter mostrare qui.</p>
-  </div>
+          <StyledButton @click="() => navigateTo(`/call?id=${v.id}`)">
+            <span class="material-icons-round align-middle pr-2">call</span>
+            Inizio chiamata
+          </StyledButton>
+          <StyledButton
+            colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
+            @click="() => navigateTo(`/appointments/edit?id=${v.id}`)"
+          >
+            Modifica
+          </StyledButton>
+        </div>
+      </DetailedTile>
+      <p v-if="!visits">Non hai appuntamenti da poter mostrare qui.</p>
+    </div>
+  </NuxtLayout>
 </template>

@@ -3,7 +3,7 @@ useHead({ title: `Tutto fatto!` });
 </script>
 
 <template>
-  <div>
+  <NuxtLayout name="layout">
     <div
       class="flex flex-col justify-center items-center rounded-3xl bg-brandBlue-50/40 mx-4 p-10 my-36"
     >
@@ -64,5 +64,5 @@ useHead({ title: `Tutto fatto!` });
         </NuxtLink>
       </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>

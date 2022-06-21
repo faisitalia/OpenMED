@@ -35,7 +35,7 @@ async function load({ fetch, url }) {
   return { props: { user: user } };
 }
 
-let action = user == null ? "Crea" : "Modifica";
+let action = props.userId ? "Crea" : "Modifica";
 
 const roles = ["Paziente", "Dottore", "Amministratore"];
 const choices = {
@@ -174,7 +174,7 @@ async function submit() {
 </script>
 
 <template>
-  <div>
+  <NuxtLayout name="layout">
     <h1 class="font-bold my-2">Gestione Utenti</h1>
     <p class="font-normal mb-8">Nuovo Profilo</p>
 
@@ -320,5 +320,5 @@ async function submit() {
     <div v-if="asyncErrors?.errors" class="text-red-500">
       Woops! Qualcosa è andato storto, riprova.
     </div>
-  </div>
+  </NuxtLayout>
 </template>

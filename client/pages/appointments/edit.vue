@@ -107,7 +107,12 @@ const choices = ref({
 const startDate = computed(
   () =>
     new Date(
-      choices.date + "T" + choices.hour + ":" + choices.minute + ":00.000"
+      choices.value.date +
+        "T" +
+        choices.value.hour +
+        ":" +
+        choices.value.minute +
+        ":00.000"
     )
 );
 
@@ -159,26 +164,29 @@ validate.extend(validate.validators.datetime, {
     return d.toString(); // This is sufficient
   },
 });
-let errors;
-let asyncErrors;
+let errors = ref({});
+let asyncErrors = ref({});
 
 async function submit() {
-  console.log(choices.date);
+  console.log(choices.value.date);
   // 1. Validate the form
   const selected = {
-    clinic: choices.clinic,
-    patient: choices.patient,
-    startDate: startDate,
+    clinic: choices.value.clinic,
+    patient: choices.value.patient,
+    startDate: startDate.value,
   };
-  errors = validate(selected, formConstraints);
-  if (errors) {
-    console.log(errors);
+  errors.value = validate(selected, formConstraints);
+  if (errors.value) {
+    console.log(errors.value);
     return;
   }
 
   // 2. Elaborate the chosen datetime interval
-  const endDate = new Date(startDate.getTime() + 1000 * 60 * choices.duration);
-  const iso8601Slot = startDate.toISOString() + "/" + endDate.toISOString();
+  const endDate = new Date(
+    startDate.value.getTime() + 1000 * 60 * choices.value.duration
+  );
+  const iso8601Slot =
+    startDate.value.toISOString() + "/" + endDate.toISOString();
 
   // 3. Submit the form
   // const response = await fetch(visitsEndpoint, {
@@ -208,7 +216,7 @@ async function submit() {
 </script>
 
 <template>
-  <div>
+  <NuxtLayout name="layout">
     <div class="mx-4 my-4">
       <h1 class="font-bold my-2">Nuovo Appuntamento</h1>
       <p class="font-normal mb-8">Compila tutti i campi.</p>
@@ -229,7 +237,7 @@ async function submit() {
           >
             <option value="Virtuale" class="font-bold">Virtuale</option>
             <option v-for="c in clinics" :value="c">{{ c }}</option>
-            <option v-if="!clinics" disabled="true">
+            <option v-if="!clinics" value="null" disabled="true">
               Nessuna clinica disponibile
             </option>
           </select>
@@ -291,7 +299,7 @@ async function submit() {
           >
             <option selected disabled hidden />
             <option v-for="p in patients" :value="p">{{ p }}</option>
-            <option v-if="!patients" disabled="true">
+            <option v-if="!patients" value="null" disabled="true">
               Nessun Paziente disponibile
             </option>
           </select>
@@ -311,7 +319,7 @@ async function submit() {
         Woops! Qualcosa è andato storto, riprova.
       </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>
 
 <style>

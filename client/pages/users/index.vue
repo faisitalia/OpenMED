@@ -102,7 +102,7 @@ const filteredList = computed(() =>
 </script>
 
 <template>
-  <div>
+  <NuxtLayout name="layout">
     <Title>Gestione Utenti</Title>
     <Subtitle>Lista Utenti</Subtitle>
 
@@ -190,5 +190,5 @@ const filteredList = computed(() =>
         <StyledButton class="font-bold" @click="null">Clicca qui</StyledButton>
       </div>
     </div>
-  </div>
+  </NuxtLayout>
 </template>
