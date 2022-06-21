@@ -8,27 +8,18 @@ export default defineNuxtRouteMiddleware(async (to, _) => {
   ];
 
   const isAuthenticated = authStore.isAuthenticated;
-  console.log(isAuthenticated);
 
   const isProtectedRoute = !clearRoutes.some((route) =>
     to.path.startsWith(route)
   );
-  console.log(isProtectedRoute);
 
-  // when we're accessing "login" pages
   if (isProtectedRoute) {
-    // If we aren't logged in, redirect to the login
-    if (!isAuthenticated) {
-      return navigateTo("/login");
-    }
+    if (!isAuthenticated) return navigateTo("/login");
 
-    // Otherwise, we're good to go
+    // No redirect needed
     return;
   }
 
-  // here, we're accessing non-protected routes
-  if (isAuthenticated) {
-    // If we're logged in, redirect to the login page
-    return navigateTo("/");
-  }
+  // The login page should be accessible iff we're not authenticated
+  if (isAuthenticated) return navigateTo("/");
 });
