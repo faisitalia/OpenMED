@@ -1,11 +1,8 @@
-<script setup></script>
-
 <template>
-  <!-- Desktop Nav Bar -->
-  <div
-    class="hidden md:flex flex-col justify-start top-auto py-4 px-8 bg-brandBlue-500"
+  <header
+    class="hidden sm:flex flex-col justify-start top-auto py-4 px-8 bg-brandBlue-500"
   >
-    <!-- Openmed's big white logo here -->
+    <!-- Desktop Nav Bar -->
     <img
       class="my-10"
       src="img/logo-openmed/openmed-logo-white.svg"
@@ -40,5 +37,5 @@
       src="img/logo-fais/logo-fais-white@2x.png"
       alt="FAIS logo"
     />
-  </div>
+  </header>
 </template>

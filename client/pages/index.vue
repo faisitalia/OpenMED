@@ -10,9 +10,9 @@ let isAdmin = roles.includes("admin");
 <template>
   <NuxtLayout name="layout">
     <div
-      class="mx-4 my-4 md:grid md:place-items-start md:grid-cols-[auto_auto]"
+      class="mx-4 my-4 sm:mt-24 md:my-4 md:grid md:place-items-start md:grid-cols-[auto_auto]"
     >
-      <div id="hello-user" class="col-start-1 row-start-1">
+      <div id="hello-user" class="sm:my-16 col-start-1 row-start-1">
         <Title>Ciao {{ name }},</Title>
         <Subtitle>come desideri procedere?</Subtitle>
       </div>
@@ -52,16 +52,19 @@ let isAdmin = roles.includes("admin");
         <img
           src="img/doctors.svg"
           alt="Un gruppo di dottori ti aspetta"
-          class="md:hidden self-center my-16"
+          class="sm:hidden self-center my-16"
         />
       </div>
 
       <!-- Prossimi appuntamenti -->
       <div
-        class="w-full col-start-2 row-span-3 justify-self-center hidden lg:flex lg:flex-col lg:justify-start lg:items-stretch"
+        class="w-full col-start-2 row-span-3 justify-self-center hidden lg:flex flex-col justify-start items-stretch"
       >
         <h3 class="mt-4 mb-8 text-center">PROSSIMI APPUNTAMENTI</h3>
-        <SummaryTile title="Visita" subtitle="24 Gennaio | h 11.30 / 12.30">
+        <DashboardAppointments
+          title="Marco Rossi"
+          subtitle="24 Gennaio | h 11.30 / 12.30"
+        >
           <div slot="content" class="grid grid-cols-3">
             <div>
               <div class="font-bold">Data</div>
@@ -91,7 +94,7 @@ let isAdmin = roles.includes("admin");
           >
             apri
           </div>
-        </SummaryTile>
+        </DashboardAppointments>
       </div>
     </div>
   </NuxtLayout>

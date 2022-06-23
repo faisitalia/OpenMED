@@ -20,30 +20,9 @@ const isDrawerOpen = ref(false);
 {/if} -->
 <template>
   <div>
-    <!-- Mobile Nav Bar -->
-    <div
-      v-if="isDrawerOpen"
-      class="fixed md:hidden items-center transition-all bg-white top-20 z-40 p-4 pb-20 w-full right-0"
-    >
-      <!-- Openmed's big logo here -->
-      <nav class="self-stretch">
-        <ul class="flex flex-col items-end list-none">
-          <NuxtLink to="/"><li class="font-light py-2">Home</li></NuxtLink>
-          <NuxtLink to="/">
-            <li class="font-light py-2">Gestisci Utenti</li>
-          </NuxtLink>
-          <NuxtLink to="/">
-            <li class="font-light py-2">Crea Appuntamento</li>
-          </NuxtLink>
-          <NuxtLink to="/">
-            <li class="font-light py-2">Lista Appuntamenti</li>
-          </NuxtLink>
-          <NuxtLink to="/"><li class="font-light py-2">Contatti</li></NuxtLink>
-        </ul>
-      </nav>
-    </div>
+    <!-- Mobile Menu, open iff we clicked on the drawer button -->
+    <LayoutMobileMenu :isOpen="isDrawerOpen" />
 
-    <!-- We're layouting the whole app with a simple gridview -->
     <div class="grid grid-flow-col md:grid-cols-[auto_1fr]">
       <LayoutDesktopMenu />
 
@@ -53,7 +32,7 @@ const isDrawerOpen = ref(false);
           class="p-6 flex flex-row justify-between md:justify-end items-center"
         >
           <!-- OpenMed's small logo -->
-          <div class="md:hidden">
+          <div class="sm:hidden">
             <NuxtLink to="/">
               <img
                 src="/img/logo-openmed/openmed-logo.svg"
@@ -64,10 +43,10 @@ const isDrawerOpen = ref(false);
 
           <!-- Drawer Button -->
           <div
-            class="flex w-10 h-10 rounded-lg hover:bg-brandBlue-50/20 justify-center items-center"
+            class="flex sm:hidden rounded-lg hover:bg-brandBlue-50/20 justify-center items-center"
           >
             <button
-              class="material-icons-round focus:outline-none text-5xl text-brandGreen-500"
+              class="p-4 material-icons-round focus:outline-none text-brandGreen-500"
               @click.prevent="isDrawerOpen = !isDrawerOpen"
             >
               menu
@@ -76,7 +55,8 @@ const isDrawerOpen = ref(false);
         </header>
 
         <main
-          class="transition-all px-4 {isDrawerOpen ? 'blur-sm' : 'blur-none'} md:blur-none"
+          class="transition-all md:blur-none"
+          :class="isDrawerOpen ? 'blur-sm' : 'blur-none'"
         >
           <slot />
         </main>
