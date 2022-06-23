@@ -10,60 +10,58 @@ let isAdmin = roles.includes("admin");
 <template>
   <NuxtLayout name="layout">
     <div
-      class="mx-4 my-4 sm:mt-24 md:my-4 md:grid md:place-items-start md:grid-cols-[auto_auto]"
+      class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:grid-cols-[auto_auto]"
     >
-      <div id="hello-user" class="sm:my-16 col-start-1 row-start-1">
+      <div
+        id="hello-user"
+        class="col-start-1 row-start-1 row-span-full place-self-start"
+      >
         <Title>Ciao {{ name }},</Title>
         <Subtitle>come desideri procedere?</Subtitle>
-      </div>
+        <!-- Main content -->
+        <div
+          id="actions"
+          class="col-start-1 row-start-3 flex flex-col justify-center items-start"
+        >
+          <DashboardTile
+            v-if="isAdmin"
+            title="Gestisci Utenti"
+            subtitle="Crea, modifica ed elimina i profili utenti"
+            href="/users"
+          />
+          <DashboardTile
+            v-if="isDoctor"
+            title="Crea Appuntamento"
+            subtitle="Crea e gestisci nuovi appuntamenti"
+            href="/appointments/edit"
+          />
+          <DashboardTile
+            v-if="isPatient || isDoctor"
+            title="Lista Appuntamenti"
+            subtitle="Visualizza i tuoi appuntamenti"
+            href="/appointments"
+          />
+          <DashboardTile
+            v-if="isPatient && !isDoctor"
+            title="Cartella Clinica"
+            subtitle="Consulta la tua cartella clinica"
+          />
 
-      <!-- Separator -->
-      <div class="my-6 col-start-1 row-start-2" />
-
-      <!-- Main menu -->
-      <div
-        id="actions"
-        class="col-start-1 row-start-3 flex flex-col justify-center items-start"
-      >
-        <DashboardTile
-          v-if="isAdmin"
-          title="Gestisci Utenti"
-          subtitle="Crea, modifica ed elimina i profili utenti"
-          href="/users"
-        />
-        <DashboardTile
-          v-if="isDoctor"
-          title="Crea Appuntamento"
-          subtitle="Crea e gestisci nuovi appuntamenti"
-          href="/appointments/edit"
-        />
-        <DashboardTile
-          v-if="isPatient || isDoctor"
-          title="Lista Appuntamenti"
-          subtitle="Visualizza i tuoi appuntamenti"
-          href="/appointments"
-        />
-        <DashboardTile
-          v-if="isPatient && !isDoctor"
-          title="Cartella Clinica"
-          subtitle="Consulta la tua cartella clinica"
-        />
-
-        <img
-          src="img/doctors.svg"
-          alt="Un gruppo di dottori ti aspetta"
-          class="sm:hidden self-center my-16"
-        />
+          <img
+            src="img/doctors.svg"
+            alt="Un gruppo di dottori ti aspetta"
+            class="sm:hidden self-center my-16"
+          />
+        </div>
       </div>
 
       <!-- Prossimi appuntamenti -->
-      <div
-        class="w-full col-start-2 row-span-3 justify-self-center hidden lg:flex flex-col justify-start items-stretch"
-      >
+      <div class="col-start-2 row-span-full hidden lg:block">
         <h3 class="mt-4 mb-8 text-center">PROSSIMI APPUNTAMENTI</h3>
         <DashboardAppointments
           title="Marco Rossi"
-          subtitle="24 Gennaio | h 11.30 / 12.30"
+          day="24 Gennaio"
+          hours="11.30 / 12.30"
         >
           <div slot="content" class="grid grid-cols-3">
             <div>

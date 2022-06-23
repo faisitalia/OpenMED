@@ -1,3 +1,5 @@
+<!-- this component should be trashed as it is now -->
+
 <script setup>
 const props = defineProps({
   class: String,
@@ -7,12 +9,16 @@ const props = defineProps({
   },
   spaces: { type: String, default: "px-4 py-2 my-1" },
 });
+
+const myClasses = props.class;
+console.log(myClasses);
 const emit = defineEmits(["click"]);
 </script>
 
 <template>
   <button
-    class="rounded-3xl {{class}} {{colors}} {{spaces}}"
+    class="rounded-3xl"
+    :class="`${myClasses} ${colors} ${spaces}`"
     @click.prevent.stop="emit('click')"
   >
     <slot />

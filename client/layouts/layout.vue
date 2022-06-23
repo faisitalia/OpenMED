@@ -27,12 +27,12 @@ const isDrawerOpen = ref(false);
       <LayoutDesktopMenu />
 
       <div class="relative min-h-screen flex flex-col">
-        <!-- Drawer Button + Small Logo -->
         <header
-          class="p-6 flex flex-row justify-between md:justify-end items-center"
+          class="sm:hidden p-6 flex flex-row justify-between md:justify-end items-center"
         >
-          <!-- OpenMed's small logo -->
-          <div class="sm:hidden">
+          <!-- Drawer Button + Small Logo -->
+          <div>
+            <!-- OpenMed's small logo -->
             <NuxtLink to="/">
               <img
                 src="/img/logo-openmed/openmed-logo.svg"

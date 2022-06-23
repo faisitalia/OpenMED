@@ -103,91 +103,94 @@ const filteredList = computed(() =>
 
 <template>
   <NuxtLayout name="layout">
-    <Title>Gestione Utenti</Title>
-    <Subtitle>Lista Utenti</Subtitle>
-
-    <div
-      class="m-4 mt-16 md:grid md:place-items-start md:grid-cols-[auto_auto] md:px-8"
-    >
+    <div class="">
       <div
-        id="search"
-        class="col-start-1 row-start-1 flex flex-row px-4 py-2 items-center w-full md:w-96 bg-brandBlue-50/50 rounded-full text-center"
+        class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:justify-items-center lg:grid-cols-[auto_auto]"
       >
-        <span class="material-icons-round"> search </span>
-        <input
-          id="search-input"
-          class="focus:bg-white/30 rounded-xl px-4 bg-transparent focus:outline-none"
-          type="text"
-          placeholder="Cerca utente"
-          :value="search"
-        />
-      </div>
-      <div id="filters" class="my-1 col-start-1 row-start-2">
-        <div class="flex flex-wrap flex-row justify-evenly md:justify-start">
-          <!-- TODO implement on:click events -->
-          <FilterButton>Medici</FilterButton>
-          <FilterButton>Infermieri</FilterButton>
-          <FilterButton>Pazienti</FilterButton>
+        <div id="user-list">
+          <Title>Gestione Utenti</Title>
+          <Subtitle>Lista Utenti</Subtitle>
+          <div
+            id="search"
+            class="mt-16 mb-4 self-end col-start-1 row-start-1 px-4 py-2 flex flex-row items-center w-full md:w-96 bg-brandBlue-50/50 rounded-full text-center"
+          >
+            <span class="material-icons-round"> search </span>
+            <input
+              id="search-input"
+              class="focus:bg-white/30 rounded-xl px-4 bg-transparent focus:outline-none"
+              type="text"
+              placeholder="Cerca utente"
+              v-model="search"
+            />
+          </div>
+          <div id="filters" class="my-1 col-start-1 row-start-2 w-full">
+            <div class="w-full flex flex-wrap flex-row justify-evenly">
+              <!-- TODO implement on:click events -->
+              <UsersFilterButton>Medici</UsersFilterButton>
+              <UsersFilterButton>Infermieri</UsersFilterButton>
+              <UsersFilterButton>Pazienti</UsersFilterButton>
+            </div>
+          </div>
+          <div
+            id="users-table"
+            class="my-4 col-start-1 row-start-3 place-self-stretch md:pr-40"
+          >
+            <DetailedTile
+              v-for="user in filteredList"
+              :title="`${user.name} ${user.surname}`"
+              :subtitle="user.email"
+              class="rounded-3xl my-1 px-4 py-1"
+            >
+              <div
+                slot="content"
+                class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]"
+              >
+                <div class="col-span-1">
+                  <p class="font-bold">Email</p>
+                  <p>{{ user.email }}</p>
+                </div>
+                <div class="col-span-1">
+                  <p class="font-bold">Ruolo</p>
+                  <p>{{ user.role }}</p>
+                </div>
+                <div class="col-span-1">
+                  <p class="font-bold">Telefono:</p>
+                  <p>{{ user.phone }}</p>
+                </div>
+                <div class="col-span-1">
+                  <p class="font-bold">Città:</p>
+                  <p>{{ user.city }}</p>
+                </div>
+              </div>
+              <div
+                @click.stop
+                slot="trailing"
+                class="flex flex-col items-center cursor-default"
+              >
+                <StyledButton @click="navigateTo(`/users/edit?id=${user.id}`)">
+                  Modifica
+                </StyledButton>
+
+                <DeleteButton @delete="null">Elimina</DeleteButton>
+              </div>
+            </DetailedTile>
+            <h3 v-if="!filteredList">Nessun utente trovato.</h3>
+          </div>
         </div>
-      </div>
-      <div
-        id="users-table"
-        class="my-4 col-start-1 row-start-3 place-self-stretch md:pr-40"
-      >
-        <DetailedTile
-          v-for="user in filteredList"
-          :title="`${user.name} ${user.surname}`"
-          :subtitle="user.email"
-          class="rounded-3xl my-1 px-4 py-1"
-        >
-          <div
-            slot="content"
-            class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]"
-          >
-            <div class="col-span-1">
-              <p class="font-bold">Email</p>
-              <p>{{ user.email }}</p>
-            </div>
-            <div class="col-span-1">
-              <p class="font-bold">Ruolo</p>
-              <p>{{ user.role }}</p>
-            </div>
-            <div class="col-span-1">
-              <p class="font-bold">Telefono:</p>
-              <p>{{ user.phone }}</p>
-            </div>
-            <div class="col-span-1">
-              <p class="font-bold">Città:</p>
-              <p>{{ user.city }}</p>
-            </div>
-          </div>
-          <div
-            @click.stop
-            slot="trailing"
-            class="flex flex-col items-center cursor-default"
-          >
-            <StyledButton @click="navigateTo(`/users/edit?id=${user.id}`)">
-              Modifica
-            </StyledButton>
 
-            <DeleteButton @delete="null">Elimina</DeleteButton>
-          </div>
-        </DetailedTile>
-        <h3 v-if="!filteredList">Nessun utente trovato.</h3>
-      </div>
-
-      <!-- Crea nuovo utente-->
-      <div
-        class="w-full xl:px-40 col-start-2 row-span-3 justify-self-center hidden lg:flex lg:flex-col lg:justify-start lg:items-stretch"
-      >
-        <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
-        <StyledButton class="font-bold" @click="navigateTo('/users/new')">
-          Crea Nuovo
-        </StyledButton>
-        <div class="my-20" />
-        <!-- TODO -->
-        <h3 class="mt-4 mb-8 text-center">SERVE AIUTO?</h3>
-        <StyledButton class="font-bold" @click="null">Clicca qui</StyledButton>
+        <!-- Crea nuovo utente-->
+        <div class="col-start-2 hidden lg:flex lg:flex-col">
+          <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
+          <StyledButton class="font-bold" @click="navigateTo('/users/new')">
+            Crea Nuovo
+          </StyledButton>
+          <div class="my-20" />
+          <!-- TODO -->
+          <h3 class="mt-4 mb-8 text-center">SERVE AIUTO?</h3>
+          <StyledButton class="font-bold" @click="null"
+            >Clicca qui</StyledButton
+          >
+        </div>
       </div>
     </div>
   </NuxtLayout>
