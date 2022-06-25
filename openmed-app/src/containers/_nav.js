@@ -40,6 +40,16 @@ export default [
   },
   {
     _tag: 'CSidebarNavTitle',
+    _children: ['Osservatorio'],
+  },
+  {
+    _tag: 'CSidebarNavItem',
+    name: 'Questionatorio',
+    to: '/survey',
+    icon: 'cil-calendar',
+  },
+  {
+    _tag: 'CSidebarNavTitle',
     _children: ['Altro'],
   },
   {
