@@ -3,7 +3,6 @@ import { validate } from "validate.js";
 
 const { $usersEndpoint } = useNuxtApp();
 
-useRouter();
 useHead({ title: `Login` });
 const authStore = useAuthStore();
 let hasStarted = ref(false);
@@ -80,7 +79,7 @@ async function logIn() {
     navigateTo("/");
   } catch (err) {
     console.log(err);
-    asyncErrors.value = err.statusText;
+    asyncErrors.value = err?.statusText;
   }
 }
 </script>
