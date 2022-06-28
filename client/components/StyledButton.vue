@@ -11,7 +11,6 @@ const props = defineProps({
 });
 
 const myClasses = props.class;
-console.log(myClasses);
 const emit = defineEmits(["click"]);
 </script>
 

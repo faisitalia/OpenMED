@@ -1,13 +1,12 @@
 export default defineNuxtRouteMiddleware(async (to, _) => {
-  const authStore = useAuthStore();
+  const { isAuthenticated } = useAuth();
+
   const clearRoutes = [
     "/login",
     "/about",
     "/forgot-password",
     "/reset-password",
   ];
-
-  const isAuthenticated = authStore.isAuthenticated;
 
   const isProtectedRoute = !clearRoutes.some((route) =>
     to.path.startsWith(route)

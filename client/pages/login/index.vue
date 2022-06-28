@@ -4,7 +4,8 @@ import { validate } from "validate.js";
 const { $usersEndpoint } = useNuxtApp();
 
 useHead({ title: `Login` });
-const authStore = useAuthStore();
+const { login } = useAuth();
+
 let hasStarted = ref(false);
 
 // Initialize form values
@@ -31,26 +32,26 @@ const formConstraints = {
 let errors = ref({});
 let asyncErrors = ref(null);
 
-async function getUserData() {
-  const { data: response } = await useFetch(`${$usersEndpoint()}/currentuser`, {
-    mode: "cors",
-    credentials: "include",
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-    },
-  });
-  // If something goes wrong with this call, we can't authenticate
-  if (!response.ok) return null;
+// async function getUserData() {
+//   const { data: response } = await useFetch(`${$usersEndpoint()}/currentuser`, {
+//     mode: "cors",
+//     credentials: "include",
+//     headers: {
+//       "Access-Control-Allow-Origin": "*",
+//     },
+//   });
+//   // If something goes wrong with this call, we can't authenticate
+//   if (!response.ok) return null;
 
-  // If we got a proper response body, we extract its currentUser prop
-  const responseBody = response;
-  const currentUser = responseBody.currentUser;
-  if (!currentUser) return null;
+//   // If we got a proper response body, we extract its currentUser prop
+//   const responseBody = response;
+//   const currentUser = responseBody.currentUser;
+//   if (!currentUser) return null;
 
-  return { ...currentUser };
-}
+//   return { ...currentUser };
+// }
 
-async function logIn() {
+async function loginWithCredentials() {
   errors.value = validate(choices.value, formConstraints);
   if (errors.value) return;
 
@@ -74,7 +75,8 @@ async function logIn() {
     );
     if (err.value) throw err.value.response;
 
-    authStore.login(response.value);
+    login(response.value);
+
     asyncErrors.value = null;
     navigateTo("/");
   } catch (err) {
@@ -105,7 +107,7 @@ async function logIn() {
         <div v-else>
           <p class="my-4">Inserisci il tuo username e la tua password</p>
           <form
-            @submit.prevent="logIn"
+            @submit.prevent="loginWithCredentials"
             id="signin"
             class="flex flex-col justify-center items-center"
             novalidate
