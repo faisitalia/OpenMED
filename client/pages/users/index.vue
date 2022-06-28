@@ -181,7 +181,7 @@ const filteredList = computed(() =>
         <!-- Crea nuovo utente-->
         <div class="col-start-2 hidden lg:flex lg:flex-col">
           <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
-          <StyledButton class="font-bold" @click="navigateTo('/users/new')">
+          <StyledButton class="font-bold" @click="navigateTo('/users/edit')">
             Crea Nuovo
           </StyledButton>
           <div class="my-20" />

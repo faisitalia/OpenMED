@@ -36,6 +36,7 @@ async function load({ fetch, url }) {
 }
 
 let action = props.userId ? "Crea" : "Modifica";
+let user; // TODO load this user from the global session store
 
 const roles = ["Paziente", "Dottore", "Amministratore"];
 const choices = {
@@ -194,7 +195,7 @@ async function submit() {
           class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
         >
           <option />
-          <option v-for="r in roles" :value="r">{r?.name}</option>
+          <option v-for="r in roles" :value="r">{{ r }}</option>
           <option v-if="!roles" disabled="true">
             Nessun ruolo disponibile
           </option>
