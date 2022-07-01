@@ -56,28 +56,16 @@ async function loginWithCredentials() {
   if (errors.value) return;
 
   try {
-    const { error: err, data: response } = await useFetch(
-      `${$usersEndpoint()}/signin`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          username: choices.value.username,
-          password: choices.value.password,
-        }),
-        pick: [
-          "access_token",
-          "refresh_token",
-          "expires_in",
-          "refresh_expires_in",
-        ],
-      }
-    );
-    if (err.value) throw err.value.response;
+    // username: choices.value.username,
+    //       password: choices.value.password,
 
-    login(response.value);
+    await login({
+      username: choices.value.username,
+      password: choices.value.password,
+    });
 
     asyncErrors.value = null;
+    console.log("NAVIGA");
     navigateTo("/");
   } catch (err) {
     console.log(err);

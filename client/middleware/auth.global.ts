@@ -14,7 +14,6 @@ export default defineNuxtRouteMiddleware(async (to, _) => {
 
   if (isProtectedRoute) {
     if (!isAuthenticated) return navigateTo("/login");
-
     // No redirect needed
     return;
   }

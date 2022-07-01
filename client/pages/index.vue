@@ -1,23 +1,20 @@
 <script setup>
-let name = "Fabrizio";
+const { user, getUser } = useUser();
+
+async function test() {
+  if (!user.value) await getUser();
+  console.log(user.value);
+}
+
 let roles = ["doctor", "admin"];
 
 let isDoctor = roles.includes("doctor");
 let isPatient = roles.includes("user");
 let isAdmin = roles.includes("admin");
-
-const user = useUser();
-
-async function test() {
-  console.log(await user.value());
-}
 </script>
 
 <template>
   <NuxtLayout name="layout">
-    <div class="flex justify-center items-center border-red-400 border-2">
-      <button @click.prevent="test">TESTA LA CHIAMATA /currentUser</button>
-    </div>
     <div
       class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:grid-cols-[auto_auto]"
     >
@@ -25,7 +22,7 @@ async function test() {
         id="hello-user"
         class="col-start-1 row-start-1 row-span-full place-self-start"
       >
-        <Title>Ciao {{ name }},</Title>
+        <Title>Ciao {{ user.name }},</Title>
         <Subtitle>come desideri procedere?</Subtitle>
         <!-- Main content -->
         <div
