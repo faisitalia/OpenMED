@@ -28,7 +28,7 @@ async function logoutAndClearUser() {
         <LayoutMobileMenuItem to="/appointments" name="Lista Appuntamenti" />
         <LayoutMobileMenuItem to="/" name="Contatti" />
         <li @click="logoutAndClearUser" class="font-light py-2 my-8">
-          <button>Logout</button>
+          <button>Esci</button>
         </li>
       </ul>
     </nav>

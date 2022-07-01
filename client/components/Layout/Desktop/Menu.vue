@@ -34,7 +34,7 @@ async function logoutAndClearUser() {
           @click="logoutAndClearUser"
           class="font-bold text-lg text-white py-2"
         >
-          <button>Logout</button>
+          <button>Esci</button>
         </li>
       </ul>
     </nav>
