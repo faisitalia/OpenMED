@@ -1,3 +1,14 @@
+<script setup>
+const { logout } = useAuth();
+const { removeUser } = useUser();
+
+async function logoutAndClearUser() {
+  await logout();
+  removeUser();
+  navigateTo("/login");
+}
+</script>
+
 <template>
   <header
     class="hidden sm:flex flex-col justify-start top-auto py-4 px-8 bg-brandBlue-500"
@@ -18,6 +29,13 @@
         />
         <LayoutDesktopMenuItem to="/appointments" name="Lista Appuntamenti" />
         <LayoutDesktopMenuItem to="/" name="Contatti" />
+        <div class="my-8"></div>
+        <li
+          @click="logoutAndClearUser"
+          class="font-bold text-lg text-white py-2"
+        >
+          <button>Logout</button>
+        </li>
       </ul>
     </nav>
 

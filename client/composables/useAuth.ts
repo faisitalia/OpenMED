@@ -42,6 +42,7 @@ export const useAuth = () => {
       }
     );
     if (error.value) throw error.value;
+    if (data.value) console.log(data.value);
 
     auth.value = {
       accessToken: data.value?.access_token,
@@ -62,7 +63,7 @@ export const useAuth = () => {
     if (!isAuthenticated) return;
 
     // TODO AuthResponse ???
-    const { data, error } = useFetch<AuthResponse>(
+    const { data, error } = await useFetch<AuthResponse>(
       `${$usersEndpoint}/refreshToken`,
       {
         method: "POST",
@@ -89,11 +90,18 @@ export const useAuth = () => {
     auth.value?.refreshExpiresIn * 1000
   );
 
-  function logout(): void {
-    // This should include a server-side:
-    // `POST /users/signout`
+  async function logout(): Promise<void> {
+    const { data, error } = await useFetch(`${$usersEndpoint}/signout`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${auth.value.accessToken}`,
+      },
+    });
+    if (error.value) console.log(error.value);
+    if (data.value) console.log(data.value);
+
     sessionStorage?.removeItem("auth");
-    sessionStorage?.removeItem("user");
     auth.value = null;
     clearInterval(refreshLoop);
   }

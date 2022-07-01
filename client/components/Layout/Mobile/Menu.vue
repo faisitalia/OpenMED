@@ -2,6 +2,14 @@
 defineProps({
   isOpen: Boolean,
 });
+const { logout } = useAuth();
+const { removeUser } = useUser();
+
+async function logoutAndClearUser() {
+  await logout();
+  removeUser();
+  navigateTo("/login");
+}
 </script>
 
 <template>
@@ -19,6 +27,9 @@ defineProps({
         />
         <LayoutMobileMenuItem to="/appointments" name="Lista Appuntamenti" />
         <LayoutMobileMenuItem to="/" name="Contatti" />
+        <li @click="logoutAndClearUser" class="font-light py-2 my-8">
+          <button>Logout</button>
+        </li>
       </ul>
     </nav>
   </header>

@@ -19,9 +19,6 @@ type User = {
 
 export const useUser = () => {
   const { $usersEndpoint } = useNuxtApp();
-  const { isAuthenticated } = useAuth();
-
-  if (!isAuthenticated) sessionStorage?.removeItem("user");
 
   const user = useState<User>("user", () => {
     const sessionValue = JSON.parse(sessionStorage?.getItem("user"));
@@ -34,11 +31,8 @@ export const useUser = () => {
       `${$usersEndpoint()}/currentuser`,
       { method: "GET" }
     );
-    // improve this
-    console.log("data received:", data?.value);
-    console.log("error received:", error.value);
-
     if (error.value) throw error.value;
+    if (data.value) console.log(data.value);
 
     user.value = {
       name: data.value?.currentUser?.given_name,
@@ -49,5 +43,10 @@ export const useUser = () => {
     sessionStorage?.setItem("user", JSON.stringify(user.value));
   }
 
-  return { user, getUser };
+  function removeUser(): void {
+    sessionStorage?.removeItem("user");
+    user.value = null;
+  }
+
+  return { user, getUser, removeUser };
 };

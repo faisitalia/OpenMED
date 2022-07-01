@@ -1,10 +1,5 @@
 <script setup>
-const { user, getUser } = useUser();
-
-async function test() {
-  if (!user.value) await getUser();
-  console.log(user.value);
-}
+const { user } = useUser();
 
 let roles = ["doctor", "admin"];
 

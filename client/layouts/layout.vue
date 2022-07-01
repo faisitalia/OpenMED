@@ -1,23 +1,7 @@
 <script setup>
-useRouter();
-
 const isDrawerOpen = ref(false);
-
-// Old SvelteKit code:
-// async function logout() {  // TODO reimplement here on Nuxt3
-//   await fetch(`${usersEndpoint}/signout`, {  // TODO use a composable
-//     method: 'POST',
-//     credentials: 'include'
-//   });
-//   $session = null;
-//   goto('/login');
-// }
 </script>
 
-<!-- reimplement the logout button later on -->
-<!-- {#if userId}
-  <p on:click|preventDefault={() => logout()}>Done? Logout here</p>
-{/if} -->
 <template>
   <div>
     <!-- Mobile Menu, open iff we clicked on the drawer button -->

@@ -1,10 +1,10 @@
 <script setup>
 import { validate } from "validate.js";
 
-const { $usersEndpoint } = useNuxtApp();
-
 useHead({ title: `Login` });
+
 const { login } = useAuth();
+const { getUser } = useUser();
 
 let hasStarted = ref(false);
 
@@ -63,6 +63,8 @@ async function loginWithCredentials() {
       username: choices.value.username,
       password: choices.value.password,
     });
+
+    await getUser();
 
     asyncErrors.value = null;
     navigateTo("/");
