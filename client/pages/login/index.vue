@@ -65,7 +65,6 @@ async function loginWithCredentials() {
     });
 
     asyncErrors.value = null;
-    console.log("NAVIGA");
     navigateTo("/");
   } catch (err) {
     console.log(err);
@@ -106,7 +105,7 @@ async function loginWithCredentials() {
                 name="Username"
                 placeholder="username"
                 id="username"
-                class="my-1 text-center align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+                class="my-1 appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
                 v-model="choices.username"
                 required
               />
