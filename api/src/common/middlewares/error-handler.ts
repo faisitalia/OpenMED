@@ -6,7 +6,7 @@ import { logger } from '../../utils/logger'
 
 // eslint-disable-next-line no-unused-vars
 export const errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
-  logger.error(err.stack)
+  logger.error(err)
 
   if (err instanceof CustomError) {
     return res.status(err.statusCode).send({ errors: err.serializeErrors() })

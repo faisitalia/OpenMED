@@ -30,7 +30,7 @@ export class KeycloakAdminClientImpl {
     if (!KeycloakAdminClientImpl.instance) {
       // console.log('Creating keycloak admin client instance....')
       KeycloakAdminClientImpl.instance = new KcAdminClient({
-        baseUrl: 'https://127.0.0.1:8443/auth',
+        baseUrl: 'https://127.0.0.1:8443',
         requestConfig: {
           httpsAgent: new https.Agent({
             rejectUnauthorized: false,
