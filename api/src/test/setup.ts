@@ -7,6 +7,7 @@ import { constants } from 'http2'
 import { app } from '../app'
 // import { assignRoleToUser, deleteUserById } from '../services/auth'
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
+import { logger } from '../utils/logger'
 
 declare global {
   namespace NodeJS {
@@ -63,24 +64,29 @@ global.signup = async (
   lastname,
   birthdate
 ) => {
-  const signup = await request(app)
-    .post('/v1/users/signup')
-    .send({
-      username,
-      email,
-      password,
-      firstname,
-      lastname,
-      birthdate,
-    })
-    .expect(constants.HTTP_STATUS_CREATED)
+  try {
+    
+    const signup = await request(app)
+      .post('/v1/users/signup')
+      .send({
+        username,
+        email,
+        password,
+        firstname,
+        lastname,
+        birthdate,
+      })
+      
+  
+    return signup.body
 
-  const user = signup.body
+  } catch (error) {
+    logger.error(error)
+  }
 
   // add the "user" role to the test user
   // await assignRoleToUser('user', user)
 
-  return user
 }
 
 global.signin = async (username: string, password: string) => {

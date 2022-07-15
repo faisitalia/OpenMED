@@ -5,6 +5,7 @@ import { constants } from 'http2'
 import { validateRequest } from '../../common'
 import { Person } from '../../models/person'
 import { createUser, getUserById } from '../../services/auth'
+import { logger } from '../../utils/logger'
 
 const router = express.Router()
 
@@ -61,16 +62,28 @@ router.post(
 
     // TODO transaction
 
-    // create the person
-    const personDoc = Person.build({ firstname, lastname, birthdate })
-    await personDoc.save()
+    try {
+      
+      // TODO remove this and set the data in keycloak 
+      const personDoc = Person.build({ firstname, lastname, birthdate })
+      const person = await personDoc.save()
+      
+      // TODO set the birthday and all the person data in the attributes
+      const attributes = {
+        personId : person._id
+      }
+      // TODO add firstname and lastname
+      const userId = await createUser(username, email, password, attributes)
+      
+      // retrieve the user just created
+      const user = await getUserById(userId)
+      
+      res.status(constants.HTTP_STATUS_CREATED).send(user)
+    } catch (error: any) {
+      logger.error(error)
+      throw new Error(error.message);
+    }
 
-    const userId = await createUser(username, email, password)
-
-    // retrieve the user just created
-    const user = await getUserById(userId)
-
-    res.status(constants.HTTP_STATUS_CREATED).send(user)
   }
 )
 

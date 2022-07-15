@@ -12,13 +12,14 @@ import { getOpenIDConnectURI } from './config/openid-connect'
  * @param password
  * @returns
  */
-async function createUser(username: string, email: string, password: string) {
+async function createUser(username: string, email: string, password: string, attributes: Object = {}) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
 
   const { id: userId } = await kcAdminClient.users.create({
     username,
     email,
     enabled: true,
+    attributes
   })
 
   await kcAdminClient.users.resetPassword({

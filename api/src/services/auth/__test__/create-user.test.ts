@@ -10,3 +10,7 @@ it('should create an user', async () => {
 
   await deleteUserById(userId)
 })
+
+it.skip('should create an user with attributes', async () => {
+
+})

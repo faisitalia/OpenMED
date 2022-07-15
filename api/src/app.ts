@@ -19,8 +19,6 @@ import { createRoleRouter } from './routes/auth/create-role'
 import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
 
-import swaggerDocs from './utils/swagger'
-
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // set the express listening port
@@ -54,9 +52,6 @@ app.use(refreshTokenRouter)
 app.use(createRoleRouter)
 app.use(facilityRouter)
 app.use(visitRouter)
-
-// run swagger/openapi docs
-swaggerDocs(app, 3001)
 
 app.all('*', async () => {
   throw new NotFoundError()

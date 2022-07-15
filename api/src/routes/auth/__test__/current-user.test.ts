@@ -5,7 +5,7 @@ import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
 it('responds with details about the current user', async () => {
-  const username = 'john'
+  const username = 'john-current'
   const email = 'user-current@test.com'
   const password = 'password'
   const firstname = 'john'
