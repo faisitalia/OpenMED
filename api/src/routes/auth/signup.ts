@@ -64,20 +64,33 @@ router.post(
 
     try {
       
-      // TODO remove this and set the data in keycloak 
       const personDoc = Person.build({ firstname, lastname, birthdate })
       const person = await personDoc.save()
       
-      // TODO set the birthday and all the person data in the attributes
       const attributes = {
         personId : person._id
       }
-      // TODO add firstname and lastname
+     
       const userId = await createUser(username, email, password, attributes)
       
+      await personDoc.updateOne({
+          _id: person._id
+      }, {
+          $set: {
+              userId: userId
+          }
+      })
+
       // retrieve the user just created
-      const user = await getUserById(userId)
-      
+      const rawUser = await getUserById(userId)
+
+      const user = {
+        id: userId,
+        username: rawUser?.username,
+        email: rawUser?.email,
+        personId: person._id, 
+      }
+
       res.status(constants.HTTP_STATUS_CREATED).send(user)
     } catch (error: any) {
       logger.error(error)
