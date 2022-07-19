@@ -1,8 +1,8 @@
 # Docker containers
 
-Docker version 20.10.12
-Docker Compose version v2.2.3
+Docker version 20.10.17
+Docker Compose version v2.6.1
 
 ```bash
-docker-compose up -d --build
+docker-compose -p openmed up -d
 ```
