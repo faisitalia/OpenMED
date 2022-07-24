@@ -6,6 +6,14 @@ Il Client di OpenMed è un'App che gira su [Nuxt3](https://v3.nuxtjs.org). Al mo
 
 È necessario completare la procedura di installazione e configurazione del (degli) Server API, come indicato [qui](https://github.com/faisitalia/OpenMED/blob/develop/api/README.md).
 
+Per installare yarn eseguire i seguenti comandi (testati su Ubuntu 20.04):
+
+```bash
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+sudo apt-get install yarn
+```
+
 ## Setup
 
 È necessario installare le dipendenze con:
@@ -19,7 +27,7 @@ In altre parole, NON usare `npm install`, in quanto `npm` non è in grado di ins
 
 ## Development Server
 
-Start the development server on http://localhost:3000
+Start the development server on https://localhost:3000
 
 ```bash
 yarn dev -o
