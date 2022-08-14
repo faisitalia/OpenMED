@@ -12,14 +12,20 @@ import { getOpenIDConnectURI } from './config/openid-connect'
  * @param password
  * @returns
  */
-async function createUser(username: string, email: string, password: string, attributes: Object = {}) {
+async function createUser(
+  username: string,
+  email: string,
+  password: string,
+  role: string,
+  attributes: Object = {}
+) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
 
   const { id: userId } = await kcAdminClient.users.create({
     username,
     email,
     enabled: true,
-    attributes
+    attributes,
   })
 
   await kcAdminClient.users.resetPassword({
@@ -30,6 +36,8 @@ async function createUser(username: string, email: string, password: string, att
       value: password,
     },
   })
+
+  await assignRoleToUser(role, userId)
 
   return userId
 }
@@ -170,7 +178,7 @@ async function logout(userId: string) {
  * @param roleName
  * @param user
  */
-async function assignRoleToUser(roleName: string, user: UserRepresentation) {
+async function assignRoleToUser(roleName: string, userId: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const role = await kcAdminClient.roles.findOneByName({
     name: roleName,
@@ -178,12 +186,12 @@ async function assignRoleToUser(roleName: string, user: UserRepresentation) {
 
   if (!role) throw new Error(`The role ${roleName} is not available!`)
 
-  const clientId = process.env.OPENID_CLIENT_ID!
-  const clients = await kcAdminClient.clients.find({ clientId })
-
-  const response = await kcAdminClient.users.addClientRoleMappings({
-    id: user.id!,
-    clientUniqueId: clients[0].id!,
+  // const clientId = process.env.OPENID_CLIENT_ID!
+  // const clients = await kcAdminClient.clients.find({ clientId })
+  // kcAdminClient.users.addClientRoleMapping
+  await kcAdminClient.users.addRealmRoleMappings({
+    id: userId!,
+    // clientUniqueId: clients[0].id!,
 
     // at least id and name should appear
     roles: [
@@ -193,7 +201,6 @@ async function assignRoleToUser(roleName: string, user: UserRepresentation) {
       },
     ],
   })
-  console.log(response)
 }
 
 async function createRole(roleName: string) {
