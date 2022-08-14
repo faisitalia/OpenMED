@@ -4,6 +4,7 @@ import { constants } from 'http2'
 
 import { validateRequest } from '../../common'
 import { Person } from '../../models/person'
+import { Role } from '../../models/user'
 import { createUser, getUserById } from '../../services/auth'
 import { logger } from '../../utils/logger'
 
@@ -63,40 +64,29 @@ router.post(
     // TODO transaction
 
     try {
-      
-      const personDoc = Person.build({ firstname, lastname, birthdate })
+      const personDoc = Person.build({ firstname, lastname, birthdate, username })
       const person = await personDoc.save()
-      
-      const attributes = {
-        personId : person._id
-      }
-     
-      const userId = await createUser(username, email, password, attributes)
-      
-      await personDoc.updateOne({
-          _id: person._id
-      }, {
-          $set: {
-              userId: userId
-          }
-      })
+
+      const userId = await createUser(username, email, password, Role.USER)
 
       // retrieve the user just created
       const rawUser = await getUserById(userId)
+
+      // assign role to user
+      if (!rawUser) throw new Error(`No user available with id ${userId}`)
 
       const user = {
         id: userId,
         username: rawUser?.username,
         email: rawUser?.email,
-        personId: person._id, 
+        personId: person._id,
       }
 
       res.status(constants.HTTP_STATUS_CREATED).send(user)
     } catch (error: any) {
       logger.error(error)
-      throw new Error(error.message);
+      throw new Error(error.message)
     }
-
   }
 )
 
