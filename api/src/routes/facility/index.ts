@@ -10,6 +10,7 @@ import {
   getFacilityById,
   createFacility,
 } from '../../services/facility'
+import { Role } from '../../models/user'
 
 // create the express router
 const router = express.Router()
@@ -61,6 +62,7 @@ const router = express.Router()
  */
 router.post(
   '/v1/facilities',
+  requireAuth([Role.SUPER_ADMIN]),
   [
     body('name').trim().not().isEmpty().withMessage('Facility name is required'),
     // body('email').isEmail().withMessage('Email is required'),
@@ -72,7 +74,6 @@ router.post(
     body('postalcode').trim().not().isEmpty().isNumeric().withMessage('Postal code is required'),
   ],
   validateRequest,
-  requireAuth,
   async (req: Request, res: Response) => {
     const { name, email, street, town, state, county, country, postalcode } = req.body
 
@@ -114,28 +115,34 @@ router.post(
  *       200:
  *         description: facilities
  */
-router.get('/v1/facilities/findnearest', requireAuth, async (req: Request, res: Response) => {
-  // get the params
-  const queryParams = req.query
-  if (!queryParams.longitude || !queryParams.latitude)
-    throw new Error('The input params are invalid: longitude or latitude unavailable')
+router.get(
+  '/v1/facilities/findnearest',
+  requireAuth([Role.USER]),
+  async (req: Request, res: Response) => {
+    // get the params
+    const queryParams = req.query
+    if (!queryParams.longitude || !queryParams.latitude)
+      throw new Error('The input params are invalid: longitude or latitude unavailable')
 
-  // latitude and logitude - required
-  const latitude = parseFloat(queryParams.latitude as string)
-  const longitude = parseFloat(queryParams.longitude as string)
+    // latitude and logitude - required
+    const latitude = parseFloat(queryParams.latitude as string)
+    const longitude = parseFloat(queryParams.longitude as string)
 
-  // ...get the not required parameters
-  const minDistance = queryParams.minDistance ? parseInt(queryParams.minDistance as string, 10) : 0
-  const maxDistance = queryParams.maxDistance
-    ? parseInt(queryParams.maxDistance as string, 10)
-    : 1000
-  const limit = queryParams.limit ? parseInt(queryParams.limit as string, 10) : 5
+    // ...get the not required parameters
+    const minDistance = queryParams.minDistance
+      ? parseInt(queryParams.minDistance as string, 10)
+      : 0
+    const maxDistance = queryParams.maxDistance
+      ? parseInt(queryParams.maxDistance as string, 10)
+      : 1000
+    const limit = queryParams.limit ? parseInt(queryParams.limit as string, 10) : 5
 
-  // get the nearest facility
-  const nearestFacility = await findNearest(latitude, longitude, minDistance, maxDistance, limit)
+    // get the nearest facility
+    const nearestFacility = await findNearest(latitude, longitude, minDistance, maxDistance, limit)
 
-  res.send(nearestFacility)
-})
+    res.send(nearestFacility)
+  }
+)
 
 /**
  * @openapi
@@ -158,7 +165,7 @@ router.get('/v1/facilities/findnearest', requireAuth, async (req: Request, res: 
  */
 router.get(
   '/v1/facilities/coordinatesByAddress',
-  requireAuth,
+  requireAuth([Role.USER]),
   async (req: Request, res: Response) => {
     if (!req.query.address) throw new Error('No address to search provided!')
 
@@ -187,10 +194,14 @@ router.get(
  *       200:
  *         description: facility details
  */
-router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: Response) => {
-  const facility = await getFacilityById(req.params.facilityId)
-  res.send(facility)
-})
+router.get(
+  '/v1/facilities/:facilityId',
+  requireAuth([Role.USER]),
+  async (req: Request, res: Response) => {
+    const facility = await getFacilityById(req.params.facilityId)
+    res.send(facility)
+  }
+)
 
 /**
  * @openapi
@@ -205,7 +216,7 @@ router.get('/v1/facilities/:facilityId', requireAuth, async (req: Request, res: 
  *       200:
  *         description: List of the all facilities available in the database
  */
-router.get('/v1/facilities', requireAuth, async (req: Request, res: Response) => {
+router.get('/v1/facilities', requireAuth([Role.USER]), async (req: Request, res: Response) => {
   const facilities = await getAllFacilities()
   res.send(facilities)
 })

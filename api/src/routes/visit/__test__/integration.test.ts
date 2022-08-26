@@ -3,85 +3,14 @@ import { constants } from 'http2'
 import mongoose from 'mongoose'
 
 import { app } from '../../../app'
-import { FacilityDoc } from '../../../models/facility'
 import { createFacility } from '../../../services/facility'
 import { Person } from '../../../models/person'
-import { User, Role, UserDoc } from '../../../models/user'
+import { Role } from '../../../models/user'
 import { Visit, VisitDoc } from '../../../models/visit'
-import { deleteUserById } from '../../../services/auth'
+import { assignRoleToUser, createUser, deleteUserById } from '../../../services/auth'
 
-describe('Visit integration test suite', function () {
-  let patient: UserDoc
-  let doctor: UserDoc
-  let caregiver: UserDoc
-  let facility: FacilityDoc
-
-  beforeEach(async () => {
-    // create the person / patient
-    const patientName = 'Patient1'
-    const patientLastname = 'Patient1Lastname'
-    const patientBirthdate = new Date()
-    const patientPersonDoc = Person.build({
-      firstname: patientName,
-      lastname: patientLastname,
-      birthdate: patientBirthdate,
-    })
-    const patientPerson1 = await patientPersonDoc.save()
-
-    const patientEmail = 'patient@openmed.test'
-    const patientPassword = 'password'
-    const patientModel = User.build({
-      email: patientEmail,
-      password: patientPassword,
-      role: Role.PATIENT,
-      personId: patientPerson1.id,
-    })
-    patient = await patientModel.save()
-
-    // create the person / doctor
-    const doctorName = 'Doctor1'
-    const doctorLastname = 'Doctor1Lastname'
-    const doctorBirthdate = new Date()
-    const doctorPersonDoc = Person.build({
-      firstname: doctorName,
-      lastname: doctorLastname,
-      birthdate: doctorBirthdate,
-    })
-    const doctorPerson1 = await doctorPersonDoc.save()
-
-    const doctorEmail = 'doctor@openmed.test'
-    const doctorPassword = 'password'
-    const doctorModel = User.build({
-      email: doctorEmail,
-      password: doctorPassword,
-      role: Role.DOCTOR,
-      personId: doctorPerson1.id,
-    })
-    doctor = await doctorModel.save()
-
-    // create the person / caregiver
-    const caregiverName = 'Caregiver1'
-    const caregiverLastname = 'Caregiver1Lastname'
-    const caregiverBirthdate = new Date()
-    const caregiverPersonDoc = Person.build({
-      firstname: caregiverName,
-      lastname: caregiverLastname,
-      birthdate: caregiverBirthdate,
-    })
-    const caregiverPerson1 = await caregiverPersonDoc.save()
-
-    const caregiverEmail = 'user@openmed.test'
-    const caregiverPassword = 'password'
-    const caregiverModel = User.build({
-      email: caregiverEmail,
-      password: caregiverPassword,
-      role: Role.CAREGIVER,
-      personId: caregiverPerson1.id,
-    })
-    caregiver = await caregiverModel.save()
-
-    // create the facility
-    const facilityName = 'Facility1'
+async function createTestFacility() {
+  const facilityName = 'Facility1'
     const facilityEmail = 'facility@openmed.cloud'
     const facilityStreet = 'Corso Bramante 88'
     const facilityTown = 'Torino'
@@ -89,21 +18,90 @@ describe('Visit integration test suite', function () {
     const facilityCounty = 'To'
     const facilityCountry = 'IT'
     const facilityPostalcode = 10126
+  
+    const facility = await createFacility({
+        name: facilityName,
+        email: facilityEmail,
+        street: facilityStreet,
+        town: facilityTown,
+        state: facilityState,
+        county: facilityCounty,
+        country: facilityCountry,
+        postalcode: facilityPostalcode
+      })
+    return facility
+}
 
-    facility = await createFacility({
-      name: facilityName,
-      email: facilityEmail,
-      street: facilityStreet,
-      town: facilityTown,
-      state: facilityState,
-      county: facilityCounty,
-      country: facilityCountry,
-      postalcode: facilityPostalcode,
+describe('Visit integration test suite', function () {
+  let patientId: string
+  let doctorId: string
+  let caregiverId: string
+
+  beforeAll(async () => {
+    const patientUsername = 'patient1'
+    const patientName = 'Patient1'
+    const patientLastname = 'Patient1Lastname'
+    const patientBirthdate = new Date()
+    const patientPersonDoc = Person.build({
+      firstname: patientName,
+      lastname: patientLastname,
+      birthdate: patientBirthdate,
+      username: patientUsername,
     })
+    await patientPersonDoc.save()
+
+    const patientEmail = 'patient@openmed.test'
+    const patientPassword = 'password'
+    patientId = await createUser(patientUsername, patientEmail, patientPassword, Role.PATIENT)
+
+    const doctorUsername = 'doctor1'
+    const doctorName = 'Doctor1'
+    const doctorLastname = 'Doctor1Lastname'
+    const doctorBirthdate = new Date()
+    const doctorPersonDoc = Person.build({
+      firstname: doctorName,
+      lastname: doctorLastname,
+      birthdate: doctorBirthdate,
+      username: doctorUsername,
+    })
+    await doctorPersonDoc.save()
+
+    const doctorEmail = 'doctor@openmed.test'
+    const doctorPassword = 'password'
+    doctorId = await createUser(doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+
+    const caregiverUsername = 'caregiver1'
+    const caregiverName = 'Caregiver1'
+    const caregiverLastname = 'Caregiver1Lastname'
+    const caregiverBirthdate = new Date()
+    const caregiverPersonDoc = Person.build({
+      firstname: caregiverName,
+      lastname: caregiverLastname,
+      birthdate: caregiverBirthdate,
+      username: caregiverUsername,
+    })
+    await caregiverPersonDoc.save()
+
+    const caregiverEmail = 'user@openmed.test'
+    const caregiverPassword = 'password'
+    caregiverId = await createUser(
+      caregiverUsername,
+      caregiverEmail,
+      caregiverPassword,
+      Role.CAREGIVER
+    )
+  })
+
+  afterAll(async ()=> {
+    await deleteUserById(patientId)
+    await deleteUserById(doctorId)
+    await deleteUserById(caregiverId)
   })
 
   it('should create a visit', async () => {
-    // get the access token
+    
+    const facility = await createTestFacility()
+
     const username = 'visit'
     const email = 'user-visit@test.com'
     const password = 'password'
@@ -113,9 +111,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot = new Date()
@@ -123,9 +124,9 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId,
+      doctorId,
+      caregiverId,
       slot,
     }
 
@@ -134,23 +135,25 @@ describe('Visit integration test suite', function () {
       .post(`/v1/visits`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send(visitData)
-      .expect(constants.HTTP_STATUS_CREATED)
+
+    expect(response.statusCode).toBe(constants.HTTP_STATUS_CREATED)
 
     const createdVisit = response.body
 
     // check data
     expect(createdVisit.id).toBeDefined()
     expect(createdVisit.facility.id).toStrictEqual(facility.id)
-    expect(createdVisit.patient.id).toStrictEqual(patient.id)
-    expect(createdVisit.doctor.id).toStrictEqual(doctor.id)
-    expect(createdVisit.caregiver.id).toStrictEqual(caregiver.id)
+    expect(createdVisit.patientId).toStrictEqual(patientId)
+    expect(createdVisit.doctorId).toStrictEqual(doctorId)
+    expect(createdVisit.caregiverId).toStrictEqual(caregiverId)
     expect(new Date(createdVisit.slot)).toStrictEqual(slot)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
   })
 
   it('should returns a 400 if the slot is not found', async () => {
-    // get the access token
+    const facility = await createTestFacility()
+
     const username = 'visit-no'
     const email = 'user-no-visit@test.com'
     const password = 'password'
@@ -160,9 +163,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot = new Date()
@@ -170,9 +176,9 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot1: slot,
     }
 
@@ -190,7 +196,7 @@ describe('Visit integration test suite', function () {
     expect(error.message).toStrictEqual('The slot is required')
     expect(error.field).toStrictEqual('slot')
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
   })
 
   it('returns a 404 if the visit is not found', async () => {
@@ -204,9 +210,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // create a dummy mongo id
     const id = new mongoose.Types.ObjectId().toHexString()
@@ -217,11 +226,12 @@ describe('Visit integration test suite', function () {
       .send()
       .expect(404)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
   })
 
   it('returns the visit if the visit is found', async () => {
-    // get the access token
+    const facility = await createTestFacility()
+
     const username = 'visit-id'
     const email = 'user-id-visit@test.com'
     const password = 'password'
@@ -231,9 +241,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot = new Date()
@@ -241,9 +254,9 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot,
     }
 
@@ -263,20 +276,21 @@ describe('Visit integration test suite', function () {
       .set('Authorization', `Bearer ${accessToken}`)
       .expect(constants.HTTP_STATUS_OK)
 
-    const retrievedVisit = retrievedVisitResponse.body
+    const retrievedVisit: VisitDoc = retrievedVisitResponse.body
 
     // check the retrieved visit
     expect(retrievedVisit.facility.id).toStrictEqual(createdVisit.facility.id)
-    expect(retrievedVisit.patient.id).toStrictEqual(createdVisit.patient.id)
-    expect(retrievedVisit.doctor.id).toStrictEqual(createdVisit.doctor.id)
-    expect(retrievedVisit.caregiver.id).toStrictEqual(createdVisit.caregiver.id)
+    expect(retrievedVisit.patientId).toStrictEqual(createdVisit.patientId)
+    expect(retrievedVisit.doctorId).toStrictEqual(createdVisit.doctorId)
+    expect(retrievedVisit.caregiverId).toStrictEqual(createdVisit.caregiverId)
     expect(retrievedVisit.slot).toStrictEqual(createdVisit.slot)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
   })
 
   it('should fetch all the available visits', async () => {
-    // get the access token
+    const facility = await createTestFacility()
+    
     const username = 'visit-all'
     const email = 'user-all-visit@test.com'
     const password = 'password'
@@ -286,9 +300,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot1 = new Date()
@@ -298,23 +315,23 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData1 = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot: slot1,
     }
     const visitData2 = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot: slot2,
     }
     const visitData3 = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot: slot3,
     }
 
@@ -338,13 +355,37 @@ describe('Visit integration test suite', function () {
       .expect(constants.HTTP_STATUS_CREATED)
 
     // check data
-    expect(await Visit.countDocuments()).toBe(3)
+    const response = await request(app)
+      .get(`/v1/visits`)
+      .set('Authorization', `Bearer ${accessToken}`)
 
-    await deleteUserById(user.id!)
+    const retrievedVisit: VisitDoc[] = response.body
+    expect(retrievedVisit).toHaveLength(3)
+
+    expect(retrievedVisit[0].facility).toStrictEqual(facility.id)
+    expect(retrievedVisit[0].patientId).toStrictEqual(patientId)
+    expect(retrievedVisit[0].doctorId).toStrictEqual(doctorId)
+    expect(retrievedVisit[0].caregiverId).toStrictEqual(caregiverId)
+    expect(new Date(retrievedVisit[0].slot)).toStrictEqual(slot1)
+
+    expect(retrievedVisit[1].facility).toStrictEqual(facility.id)
+    expect(retrievedVisit[1].patientId).toStrictEqual(patientId)
+    expect(retrievedVisit[1].doctorId).toStrictEqual(doctorId)
+    expect(retrievedVisit[1].caregiverId).toStrictEqual(caregiverId)
+    expect(new Date(retrievedVisit[1].slot)).toStrictEqual(slot2)
+
+    expect(retrievedVisit[2].facility).toStrictEqual(facility.id)
+    expect(retrievedVisit[2].patientId).toStrictEqual(patientId)
+    expect(retrievedVisit[2].doctorId).toStrictEqual(doctorId)
+    expect(retrievedVisit[2].caregiverId).toStrictEqual(caregiverId)
+    expect(new Date(retrievedVisit[2].slot)).toStrictEqual(slot3)
+
+    await deleteUserById(userId)
   })
 
   it('should update the visit', async () => {
-    // get the access token
+    const facility = await createTestFacility()
+
     const username = 'visit-update'
     const email = 'user-update-visit@test.com'
     const password = 'password'
@@ -354,9 +395,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot = new Date()
@@ -364,9 +408,9 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot,
     }
 
@@ -395,22 +439,21 @@ describe('Visit integration test suite', function () {
     expect(newFacility.id).toBeDefined()
 
     // update the doctor
+    const newDoctorUsername = 'updatedDoctor'
     const newDoctorPersonDoc = Person.build({
       firstname: 'UpdatedDoctor',
       lastname: 'UpdatedDoctor1Lastname',
       birthdate: new Date(),
+      username: newDoctorUsername,
     })
-    const newDoctorPerson1 = await newDoctorPersonDoc.save()
+    await newDoctorPersonDoc.save()
 
-    const newDoctorModel = User.build({
-      email: 'updatedDoctor@openmed.test',
-      password: 'password',
-      role: Role.DOCTOR,
-      personId: newDoctorPerson1.id,
-    })
-    const newDoctor = await newDoctorModel.save()
-    expect(newDoctor).toBeDefined()
-    expect(newDoctor.id).toBeDefined()
+    const newDoctorId = await createUser(
+      newDoctorUsername,
+      'updatedDoctor@openmed.test',
+      'password',
+      Role.DOCTOR
+    )
 
     // update the slot
     const newSlot = new Date()
@@ -421,9 +464,9 @@ describe('Visit integration test suite', function () {
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         facilityId: newFacility.id,
-        patientId: patient.id,
-        doctorId: newDoctor.id,
-        caregiverId: caregiver.id,
+        patientId: patientId,
+        doctorId: newDoctorId,
+        caregiverId: caregiverId,
         slot: newSlot,
       })
       .expect(constants.HTTP_STATUS_OK)
@@ -432,16 +475,18 @@ describe('Visit integration test suite', function () {
 
     // check the updated visit
     expect(updatedVisit.facility.id).toStrictEqual(newFacility.id)
-    expect(updatedVisit.patient.id).toStrictEqual(patient.id)
-    expect(updatedVisit.doctor.id).toStrictEqual(newDoctor.id)
-    expect(updatedVisit.caregiver.id).toStrictEqual(caregiver.id)
+    expect(updatedVisit.patientId).toStrictEqual(patientId)
+    expect(updatedVisit.doctorId).toStrictEqual(newDoctorId)
+    expect(updatedVisit.caregiverId).toStrictEqual(caregiverId)
     expect(new Date(updatedVisit.slot)).toStrictEqual(newSlot)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
+    await deleteUserById(newDoctorId)
   })
 
   it('should delete a visit', async () => {
-    // get the access token
+     const facility = await createTestFacility()
+
     const username = 'visit-delete'
     const email = 'user-delete-visit@test.com'
     const password = 'password'
@@ -451,9 +496,12 @@ describe('Visit integration test suite', function () {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.DOCTOR, userId)
 
     // set the slot
     const slot = new Date()
@@ -461,9 +509,9 @@ describe('Visit integration test suite', function () {
     // set the visit data
     const visitData = {
       facilityId: facility.id,
-      patientId: patient.id,
-      doctorId: doctor.id,
-      caregiverId: caregiver.id,
+      patientId: patientId,
+      doctorId: doctorId,
+      caregiverId: caregiverId,
       slot,
     }
 
@@ -485,6 +533,6 @@ describe('Visit integration test suite', function () {
 
     expect(await Visit.countDocuments({ _id: createdVisit.id })).toBe(0)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
   })
 })

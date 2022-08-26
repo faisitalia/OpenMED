@@ -65,28 +65,22 @@ global.signup = async (
   birthdate
 ) => {
   try {
-    
-    const signup = await request(app)
-      .post('/v1/users/signup')
-      .send({
-        username,
-        email,
-        password,
-        firstname,
-        lastname,
-        birthdate,
-      })
-      
-  
-    return signup.body
+    const signup = await request(app).post('/v1/users/signup').send({
+      username,
+      email,
+      password,
+      firstname,
+      lastname,
+      birthdate,
+    })
 
+    return signup.body
   } catch (error) {
     logger.error(error)
   }
 
   // add the "user" role to the test user
   // await assignRoleToUser('user', user)
-
 }
 
 global.signin = async (username: string, password: string) => {

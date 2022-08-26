@@ -13,6 +13,6 @@ export const errorHandler = (err: Error, req: Request, res: Response, next: Next
   }
 
   res.status(constants.HTTP_STATUS_BAD_REQUEST).send({
-    errors: [{ message: `Something went wrong: ${err.message}` }],
+    errors: [{ message: err.message }],
   })
 }

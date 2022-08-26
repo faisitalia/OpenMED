@@ -5,13 +5,16 @@ import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
 it('fails when a username that does not exist is supplied', async () => {
-  await request(app)
+  const response = await request(app)
     .post('/v1/users/signin')
     .send({
       username: 'test-fail',
       password: 'password'
     })
-    .expect(400)
+  expect(response.statusCode).toStrictEqual(constants.HTTP_STATUS_UNAUTHORIZED)
+
+  const errors = JSON.parse(response.text).errors
+  expect(errors[0].message).toStrictEqual('Not Authorized: the credentials could be wrong')
 })
 
 it('fails when an incorrect password is supplied', async () => {
@@ -21,7 +24,7 @@ it('fails when an incorrect password is supplied', async () => {
       username: 'test',
       password: 'aslkdfjalskdfj'
     })
-    .expect(400)
+    .expect(constants.HTTP_STATUS_UNAUTHORIZED)
 })
 
 it('responds with a access token when given valid credentials', async () => {

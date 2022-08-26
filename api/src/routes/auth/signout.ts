@@ -25,7 +25,9 @@ router.post('/v1/users/signout', async (req: Request, res: Response) => {
 
     const userInfo = await getUserInfo(accessToken)
 
-    await logout(userInfo.sub)
+    if (!userInfo.id) throw new Error(`User id non available for user ${userInfo}`)
+
+    await logout(userInfo.id)
 
     res.status(constants.HTTP_STATUS_OK).send({})
   } else {

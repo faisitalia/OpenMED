@@ -22,7 +22,7 @@ import { visitRouter } from './routes/visit'
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 // set the express listening port
-const PORT: number = process.env.PORT ? parseInt(process.env.PORT) : 3001
+const PORT = process.env.PORT ? parseInt(process.env.PORT) : 3001
 
 const app = express()
 app.set('trust proxy', true)
@@ -38,7 +38,7 @@ app.use(
     secret: 'some secret',
     resave: false,
     saveUninitialized: true,
-    store: memoryStore,
+    store: memoryStore
   })
 )
 

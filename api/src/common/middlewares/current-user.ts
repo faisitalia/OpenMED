@@ -1,9 +1,13 @@
+import RoleRepresentation from '@keycloak/keycloak-admin-client/lib/defs/roleRepresentation'
 import { Request, Response, NextFunction } from 'express'
 import { getUserInfo } from '../../services/auth'
 
 interface UserPayload {
   id: string
+  username: string
   email: string
+  roles: RoleRepresentation[]
+  errorDescription: string
 }
 
 declare global {
@@ -24,13 +28,9 @@ export const currentUser = async (req: Request, res: Response, next: NextFunctio
   const userInfo = await getUserInfo(bearerToken)
 
   try {
-    // const payload = jwt.verify(
-    //   req.session.jwt,
-    //   process.env.JWT_KEY!
-    // ) as UserPayload;
-    if (userInfo && userInfo.sub) {
+    if (userInfo && userInfo.id) {
       req.currentUser = userInfo
-    } else throw new Error(userInfo.error_description)
+    } else throw new Error(userInfo.errorDescription)
   } catch (err) {
     console.error(err)
   }

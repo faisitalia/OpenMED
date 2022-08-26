@@ -12,6 +12,7 @@ import {
   fetchAllVisits,
 } from '../../services/visit'
 import { VisitDoc } from '../../models/visit'
+import { Role } from '../../models/user'
 
 // create the express router
 const router = express.Router()
@@ -54,6 +55,7 @@ const router = express.Router()
  */
 router.post(
   '/v1/visits',
+  requireAuth([Role.DOCTOR, Role.NURSE]),
   [
     body('facilityId').trim().not().isEmpty().withMessage('The facility id is required'),
     body('patientId').trim().not().isEmpty().withMessage('The patient id is required'),
@@ -62,7 +64,6 @@ router.post(
     body('slot').trim().not().isEmpty().withMessage('The slot is required'),
   ],
   validateRequest,
-  requireAuth,
   async (req: Request, res: Response) => {
     const { facilityId, patientId, doctorId, caregiverId, slot } = req.body
 
@@ -74,7 +75,7 @@ router.post(
       slot
     )
 
-    res.status(constants.HTTP_STATUS_CREATED).send(createdVisit.toJSON())
+    res.status(constants.HTTP_STATUS_CREATED).send(createdVisit)
   }
 )
 
@@ -116,6 +117,7 @@ router.post(
  */
 router.put(
   '/v1/visits/:visitId',
+  requireAuth([Role.DOCTOR, Role.NURSE]),
   [
     body('facilityId').trim().not().isEmpty().withMessage('The facility id is required'),
     body('patientId').trim().not().isEmpty().withMessage('The patient id is required'),
@@ -124,7 +126,6 @@ router.put(
     body('slot').trim().not().isEmpty().withMessage('The slot is required'),
   ],
   validateRequest,
-  requireAuth,
   async (req: Request, res: Response) => {
     const visitId = req.params.visitId
     const { facilityId, patientId, doctorId, caregiverId, slot } = req.body
@@ -160,13 +161,17 @@ router.put(
  *       200:
  *         description: visit details
  */
-router.get('/v1/visits/:visitId', requireAuth, async (req: Request, res: Response) => {
-  const visitId = req.params.visitId
+router.get(
+  '/v1/visits/:visitId',
+  requireAuth([Role.PATIENT, Role.DOCTOR, Role.NURSE, Role.ADMIN, Role.SUPER_ADMIN]),
+  async (req: Request, res: Response) => {
+    const visitId = req.params.visitId
 
-  const visit = await fetchVisitById(visitId)
+    const visit = await fetchVisitById(visitId)
 
-  res.status(constants.HTTP_STATUS_OK).send(visit.toJSON())
-})
+    res.status(constants.HTTP_STATUS_OK).send(visit.toJSON())
+  }
+)
 
 /**
  * @openapi
@@ -181,11 +186,15 @@ router.get('/v1/visits/:visitId', requireAuth, async (req: Request, res: Respons
  *       200:
  *         description: All the available visits
  */
-router.get('/v1/visits', requireAuth, async (req: Request, res: Response) => {
-  const visits = await fetchAllVisits()
+router.get(
+  '/v1/visits',
+  requireAuth([Role.DOCTOR, Role.NURSE]),
+  async (req: Request, res: Response) => {
+    const visits = await fetchAllVisits()
 
-  res.status(constants.HTTP_STATUS_OK).send(visits)
-})
+    res.status(constants.HTTP_STATUS_OK).send(visits)
+  }
+)
 
 /**
  * @openapi
@@ -206,12 +215,16 @@ router.get('/v1/visits', requireAuth, async (req: Request, res: Response) => {
  *       204:
  *         description: Visit has been enacted and no further information is to be supplied.
  */
-router.delete('/v1/visits/:visitId', requireAuth, async (req: Request, res: Response) => {
-  const visitId = req.params.visitId
+router.delete(
+  '/v1/visits/:visitId',
+  requireAuth([Role.DOCTOR, Role.NURSE]),
+  async (req: Request, res: Response) => {
+    const visitId = req.params.visitId
 
-  await deleteVisitById(visitId)
+    await deleteVisitById(visitId)
 
-  res.status(constants.HTTP_STATUS_NO_CONTENT).send()
-})
+    res.status(constants.HTTP_STATUS_NO_CONTENT).send()
+  }
+)
 
 export { router as visitRouter }

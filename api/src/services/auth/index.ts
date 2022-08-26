@@ -1,7 +1,7 @@
-import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
 import { TokenResponse } from '@keycloak/keycloak-admin-client/lib/utils/auth'
 import axios from 'axios'
 import url from 'url'
+import { NotAuthorizedError } from '../../common'
 import { KeycloakAdminClientImpl } from './config/keycloakAdminClient'
 import { getOpenIDConnectURI } from './config/openid-connect'
 
@@ -49,9 +49,23 @@ async function createUser(
  */
 async function getUserById(id: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
-  return kcAdminClient.users.findOne({
+  const user = await kcAdminClient.users.findOne({
     id,
   })
+
+  if (!user) throw new Error(`No user available with id: ${id}`)
+
+  const roles = await kcAdminClient.users.listRealmRoleMappings({
+    id: id,
+  })
+  
+  return {
+    id: user.id,
+    username: user.username,
+    email: user.email,
+    roles: roles,
+    attributes: user.attributes
+  }
 }
 
 /**
@@ -66,8 +80,6 @@ async function getUserByEmail(email: string) {
   })
 
   if (user && user[0]) return user[0]
-
-  return null
 }
 
 /**
@@ -103,12 +115,12 @@ async function getAuthToken(username: string, password: string): Promise<TokenRe
     client_secret: process.env.OPENID_CLIENT_SECRET,
   })
 
-  // console.log('openid URI', openidURI)
-  // console.log('payload', payload)
-
-  const { data } = await axios.post(`${openidURI}/token`, payload.toString())
-  // console.log('getAuthToken', data)
-  return data
+  try {
+    const { data } = await axios.post(`${openidURI}/token`, payload.toString())
+    return data
+  } catch (error) {
+    throw new NotAuthorizedError('Not Authorized: the credentials could be wrong')
+  }
 }
 
 /**
@@ -157,7 +169,25 @@ async function getUserInfo(accessToken: string) {
         Authorization: `Bearer ${accessToken}`,
       },
     })
-    return data
+
+    const currentUser = await getUserByEmail(data.email)
+    if (!currentUser) throw new Error(`No user available with email: ${data.email}`)
+
+    if (currentUser.id && currentUser.username && currentUser.email) {
+      const roles = await kcAdminClient.users.listRealmRoleMappings({
+        id: currentUser.id,
+      })
+
+      return {
+        id: currentUser.id,
+        username: currentUser.username,
+        email: currentUser.email,
+        roles: roles,
+        errorDescription: data.error_description,
+      }
+    } else {
+      throw new Error(`id or username or email not available: ${currentUser}`)
+    }
   } catch (error: any) {
     throw error.response.data.error_description
   }

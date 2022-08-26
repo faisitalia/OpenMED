@@ -3,6 +3,7 @@ import { constants } from 'http2'
 
 import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
+import { Role } from '../../../models/user'
 
 it('responds with details about the current user', async () => {
   const username = 'john-current'
@@ -14,6 +15,7 @@ it('responds with details about the current user', async () => {
 
   // signup
   const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+  const userId = user.id ?? ''
 
   // get auth token
   const accessToken = await global.signin(username, password)
@@ -25,8 +27,13 @@ it('responds with details about the current user', async () => {
     .expect(constants.HTTP_STATUS_OK)
 
   expect(response.body.currentUser.email).toEqual(email)
+  expect(response.body.currentUser.roles).toBeDefined()
+  expect(response.body.currentUser.roles.length).toBeGreaterThan(0)
 
-  await deleteUserById(user.id!)
+  const roles = response.body.currentUser.roles
+  expect(roles[1].name).toStrictEqual(Role.USER)
+
+  await deleteUserById(userId)
 })
 
 it('responds with null if not authenticated', async () => {
