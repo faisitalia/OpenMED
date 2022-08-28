@@ -6,7 +6,7 @@ import { Role } from './models/user'
 import { Person } from './models/person'
 import { transformData } from './services/facility/utils/etl-json'
 import facilitiesData from './routes/facility/__test__/facilities.json'
-import { createRole, createUser } from './services/auth'
+import { createRole, createUser, deleteRoleByRoleName, findRoleByRoleName } from './services/auth'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
@@ -17,6 +17,10 @@ require('dotenv').config()
 const createRoles = async () => {
   console.log('Creating roles....')
   for (const role of Object.keys(Role)) {
+    const existingRole = await findRoleByRoleName(role)
+    if (existingRole) {
+      await deleteRoleByRoleName(role)
+    }
     await createRole(role)
   }
 }
@@ -30,7 +34,6 @@ const populateUsers = async function () {
 
   console.log('Inserting user....')
 
-  // create an USER
   const username = 'user'
   const firstname = 'John'
   const lastname = 'Doe'
@@ -42,7 +45,23 @@ const populateUsers = async function () {
   const password = 'password'
   await createUser(username, email, password, Role.USER)
 
-  console.log('User inserted!')
+  const adminUsername = 'admin'
+  const adminFirstname = 'Admin'
+  const adminLastname = 'Doe'
+  const adminBirthdate = new Date()
+  const adminPersonDoc = Person.build({
+    firstname: adminFirstname,
+    lastname: adminLastname,
+    birthdate: adminBirthdate,
+    username: adminUsername,
+  })
+  await adminPersonDoc.save()
+
+  const adminEmail = 'admin@openmed.cloud'
+  const adminPassword = 'password'
+  await createUser(adminUsername, adminEmail, adminPassword, Role.ADMIN)
+
+  console.log('Users inserted!')
 }
 
 /**

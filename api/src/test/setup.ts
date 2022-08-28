@@ -34,7 +34,7 @@ let mongo: MongoMemoryServer
 
 beforeAll(async () => {
   process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = '2HL0bwDlkGu6iyIsmoWVgBySxtNHWzEm'
+  process.env.OPENID_CLIENT_SECRET = 'SMEvJVmtLQqkqrWZVumoEZoO8tRGurkV'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()

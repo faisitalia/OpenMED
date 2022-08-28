@@ -11,7 +11,13 @@ Per lanciare i servizi ausiliari si può anche utilizzare il seguento comando:
 npm run start:services
 ```
 
-Lanciati i container (vedere il seguente [README.md](../docker/README.md) si può passare alla configurazione dell'API server:
+Lanciati i container (vedere il seguente [README.md](../docker/README.md) è necessario configurare keycloak:
+
+- eseguire il login su keycloak (admin/admin)
+- cliccare su "Add realm"
+- importare il file "docker/keycloak/config/openmed.json"
+
+Ora si può passare alla configurazione dell'API server:
 
 - crea una directory "certs"
 - entrare nella directory "certs" e lanciare:
