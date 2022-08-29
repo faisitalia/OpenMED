@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 useHead({ title: `Tutto fatto!` });
 </script>
 
@@ -12,12 +12,12 @@ useHead({ title: `Tutto fatto!` });
       </h1>
       <p class="my-2 text-center">Continua la navigazione</p>
       <div class="my-7" />
-      <NuxtLink
+      <RouterLink
         to="/"
         class="bg-brandBlue-500 text-white text-center px-3 py-2 rounded-3xl font-bold"
       >
         Torna in Home
-      </NuxtLink>
+      </RouterLink>
       <!-- <div on:click={() => goto('/appointments/edit')}>Crea Nuovo Appuntamento</div> -->
 
       <!-- Aggiungere il + in fondo a dx -->
@@ -29,12 +29,12 @@ useHead({ title: `Tutto fatto!` });
         >
           Altro appuntamento
         </p>
-        <NuxtLink
+        <RouterLink
           to="/appointments/edit"
           class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
         >
           add
-        </NuxtLink>
+        </RouterLink>
       </div>
       <div class="my-3 group flex flex-row justify-end items-center">
         <p
@@ -42,12 +42,12 @@ useHead({ title: `Tutto fatto!` });
         >
           Torna indietro e modifica
         </p>
-        <NuxtLink
+        <RouterLink
           to="/appointments/edit"
           class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
         >
           edit
-        </NuxtLink>
+        </RouterLink>
       </div>
       <div class="my-3 group flex flex-row justify-end items-center">
         <p
@@ -56,12 +56,12 @@ useHead({ title: `Tutto fatto!` });
           Annulla appuntamento
         </p>
         <!-- TODO change this so that an appointments get deleted after a confirmation message -->
-        <NuxtLink
+        <RouterLink
           to=""
           class="p-2 text-4xl material-icons-round rounded-full bg-brandBlue-500 font-bold text-white"
         >
           delete_forever
-        </NuxtLink>
+        </RouterLink>
       </div>
     </div>
   </NuxtLayout>

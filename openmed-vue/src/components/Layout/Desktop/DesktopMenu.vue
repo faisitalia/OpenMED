@@ -1,8 +1,9 @@
 <script setup lang="ts">
+import router from "@/router";
+
+import DesktopMenuItem from "./DesktopMenuItem.vue";
 // const { logout } = useAuth();
 // const { removeUser } = useUser();
-
-import router from "@/router";
 
 async function logoutAndClearUser() {
   // await logout();
@@ -23,14 +24,11 @@ async function logoutAndClearUser() {
     />
     <nav class="self-stretch">
       <ul class="flex flex-col items-start list-none">
-        <LayoutDesktopMenuItem to="/" name="Home" />
-        <LayoutDesktopMenuItem to="/users" name="Gestisci Utenti" />
-        <LayoutDesktopMenuItem
-          to="/appointments/edit"
-          name="Crea Appuntamento"
-        />
-        <LayoutDesktopMenuItem to="/appointments" name="Lista Appuntamenti" />
-        <LayoutDesktopMenuItem to="/" name="Contatti" />
+        <DesktopMenuItem to="/" name="Home" />
+        <DesktopMenuItem to="/users" name="Gestisci Utenti" />
+        <DesktopMenuItem to="/appointments/edit" name="Crea Appuntamento" />
+        <DesktopMenuItem to="/appointments" name="Lista Appuntamenti" />
+        <DesktopMenuItem to="/" name="Contatti" />
         <div class="my-8"></div>
         <li
           @click="logoutAndClearUser"

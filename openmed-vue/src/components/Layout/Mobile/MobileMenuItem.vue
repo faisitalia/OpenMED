@@ -1,12 +1,15 @@
 <script setup lang="ts">
 defineProps({
-  to: String,
   name: String,
+  to: {
+    required: true,
+    type: String,
+  },
 });
 </script>
 
 <template>
-  <NuxtLink :to="to">
+  <RouterLink :to="to">
     <li class="font-light py-2">{{ name }}</li>
-  </NuxtLink>
+  </RouterLink>
 </template>
