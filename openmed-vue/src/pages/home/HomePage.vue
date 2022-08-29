@@ -57,7 +57,7 @@ const isAdmin = roles.includes("admin");
         />
 
         <img
-          src="img/doctors.svg"
+          src="@/assets/img/doctors.svg"
           alt="Un gruppo di dottori ti aspetta"
           class="sm:hidden self-center my-16"
         />

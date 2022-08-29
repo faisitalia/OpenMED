@@ -81,7 +81,7 @@ async function loginWithCredentials() {
       class="bg-no-repeat bg-center bg-cover bg-[url('img/login-background.png')] h-screen flex flex-col px-8 py-16 items-center justify-between"
     >
       <img
-        src="img/logo-openmed/openmed-logo-full.svg"
+        src="@/assets/img/logo-openmed/openmed-logo-full.svg"
         alt="Il logo di Openmed"
       />
       <div id="login" class="grid grid-rows-1 grid-cols-1">
@@ -144,7 +144,7 @@ async function loginWithCredentials() {
 
       <img
         class="w-40"
-        src="img/logo-fais/logo-fais.png"
+        src="@/assets/img/logo-fais/logo-fais.png"
         alt="Il logo di FAIS"
       />
     </div>

@@ -19,7 +19,7 @@ async function logoutAndClearUser() {
     <!-- Desktop Nav Bar -->
     <img
       class="my-10"
-      src="img/logo-openmed/openmed-logo-white.svg"
+      src="@/assets/img/logo-openmed/openmed-logo-white.svg"
       alt="Il logo di openmed."
     />
     <nav class="self-stretch">
@@ -44,7 +44,7 @@ async function logoutAndClearUser() {
     <!-- Doctor's image in desktop view mode only -->
     <img
       class="my-4 self-center"
-      src="/img/doctors.svg"
+      src="@/assets/img/doctors.svg"
       alt="A sketch of three doctors smile and look helpful"
     />
     <div class="flex-grow" />
@@ -52,7 +52,7 @@ async function logoutAndClearUser() {
     <!-- FAIS's logo in desktop view mode only -->
     <img
       class="my-4 min-w-[1rem] max-w-[7rem] self-center place-self-end"
-      src="img/logo-fais/logo-fais-white@2x.png"
+      src="@/assets/img/logo-fais/logo-fais-white@2x.png"
       alt="FAIS logo"
     />
   </header>

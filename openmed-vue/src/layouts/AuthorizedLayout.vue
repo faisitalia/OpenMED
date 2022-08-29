@@ -23,7 +23,7 @@ const isDrawerOpen = ref(false);
           <!-- OpenMed's small logo -->
           <RouterLink to="/">
             <img
-              src="/img/logo-openmed/openmed-logo.svg"
+              src="@/assets/img/logo-openmed/openmed-logo.svg"
               alt="Il logo di openmed."
             />
           </RouterLink>
