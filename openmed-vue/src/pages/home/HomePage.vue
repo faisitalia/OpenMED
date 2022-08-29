@@ -2,6 +2,11 @@
 import { useUser } from "@/composables/useUser";
 import { storeToRefs } from "pinia";
 
+import H1Title from "@/components/H1Title.vue";
+import SubTitle from "@/components/SubTitle.vue";
+import DashboardTile from "@/components/Dashboard/DashboardTile.vue";
+import DashboardAppointments from "@/components/Dashboard/DashboardAppointments.vue";
+
 const { fullName } = storeToRefs(useUser());
 
 const roles = ["doctor", "admin"];
@@ -19,8 +24,8 @@ const isAdmin = roles.includes("admin");
       id="hello-user"
       class="col-start-1 row-start-1 row-span-full place-self-start"
     >
-      <Title>Ciao {{ fullName }},</Title>
-      <Subtitle>come desideri procedere?</Subtitle>
+      <H1Title>Ciao {{ fullName }},</H1Title>
+      <SubTitle>come desideri procedere?</SubTitle>
       <!-- Main content -->
       <div
         id="actions"
@@ -48,6 +53,7 @@ const isAdmin = roles.includes("admin");
           v-if="isPatient && !isDoctor"
           title="Cartella Clinica"
           subtitle="Consulta la tua cartella clinica"
+          href="/"
         />
 
         <img
