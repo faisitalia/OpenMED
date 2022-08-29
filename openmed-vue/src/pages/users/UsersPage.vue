@@ -1,10 +1,14 @@
-<script setup>
+<script setup lang="ts">
+import { useHead } from "@vueuse/head";
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+
 const props = defineProps({
   users: { default: [] },
   userId: Number,
 });
 
-useRouter();
+const { replace } = useRouter();
 useHead({ title: `Gestione utenti` });
 // // TODO import GET users endpoint(s)
 // async function load({ session, fetch }) {
@@ -87,22 +91,27 @@ useHead({ title: `Gestione utenti` });
 
 const filter = ref("all");
 const search = ref("");
-const filteredList = computed(() =>
-  props.users
-    .filter((user) => {
-      if (filter.value === "all") return true;
-      return user.role === filter.value;
-    })
-    .filter((user) => {
-      if (search.value === "") return true;
-      // TODO improve this search with regex
-      return user.name.toLowerCase().includes(search.value.toLowerCase());
-    })
+// TODO tipizzare correttamente gli utenti una volta ricevute le API dal backend
+const filteredList = computed(
+  () =>
+    props.users
+      .filter((user) => {
+        const u = user as any;
+        if (filter.value === "all") return true;
+        return u.role === filter.value;
+      })
+      .filter((user) => {
+        const u = user as any;
+        if (search.value === "") return true;
+        // TODO improve this search with regex
+        return u.name.toLowerCase().includes(search.value.toLowerCase());
+      }) as any
 );
 </script>
 
 <template>
   <NuxtLayout name="layout">
+    <!-- TODO move this to the router -->
     <div class="">
       <div
         class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:justify-items-center lg:grid-cols-[auto_auto]"
@@ -137,42 +146,43 @@ const filteredList = computed(() =>
           >
             <DetailedTile
               v-for="user in filteredList"
+              :key="user.id"
               :title="`${user.name} ${user.surname}`"
               :subtitle="user.email"
               class="rounded-3xl my-1 px-4 py-1"
             >
-              <div
-                slot="content"
-                class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]"
-              >
-                <div class="col-span-1">
-                  <p class="font-bold">Email</p>
-                  <p>{{ user.email }}</p>
+              <template v-slot:content>
+                <div class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]">
+                  <div class="col-span-1">
+                    <p class="font-bold">Email</p>
+                    <p>{{ user.email }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Ruolo</p>
+                    <p>{{ user.role }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Telefono:</p>
+                    <p>{{ user.phone }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Città:</p>
+                    <p>{{ user.city }}</p>
+                  </div>
                 </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Ruolo</p>
-                  <p>{{ user.role }}</p>
-                </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Telefono:</p>
-                  <p>{{ user.phone }}</p>
-                </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Città:</p>
-                  <p>{{ user.city }}</p>
-                </div>
-              </div>
-              <div
-                @click.stop
-                slot="trailing"
-                class="flex flex-col items-center cursor-default"
-              >
-                <StyledButton @click="navigateTo(`/users/edit?id=${user.id}`)">
-                  Modifica
-                </StyledButton>
+              </template>
+              <template v-slot:trailing>
+                <div
+                  @click.stop
+                  class="flex flex-col items-center cursor-default"
+                >
+                  <StyledButton @click="replace(`/users/edit?id=${user.id}`)">
+                    Modifica
+                  </StyledButton>
 
-                <DeleteButton @delete="null">Elimina</DeleteButton>
-              </div>
+                  <DeleteButton @delete="null">Elimina</DeleteButton>
+                </div>
+              </template>
             </DetailedTile>
             <h3 v-if="!filteredList">Nessun utente trovato.</h3>
           </div>
@@ -181,7 +191,7 @@ const filteredList = computed(() =>
         <!-- Crea nuovo utente-->
         <div class="col-start-2 hidden lg:flex lg:flex-col">
           <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
-          <StyledButton class="font-bold" @click="navigateTo('/users/edit')">
+          <StyledButton class="font-bold" @click="replace('/users/edit')">
             Crea Nuovo
           </StyledButton>
           <div class="my-20" />

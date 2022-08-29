@@ -1,12 +1,13 @@
-<script setup>
-const props = defineProps({
+<script setup lang="ts">
+import { ref } from "vue";
+
+defineProps({
   class: { type: String, default: "rounded-lg px-1 py-4 my-1" },
   title: String,
   subtitle: String,
 });
 
-let isExpanded = false;
-function toggle() {}
+const isExpanded = ref(false);
 </script>
 
 <template>

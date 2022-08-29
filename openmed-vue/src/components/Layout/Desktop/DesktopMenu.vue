@@ -1,11 +1,13 @@
-<script setup>
-const { logout } = useAuth();
-const { removeUser } = useUser();
+<script setup lang="ts">
+// const { logout } = useAuth();
+// const { removeUser } = useUser();
+
+import router from "@/router";
 
 async function logoutAndClearUser() {
-  await logout();
-  removeUser();
-  navigateTo("/login");
+  // await logout();
+  // removeUser();
+  router.replace({ path: "/login" });
 }
 </script>
 

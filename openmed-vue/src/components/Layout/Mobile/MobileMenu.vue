@@ -1,14 +1,16 @@
-<script setup>
+<script setup lang="ts">
+import router from "@/router";
+
 defineProps({
   isOpen: Boolean,
 });
-const { logout } = useAuth();
-const { removeUser } = useUser();
+// const { logout } = useAuth();
+// const { removeUser } = useUser();
 
 async function logoutAndClearUser() {
-  await logout();
-  removeUser();
-  navigateTo("/login");
+  //   await logout();
+  //   removeUser();
+  router.replace({ path: "/ogin" });
 }
 </script>
 

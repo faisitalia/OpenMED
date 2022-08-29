@@ -1,8 +1,7 @@
 <!-- this component should be trashed as it is now -->
 
-<script setup>
-const props = defineProps({
-  class: String,
+<script setup lang="ts">
+defineProps({
   colors: {
     type: String,
     default: "text-white bg-brandBlue-500 hover:bg-brandBlue-700",
@@ -10,14 +9,13 @@ const props = defineProps({
   spaces: { type: String, default: "px-4 py-2 my-1" },
 });
 
-const myClasses = props.class;
 const emit = defineEmits(["click"]);
 </script>
 
 <template>
   <button
     class="rounded-3xl"
-    :class="`${myClasses} ${colors} ${spaces}`"
+    :class="`${colors} ${spaces}`"
     @click.prevent.stop="emit('click')"
   >
     <slot />

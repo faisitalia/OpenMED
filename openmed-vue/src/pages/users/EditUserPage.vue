@@ -1,42 +1,46 @@
-<script setup>
+<script setup lang="ts">
+import { useHead } from "@vueuse/head";
 import { validate } from "validate.js";
+import { useRouter } from "vue-router";
 
 const props = defineProps({ userId: String });
 
-useRouter();
+const router = useRouter();
 useHead({ title: `${props.userId ? "Modifica" : "Crea"} Utente` });
 
-// TODO check old svelte logic
-async function load({ fetch, url }) {
-  const params = url.searchParams;
+// TODO check old svelte logic and eventually get something out of it
+// async function load({ fetch, url }) {
+//   const params = url.searchParams;
 
-  let user;
+//   let user;
 
-  if (params.has("user")) {
-    const response = await fetch(
-      `${url.origin}/api/users/${params.get("user")}`,
-      {
-        credentials: "include",
-      }
-    );
+//   if (params.has("user")) {
+//     const response = await fetch(
+//       `${url.origin}/api/users/${params.get("user")}`,
+//       {
+//         credentials: "include",
+//       }
+//     );
 
-    if (!response.ok) {
-      console.log("Lookout: something went wrong!");
-      console.log(response.status);
-      console.log(await response.json().errors);
+//     if (!response.ok) {
+//       console.log("Lookout: something went wrong!");
+//       console.log(response.status);
+//       console.log(await response.json().errors);
 
-      // TODO properly handle this error
-      throw "Something went wrong!";
-    }
+//       // TODO properly handle this error
+//       throw "Something went wrong!";
+//     }
 
-    user = await response.json();
-  }
+//     user = await response.json();
+//   }
 
-  return { props: { user: user } };
-}
+//   return { props: { user: user } };
+// }
 
-let action = props.userId ? "Crea" : "Modifica";
-let user; // TODO load this user from the global session store
+const action = props.userId ? "Crea" : "Modifica";
+// TODO load this user from the global session store
+// TODO give a type to the current user
+let user: any;
 
 const roles = ["Paziente", "Dottore", "Amministratore"];
 const choices = {
@@ -134,11 +138,12 @@ const formConstraints = {
 };
 
 // Set-up default error messages
+// TODO use new form library
 validate.validators.inclusion.message = `^Hai selezionato un valore non presente tra quelli disponibili`;
 validate.validators.email.message = `^La tua mail non sembra essere valida`;
 
-let errors;
-let asyncErrors;
+let errors: any;
+let asyncErrors: any;
 async function submit() {
   // 1. Validate the form
   errors = validate(choices, formConstraints);
@@ -170,7 +175,7 @@ async function submit() {
   // }
 
   // Everything went right, therefore redirect to the confirm page
-  navigateTo("/users/ok");
+  router.push("/users/ok");
 }
 </script>
 
@@ -195,7 +200,7 @@ async function submit() {
           class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
         >
           <option />
-          <option v-for="r in roles" :value="r">{{ r }}</option>
+          <option v-for="r in roles" :value="r" :key="r">{{ r }}</option>
           <option v-if="!roles" disabled="true">
             Nessun ruolo disponibile
           </option>

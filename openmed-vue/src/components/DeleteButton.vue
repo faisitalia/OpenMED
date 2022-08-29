@@ -1,7 +1,9 @@
-<script setup>
-const emit = defineEmits();
+<script setup lang="ts">
+import { ref } from "vue";
 
-let areYousure = false;
+const emit = defineEmits([`delete`]);
+
+const areYousure = ref(false);
 </script>
 
 <template>
