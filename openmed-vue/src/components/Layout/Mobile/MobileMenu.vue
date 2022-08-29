@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import router from "@/router";
 
+import MobileMenuItem from "@/components/Layout/Mobile/MobileMenuItem.vue";
+
 defineProps({
   isOpen: Boolean,
 });
@@ -21,14 +23,11 @@ async function logoutAndClearUser() {
   >
     <nav>
       <ul class="flex flex-col items-end list-none">
-        <LayoutMobileMenuItem to="/" name="Home" />
-        <LayoutMobileMenuItem to="/users" name="Gestisci Utenti" />
-        <LayoutMobileMenuItem
-          to="/appointments/edit"
-          name="Crea Appuntamento"
-        />
-        <LayoutMobileMenuItem to="/appointments" name="Lista Appuntamenti" />
-        <LayoutMobileMenuItem to="/" name="Contatti" />
+        <MobileMenuItem to="/" name="Home" />
+        <MobileMenuItem to="/users" name="Gestisci Utenti" />
+        <MobileMenuItem to="/appointments/edit" name="Crea Appuntamento" />
+        <MobileMenuItem to="/appointments" name="Lista Appuntamenti" />
+        <MobileMenuItem to="/" name="Contatti" />
         <li @click="logoutAndClearUser" class="font-light py-2 my-8">
           <button>Esci</button>
         </li>

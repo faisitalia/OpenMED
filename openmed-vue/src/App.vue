@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import Layout from "./layouts/Layout.vue";
+import AppLayout from "@/AppLayout.vue";
 </script>
 
 <template>
   <div id="app">
-    <Layout />
+    <main>
+      <AppLayout />
+    </main>
   </div>
 </template>
