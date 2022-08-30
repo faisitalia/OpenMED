@@ -72,7 +72,7 @@ const isAdmin = roles.includes("admin");
         day="24 Gennaio"
         hours="11.30 / 12.30"
       >
-        <template v-slot:content>
+        <template #content>
           <div class="grid grid-cols-3">
             <div>
               <div class="font-bold">Data</div>
@@ -96,7 +96,7 @@ const isAdmin = roles.includes("admin");
             </div>
           </div>
         </template>
-        <template v-slot:trailing>
+        <template #trailing>
           <div
             @click.stop="() => null"
             class="flex flex-col items-stretch cursor-default"

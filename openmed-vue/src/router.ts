@@ -5,6 +5,7 @@ import HomeView from "./pages/home/HomePage.vue";
 import UsersPageVue from "./pages/users/UsersPage.vue";
 import AppointmentsPage from "./pages/appointments/AppointmentsPage.vue";
 import EditAppointmentPage from "./pages/appointments/EditAppointmentPage.vue";
+import ConfirmAppointmentPageVue from "./pages/appointments/ConfirmAppointmentPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,14 +27,18 @@ const router = createRouter({
       name: "appointments",
       component: AppointmentsPage,
       meta: { layout: "AuthorizedLayout" },
-      children: [
-        {
-          path: "edit",
-          name: "edit-appointment",
-          component: EditAppointmentPage,
-          meta: { layout: "AuthorizedLayout" },
-        },
-      ],
+    },
+    {
+      path: "/appointments/edit",
+      name: "edit-appointment",
+      component: EditAppointmentPage,
+      meta: { layout: "AuthorizedLayout" },
+    },
+    {
+      path: "/appointments/ok",
+      name: "confirm-appointment",
+      component: ConfirmAppointmentPageVue,
+      meta: { layout: "AuthorizedLayout" },
     },
   ],
 });
