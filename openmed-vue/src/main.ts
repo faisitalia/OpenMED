@@ -8,10 +8,12 @@ import router from "./router";
 import "./assets/index.css";
 
 const app = createApp(App);
-const head = createHead();
 
+const head = createHead();
 app.use(head);
+
 app.use(createPinia());
+
 app.use(router);
 
 app.mount("#app");

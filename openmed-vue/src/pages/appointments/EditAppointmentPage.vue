@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { validate } from "validate.js";
 import { format } from "date-fns";
 
@@ -164,8 +164,8 @@ validate.extend(validate.validators.datetime, {
     return d.toString(); // This is sufficient
   },
 });
-let errors = ref({});
-let asyncErrors = ref({});
+const errors = ref({});
+const asyncErrors = ref({});
 
 async function submit() {
   console.log(choices.value.date);

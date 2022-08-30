@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 // import { visitsEndpoint } from '$lib/uri.js';
 const props = defineProps({ visits: [] });
 useRouter();
