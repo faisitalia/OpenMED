@@ -1,11 +1,14 @@
-import useAuth from "@/composables/useAuth";
 import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "./pages/home/HomePage.vue";
-import UsersPageVue from "./pages/users/UsersPage.vue";
-import AppointmentsPage from "./pages/appointments/AppointmentsPage.vue";
-import EditAppointmentPage from "./pages/appointments/EditAppointmentPage.vue";
-import ConfirmAppointmentPageVue from "./pages/appointments/ConfirmAppointmentPage.vue";
+
+import useAuth from "@/composables/useAuth";
+
+import HomePage from "@/pages/home/HomePage.vue";
+import LoginPage from "@/pages/login/LoginPage.vue";
+import UsersPageVue from "@/pages/users/UsersPage.vue";
+import AppointmentsPage from "@/pages/appointments/AppointmentsPage.vue";
+import EditAppointmentPage from "@/pages/appointments/EditAppointmentPage.vue";
+import ConfirmAppointmentPageVue from "@/pages/appointments/ConfirmAppointmentPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,8 +16,13 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      component: HomeView,
+      component: HomePage,
       meta: { layout: "AuthorizedLayout" },
+    },
+    {
+      path: "/login",
+      name: "login",
+      component: LoginPage,
     },
     {
       path: "/users",

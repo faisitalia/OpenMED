@@ -11,7 +11,7 @@ type AuthInfo = {
   refreshExpiresIn: number;
 };
 
-interface OpenMedCredentials {
+export interface OpenMedCredentials {
   username: string;
   password: string;
 }

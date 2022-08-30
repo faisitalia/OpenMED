@@ -1,17 +1,23 @@
-<script setup>
+<script setup lang="ts">
+import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { validate } from "validate.js";
+import { useHead } from "@vueuse/head";
+
+import useAuth, { type OpenMedCredentials } from "@/composables/useAuth";
+
+import StyledButton from "../../components/StyledButton.vue";
 
 useHead({ title: `Login` });
-
 const { login } = useAuth();
-const { getUser } = useUser();
+const { replace } = useRouter();
 
-let hasStarted = ref(false);
+const hasStarted = ref(false);
 
 // Initialize form values
-const choices = ref({
-  username: undefined,
-  password: undefined,
+const choices = reactive<OpenMedCredentials>({
+  username: "",
+  password: "",
 });
 
 // Initialize form constraints
@@ -29,8 +35,8 @@ const formConstraints = {
     },
   },
 };
-let errors = ref({});
-let asyncErrors = ref(null);
+const errors = ref<any>({});
+const asyncErrors = ref<any>(null);
 
 // async function getUserData() {
 //   const { data: response } = await useFetch(`${$usersEndpoint()}/currentuser`, {
@@ -52,25 +58,23 @@ let asyncErrors = ref(null);
 // }
 
 async function loginWithCredentials() {
-  errors.value = validate(choices.value, formConstraints);
+  errors.value = validate(choices, formConstraints);
   if (errors.value) return;
 
   try {
     // username: choices.value.username,
-    //       password: choices.value.password,
+    // password: choices.value.password,
 
     await login({
-      username: choices.value.username,
-      password: choices.value.password,
+      username: choices.username,
+      password: choices.password,
     });
 
-    await getUser();
-
     asyncErrors.value = null;
-    navigateTo("/");
+    replace("/");
   } catch (err) {
     console.log(err);
-    asyncErrors.value = err?.statusText;
+    asyncErrors.value = (err as any)?.statusText;
   }
 }
 </script>
