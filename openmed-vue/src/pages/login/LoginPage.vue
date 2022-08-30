@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
-import { validate } from "validate.js";
+import { useField } from "vee-validate";
 import { useHead } from "@vueuse/head";
 
-import useAuth, { type OpenMedCredentials } from "@/composables/useAuth";
+import useAuth from "@/composables/useAuth";
 
 import StyledButton from "../../components/StyledButton.vue";
 
@@ -15,66 +15,50 @@ const { replace } = useRouter();
 const hasStarted = ref(false);
 
 // Initialize form values
-const choices = reactive<OpenMedCredentials>({
-  username: "",
-  password: "",
-});
+const { value: username, errorMessage: usernameError } = useField<string>(
+  "email",
+  (val) => {
+    if (!val) return "Devi inserire il tuo username";
 
-// Initialize form constraints
-const formConstraints = {
-  username: {
-    presence: {
-      allowEmpty: false,
-      message: `^Devi inserire un username`,
-    },
-  },
-  password: {
-    presence: {
-      allowEmpty: false,
-      message: `^Devi inserire la tua password`,
-    },
-  },
-};
-const errors = ref<any>({});
-const asyncErrors = ref<any>(null);
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!regex.test(String(val).toLowerCase()))
+      return "Devi inserire un indirizzo email valido";
 
-// async function getUserData() {
-//   const { data: response } = await useFetch(`${$usersEndpoint()}/currentuser`, {
-//     mode: "cors",
-//     credentials: "include",
-//     headers: {
-//       "Access-Control-Allow-Origin": "*",
-//     },
-//   });
-//   // If something goes wrong with this call, we can't authenticate
-//   if (!response.ok) return null;
+    return true;
+  }
+);
+const { value: password, errorMessage: passwordError } = useField<string>(
+  "password",
+  (val) => {
+    if (!val) return "Devi inserire la tua password";
 
-//   // If we got a proper response body, we extract its currentUser prop
-//   const responseBody = response;
-//   const currentUser = responseBody.currentUser;
-//   if (!currentUser) return null;
+    if (val.length < 4) return "Password troppo corta";
 
-//   return { ...currentUser };
-// }
+    return true;
+  }
+);
+
+const submitError = ref<string>();
 
 async function loginWithCredentials() {
-  errors.value = validate(choices, formConstraints);
-  if (errors.value) return;
+  if (usernameError.value) return;
+  if (passwordError.value) return;
 
   try {
     // username: choices.value.username,
     // password: choices.value.password,
 
     await login({
-      username: choices.username,
-      password: choices.password,
+      username: username.value,
+      password: password.value,
     });
 
-    asyncErrors.value = null;
+    submitError.value = "";
     replace("/");
   } catch (err) {
     console.log(err);
-    asyncErrors.value = (err as any)?.statusText;
+    submitError.value = (err as any)?.statusText;
   }
 }
 </script>
@@ -112,12 +96,12 @@ async function loginWithCredentials() {
                 placeholder="username"
                 id="username"
                 class="my-1 appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-                v-model="choices.username"
+                v-model="username"
                 required
               />
             </fieldset>
-            <div v-if="errors?.username" class="my-4 text-red-500">
-              {{ errors.username[0] }}
+            <div v-if="usernameError" class="my-4 text-red-500">
+              {{ usernameError }}
             </div>
             <fieldset>
               <input
@@ -127,11 +111,11 @@ async function loginWithCredentials() {
                 name="psw"
                 type="password"
                 class="my-1 appearance-none px-2 py-1 bg-brandBlue-50/25 hover:bg-brandBlue-50/40 shadow-sm rounded-3xl"
-                v-model="choices.password"
+                v-model="password"
               />
             </fieldset>
-            <div v-if="errors?.password" class="my-4 text-red-500">
-              {{ errors.password[0] }}
+            <div v-if="passwordError" class="my-4 text-red-500">
+              {{ passwordError }}
             </div>
             <button
               type="submit"
@@ -140,8 +124,8 @@ async function loginWithCredentials() {
               Accedi
             </button>
           </form>
-          <div v-if="asyncErrors" class="my-4 text-center text-red-500">
-            {{ asyncErrors }}
+          <div v-if="submitError" class="my-4 text-center text-red-500">
+            {{ submitError }}
           </div>
         </div>
       </div>
