@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import router from "@/router";
-
 import MobileMenuItem from "@/components/Layout/Mobile/MobileMenuItem.vue";
 
 defineProps({

@@ -1,7 +1,7 @@
 import useAuth from "@/composables/useAuth";
 import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../pages/home/HomePage.vue";
+import HomeView from "./pages/home/HomePage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
