@@ -1,197 +1,70 @@
 <script setup lang="ts">
-import { validate } from "validate.js";
+import { ref } from "vue";
 import { format } from "date-fns";
-import { useHead } from "@vueuse/head";
-import { ref, computed } from "vue";
+
 import { useRouter } from "vue-router";
+import { useHead } from "@vueuse/head";
 
 const props = defineProps({
-  patients: { default: ["Gianni Maria", "Franco Neri", "Anna Rossi"] },
-  clinics: [],
-  doctorId: String,
+  appointmentId: String,
 });
-const { push } = useRouter();
+
 useHead({
-  title: `${props.doctorId ? "Modifica" : "Crea"} Appuntamento`,
+  title: `${props.appointmentId ? "Modifica" : "Crea"} Appuntamento`,
 });
 
-// async function load({ session, fetch }) {
-//   // if (!session?.id) {
-//   //   return {
-//   //     status: 302,
-//   //     redirect: '/login'
-//   //   };
-//   // }
+const { push } = useRouter();
 
-//   // 1. Get Clinics' list
-//   // TODO
-//   const clinicsList = [
-//     "San Raffaele di Milano",
-//     "Santa Misericordia di Udine",
-//     "Ospedale Burlo di Trieste",
-//   ];
-//   // const response = await fetch(
-//   //     facilitiesEndpoint,
-//   //     { credentials: 'include' }
-//   //   );
-
-//   // if(!response.ok) {
-//   //   console.log("Lookout: something went wrong!");
-
-//   //   // TODO redirect to an error page and not the home
-//   //   return {
-//   //     status: 302,
-//   //     redirect: "/"
-//   //   };
-//   // }
-//   // const clinicsList = await response.json();
-//   // if(clinicsList.length === 0) {
-//   //   console.log("warn: there are no clinics!");
-
-//   //   // TODO redirect to an error page
-//   // }
-
-//   // 2. Get Patients' list
-//   // TODO
-//   const patientsList = ["Gianni Maria", "Franco Neri", "Anna Rossi"];
-
-//   return {
-//     props: {
-//       clinics: clinicsList,
-//       patients: patientsList,
-//       // doctorId: session.id
-//       doctorId: 1234,
-//     },
-//   };
-// }
-
-const hours = [
-  "06",
-  "07",
-  "08",
-  "09",
-  "10",
-  "11",
-  "12",
-  "13",
-  "14",
-  "15",
-  "16",
-  "17",
-  "18",
-  "19",
-  "20",
+// TODO these should come from API
+// logic should be: if no clinics, show disabled option "no clinic available"
+const clinics = [{ label: "Virtuale", value: "virtual" }];
+// logic should be: if no patients, show disabled option "no patient available"
+const patients = [
+  { label: "Gianni Maria", value: 3 },
+  { label: "Franco Neri", value: 9 },
+  { label: "Anna Rossi", value: 27 },
 ];
-const minutes = [
-  "00",
-  "05",
-  "10",
-  "15",
-  "20",
-  "25",
-  "30",
-  "35",
-  "40",
-  "45",
-  "50",
-  "55",
-];
-const durations = [10, 20, 30, 40, 50, 60, 75, 90];
-const today = format(new Date(), "yyyy-MM-dd");
-const choices = ref({
-  date: today,
-  hour: hours[0],
-  minute: minutes[0],
-  duration: durations[0],
-  clinic: "Virtuale",
-  patient: undefined,
-});
+const durations = [10, 20, 30, 40, 50, 60, 75, 90].map((el) => `${el} minuti`);
+const now = new Date(Date.now());
+const formattedDate = format(now, "yyyy-MM-dd'T'hh:mm");
 
-const startDate = computed(
-  () =>
-    new Date(
-      choices.value.date +
-        "T" +
-        choices.value.hour +
-        ":" +
-        choices.value.minute +
-        ":00.000"
-    )
-);
+const startDateTime = ref<Date>();
+const duration = ref<string>("duration");
+const clinic = ref<string>("clinic");
+const patient = ref<string>("patient");
 
-// Initialize constraints
-const now = new Date(Date.now()).toISOString();
-// Set-up the validator constraints
-const formConstraints = {
-  clinic: {
-    presence: {
-      allowEmpty: false,
-      message: `^Devi selezionare un ambulatorio, oppure scegli "Virtuale"`,
-    },
-  },
-  patient: {
-    presence: {
-      allowEmpty: false,
-      message: `^Devi selezionare un paziente da visitare`,
-    },
-  },
-  startDate: {
-    datetime: {
-      earliest: now,
-      message: `^Non puoi prenotare appuntamenti per il passato`,
-    },
-  },
-  hour: {
-    inclusion: { hours },
-  },
-  minute: {
-    inclusion: { minutes },
-  },
-  duration: {
-    inclusion: { durations },
-  },
-};
-validate.validators.inclusion.message = `^Hai selezionato un valore non presente tra quelli disponibili`;
-// Set-up the validator to gracefully accept DateTime objects
-validate.extend(validate.validators.datetime, {
-  parse: (value, options) => {
-    // Here, `value` is the ISO6801 date format
-    const d = new Date(value);
-    // This lib requires us to return UNIX timestamp for that date, or NaN if invalid
-    return d.getTime(); // This will do
-  },
-  format: (value, options) => {
-    // Here, `value` a UNIX timestamp
-    const d = new Date(value);
-    // This lib requires us to return a user-friendly date, given the UNIX timestamp
-    return d.toString(); // This is sufficient
-  },
-});
-const errors = ref<any>({});
-const asyncErrors = ref<any>({});
+// const inclusionError = "Puoi scegliere solo un'opzione tra quelle presenti";
+const requiredError = "Questo campo è obbligatorio";
+const noPastAppointments = "Non puoi prenotare appuntamenti per il passato";
+
+// const endDateTime = computed(() =>
+//   add(startDateTime.value, { minutes: parseInt(duration.value) })
+// );
+// const timeError = computed(() =>
+//   isBefore(startDate.value, now) ? noPastAppointments : ""
+// );
+
+// watch(startDate, () => {});
+
+const asyncErrors = ref<string>();
 
 async function submit() {
-  console.log(choices.value.date);
+  // console.log(values);
+
   // 1. Validate the form
-  const selected = {
-    clinic: choices.value.clinic,
-    patient: choices.value.patient,
-    startDate: startDate.value,
-  };
-  errors.value = validate(selected, formConstraints);
-  if (errors.value) {
-    console.log(errors.value);
-    return;
-  }
+  // const { valid, errors } = await validate();
+  // if (!valid || timeError.value) {
+  //   console.log(errors);
+  //   console.log(timeError.value);
+  //   return;
+  // }
 
   // 2. Elaborate the chosen datetime interval
-  const endDate = new Date(
-    startDate.value.getTime() + 1000 * 60 * choices.value.duration
-  );
-  const iso8601Slot =
-    startDate.value.toISOString() + "/" + endDate.toISOString();
+  // TODO use formatISODuration from date-fns
+  // const iso8601Slot = `${startDate.value.toISOString()} / ${endDate.value.toISOString()}`;
 
   // 3. Submit the form
+  // TODO use axios here.
   // const response = await fetch(visitsEndpoint, {
   //   method: 'POST',
   //   credentials: 'include',
@@ -213,7 +86,6 @@ async function submit() {
   //   return;
   // }
 
-  // Everything went right, therefore redirect to the confirm page
   push("/appointments/ok");
 }
 </script>
@@ -223,108 +95,93 @@ async function submit() {
     <h1 class="font-bold my-2">Nuovo Appuntamento</h1>
     <p class="font-normal mb-8">Compila tutti i campi.</p>
 
-    <form
-      @submit.prevent="submit"
-      id="editAppointment"
-      class="flex flex-col justify-center items-stretch"
+    <FormKit
+      type="form"
+      id="edit-appointment"
+      :actions="false"
+      :incomplete-message="false"
+      @submit="submit"
+      class="flex flex-col items-stretch px-2"
     >
-      <fieldset class="flex flex-col items-stretch my-3">
-        <label for="clinic">Seleziona Ambulatorio</label>
-        <select
-          v-model="choices.clinic"
-          name="Ambulatorio"
+      <fieldset class="my-3" name="Ambulatorio">
+        <FormKit
           id="clinic"
-          required
-          class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        >
-          <option value="Virtuale" class="font-bold">Virtuale</option>
-          <option v-for="c in clinics" :value="c" :key="c">{{ c }}</option>
-          <option v-if="!clinics" value="null" disabled="true">
-            Nessuna clinica disponibile
-          </option>
-        </select>
-        <div v-if="errors?.clinic" class="text-red-500">
-          {{ errors.clinic[0] }}
-        </div>
-      </fieldset>
-      <fieldset class="flex flex-col items-stretch my-3">
-        <label for="date">Seleziona una data</label>
-        <input
-          type="date"
-          name="Data"
-          id="date"
-          class="transition-all align-middle appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-          v-model="choices.date"
-          required
+          name="Ambulatorio"
+          label="Seleziona Ambulatorio"
+          type="select"
+          v-model="clinic"
+          value="Virtuale"
+          validation="required"
+          :validation-messages="{ required: requiredError }"
+          :options="clinics"
+          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          message-class="text-red-500"
         />
       </fieldset>
-      <fieldset class="flex flex-col items-stretch">
-        <label for="date">Seleziona orario</label>
-        <select
-          v-model="choices.hour"
-          name="Ore"
-          id="hours"
-          class="transition-all hover:cursor-pointer my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        >
-          <option v-for="h in hours" :value="h" :key="h">{{ h }}</option>
-        </select>
-        <select
-          v-model="choices.minute"
-          name="Minuti"
-          id="minutes"
-          class="transition-all hover:cursor-pointer my-0.5 appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        >
-          <option v-for="m in minutes" :value="m" :key="m">{{ m }}</option>
-        </select>
-        <div v-if="errors?.startDate" class="text-red-500">
-          {{ errors?.startDate[0] }}
-        </div>
+      <fieldset class="my-3" name="Appuntamento">
+        <FormKit
+          id="appointment"
+          name="Appuntamento"
+          label="Seleziona l'appuntamento"
+          type="datetime-local"
+          :required="false"
+          v-model="startDateTime"
+          :value="formattedDate"
+          :validation="`required|date_after:${formattedDate}`"
+          :validation-messages="{ date_after: noPastAppointments }"
+          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          message-class="text-red-500"
+        />
       </fieldset>
-      <fieldset class="flex flex-col items-stretch my-3">
-        <label for="duration">Durata Visita (min.)</label>
-        <select
-          v-model="choices.duration"
-          name="Durata"
+      <fieldset class="my-3" name="Durata">
+        <FormKit
           id="duration"
-          class="transition-all hover:cursor-pointer appearance-none text-center px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        >
-          <option v-for="d in durations" :value="d" :key="d">{{ d }}</option>
-        </select>
+          name="Durata"
+          label="Durata"
+          type="select"
+          v-model="duration"
+          :options="durations"
+          :value="durations[0]"
+          validation="required"
+          :validation-messages="{ required: requiredError }"
+          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          message-class="text-red-500"
+        />
       </fieldset>
-      <fieldset class="flex flex-col items-stretch my-4">
-        <label for="patient">Seleziona Paziente</label>
-        <select
-          v-model="choices.patient"
-          name="Paziente"
+      <fieldset class="my-3" name="Paziente">
+        <FormKit
           id="patient"
-          class="transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-        >
-          <option selected disabled hidden />
-          <option v-for="p in patients" :value="p" :key="p">{{ p }}</option>
-          <option v-if="!patients" value="null" disabled="true">
-            Nessun Paziente disponibile
-          </option>
-        </select>
-        <div v-if="errors?.patient" class="text-red-500">
-          {{ errors.patient[0] }}
-        </div>
+          name="Paziente"
+          label="Paziente"
+          type="select"
+          v-model="patient"
+          :options="patients"
+          :value="patients[0]"
+          validation="required"
+          :validation-messages="{ required: requiredError }"
+          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+          message-class="text-red-500"
+        />
       </fieldset>
-      <button
+      <FormKit
         type="submit"
-        on:submit="{submit}"
-        class="mx-10 my-7 px-2 py-1 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
-      >
-        Crea appuntamento
-      </button>
-    </form>
-    <div v-if="asyncErrors?.errors" class="text-red-500">
+        name="submit-button"
+        label="Crea appuntamento"
+        wrapper-class="$reset flex justify-center align-middle mt-12"
+        input-class="align-center px-4 py-2 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
+      />
+    </FormKit>
+    <div v-if="asyncErrors" class="text-red-500">
       Woops! Qualcosa è andato storto, riprova.
     </div>
   </div>
+  <div
+    class="mx-3 align-middle bg-brandBlue-100/60 rounded-lg cursor-pointer"
+  ></div>
 </template>
 
 <style>
-#date::-webkit-calendar-picker-indicator {
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
   @apply px-4 py-1 mx-3 align-middle bg-brandBlue-100/60 rounded-lg cursor-pointer;
 }
 </style>

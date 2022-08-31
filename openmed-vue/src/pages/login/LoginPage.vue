@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
+
 import { useRouter } from "vue-router";
-import { useField } from "vee-validate";
 import { useHead } from "@vueuse/head";
 
 import useAuth from "@/composables/useAuth";
@@ -12,39 +12,20 @@ useHead({ title: `Login` });
 const { login } = useAuth();
 const { replace } = useRouter();
 
-const hasStarted = ref(false);
-
-// Initialize form values
-const { value: username, errorMessage: usernameError } = useField<string>(
-  "email",
-  (val) => {
-    if (!val) return "Devi inserire il tuo username";
-
-    const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!regex.test(String(val).toLowerCase()))
-      return "Devi inserire un indirizzo email valido";
-
-    return true;
-  }
-);
-const { value: password, errorMessage: passwordError } = useField<string>(
-  "password",
-  (val) => {
-    if (!val) return "Devi inserire la tua password";
-
-    if (val.length < 4) return "Password troppo corta";
-
-    return true;
-  }
-);
+const username = ref<string>("");
+const usernameMessages = {
+  required: "Inserisci la tua mail",
+  email: "Inserisci una mail vailda",
+};
+const password = ref<string>("");
+const passwordMessages = {
+  required: "Inserisci la tua password",
+};
 
 const submitError = ref<string>();
+const hasStarted = ref(false);
 
 async function loginWithCredentials() {
-  if (usernameError.value) return;
-  if (passwordError.value) return;
-
   try {
     // username: choices.value.username,
     // password: choices.value.password,
@@ -58,6 +39,7 @@ async function loginWithCredentials() {
     replace("/");
   } catch (err) {
     console.log(err);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     submitError.value = (err as any)?.statusText;
   }
 }
@@ -81,49 +63,47 @@ async function loginWithCredentials() {
         >
           Inizia
         </StyledButton>
+
         <div v-else>
-          <p class="my-4">Inserisci il tuo username e la tua password</p>
-          <form
-            @submit.prevent="loginWithCredentials"
+          <FormKit
+            type="form"
             id="signin"
+            :actions="false"
+            :incomplete-message="false"
             class="flex flex-col justify-center items-center"
-            novalidate
+            @submit="loginWithCredentials"
           >
             <fieldset>
-              <input
-                type="text"
-                name="Username"
-                placeholder="username"
-                id="username"
-                class="my-1 appearance-none px-2 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-                v-model="username"
-                required
+              <FormKit
+                type="email"
+                name="email"
+                label="Username"
+                validation="required|email"
+                :validation-messages="usernameMessages"
+                placeholder="your@email.com"
+                input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+                message-class="text-red-500"
               />
             </fieldset>
-            <div v-if="usernameError" class="my-4 text-red-500">
-              {{ usernameError }}
-            </div>
             <fieldset>
-              <input
-                label="Password"
-                placeholder="password"
-                id="psw"
-                name="psw"
+              <FormKit
                 type="password"
-                class="my-1 appearance-none px-2 py-1 bg-brandBlue-50/25 hover:bg-brandBlue-50/40 shadow-sm rounded-3xl"
-                v-model="password"
+                name="password"
+                label="Password"
+                validation="required"
+                :validation-messages="passwordMessages"
+                input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+                message-class="text-red-500"
               />
             </fieldset>
-            <div v-if="passwordError" class="my-4 text-red-500">
-              {{ passwordError }}
-            </div>
-            <button
+            <FormKit
               type="submit"
-              class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-            >
-              Accedi
-            </button>
-          </form>
+              name="submit-button"
+              label="Accedi"
+              outer-class="my-2"
+              input-class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            />
+          </FormKit>
           <div v-if="submitError" class="my-4 text-center text-red-500">
             {{ submitError }}
           </div>
