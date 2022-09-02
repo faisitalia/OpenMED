@@ -9,6 +9,7 @@ import UsersPageVue from "@/pages/users/UsersPage.vue";
 import AppointmentsPage from "@/pages/appointments/AppointmentsPage.vue";
 import EditAppointmentPage from "@/pages/appointments/EditAppointmentPage.vue";
 import ConfirmAppointmentPageVue from "@/pages/appointments/ConfirmAppointmentPage.vue";
+import SurveysPage from "./pages/surveys/SurveysPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,6 +47,12 @@ const router = createRouter({
       path: "/appointments/ok",
       name: "confirm-appointment",
       component: ConfirmAppointmentPageVue,
+      meta: { layout: "AuthorizedLayout" },
+    },
+    {
+      path: "/surveys",
+      name: "surveys",
+      component: SurveysPage,
       meta: { layout: "AuthorizedLayout" },
     },
   ],
