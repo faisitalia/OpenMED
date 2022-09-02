@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { useHead } from "@vueuse/head";
 import { onMounted } from "vue";
 
@@ -23,8 +23,36 @@ onMounted(() => {
     isAutoSave: true,
   };
 
-  const create = new window.SurveyCreator.SurveyCreator(options);
-  create.render("survey");
+  const configJson = {
+    pages: [
+      {
+        name: "Name",
+        elements: [
+          {
+            name: "FirstName",
+            title: "Enter your first name:",
+            type: "text",
+          },
+          {
+            name: "LastName",
+            title: "Enter your last name:",
+            type: "text",
+          },
+        ],
+      },
+    ],
+  };
+
+  const survey = new window.SurveyCreator.SurveyCreator(options);
+  survey.text = JSON.stringify(configJson);
+
+  survey.saveSurveyFunc = (saveNo, callback) => {
+    callback(saveNo, true); // TODO read the docs bout this
+
+    // TODO mock a POST request
+  };
+
+  survey.render("survey");
 });
 </script>
 
