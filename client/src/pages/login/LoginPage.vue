@@ -38,83 +38,88 @@ async function loginWithCredentials() {
     submitError.value = "";
     replace("/");
   } catch (err) {
-    console.log(err);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    submitError.value = (err as any)?.statusText;
+    const e = err as any;
+    console.log(e);
+
+    if (e?.code == "ERR_NETWORK") {
+      submitError.value =
+        "Woops, sembra che vi siano problemi di comunicazione con il server";
+      return;
+    }
+
+    submitError.value = "Qualcosa è andato storto; credenziali errate?";
   }
 }
 </script>
 
 <template>
-  <div>
-    <div
-      class="bg-no-repeat bg-center bg-cover bg-[url('img/login-background.png')] h-screen flex flex-col px-8 py-16 items-center justify-between"
-    >
-      <img
-        src="@/assets/img/logo-openmed/openmed-logo-full.svg"
-        alt="Il logo di Openmed"
-      />
-      <div id="login" class="grid grid-rows-1 grid-cols-1">
-        <StyledButton
-          v-if="!hasStarted"
-          @click="hasStarted = true"
-          class="font-bold"
-          spaces="px-16 py-2"
-        >
-          Inizia
-        </StyledButton>
+  <div
+    class="bg-no-repeat bg-center bg-cover bg-[url('img/login-background.png')] h-screen flex flex-col px-8 py-16 items-center justify-between"
+  >
+    <img
+      src="@/assets/img/logo-openmed/openmed-logo-full.svg"
+      alt="Il logo di Openmed"
+    />
+    <div id="login" class="grid grid-rows-1 grid-cols-1">
+      <StyledButton
+        v-if="!hasStarted"
+        @click="hasStarted = true"
+        class="font-bold"
+        spaces="px-16 py-2"
+      >
+        Inizia
+      </StyledButton>
 
-        <div v-else>
-          <FormKit
-            type="form"
-            id="signin"
-            :actions="false"
-            :incomplete-message="false"
-            class="flex flex-col justify-center items-center"
-            @submit="loginWithCredentials"
-          >
-            <fieldset>
-              <FormKit
-                type="email"
-                name="email"
-                label="Username"
-                validation="required|email"
-                :validation-messages="usernameMessages"
-                placeholder="your@email.com"
-                input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-                message-class="text-red-500"
-              />
-            </fieldset>
-            <fieldset>
-              <FormKit
-                type="password"
-                name="password"
-                label="Password"
-                validation="required"
-                :validation-messages="passwordMessages"
-                input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-                message-class="text-red-500"
-              />
-            </fieldset>
+      <div class="flex flex-col justify-center items-center" v-else>
+        <FormKit
+          type="form"
+          id="signin"
+          :actions="false"
+          :incomplete-message="false"
+          @submit="loginWithCredentials"
+        >
+          <fieldset>
             <FormKit
-              type="submit"
-              name="submit-button"
-              label="Accedi"
-              outer-class="my-2"
-              input-class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              type="email"
+              name="email"
+              label="Username"
+              validation="required|email"
+              :validation-messages="usernameMessages"
+              placeholder="your@email.com"
+              input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+              message-class="text-red-500"
             />
-          </FormKit>
-          <div v-if="submitError" class="my-4 text-center text-red-500">
-            {{ submitError }}
-          </div>
+          </fieldset>
+          <fieldset>
+            <FormKit
+              type="password"
+              name="password"
+              label="Password"
+              validation="required"
+              :validation-messages="passwordMessages"
+              input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+              message-class="text-red-500"
+            />
+          </fieldset>
+          <FormKit
+            type="submit"
+            name="submit-button"
+            label="Accedi"
+            outer-class="my-2"
+            input-class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+          />
+        </FormKit>
+        <div v-if="submitError" class="my-8 text-center text-red-500">
+          {{ submitError }}
         </div>
       </div>
-
-      <img
-        class="w-40"
-        src="@/assets/img/logo-fais/logo-fais.png"
-        alt="Il logo di FAIS"
-      />
     </div>
+
+    <img
+      class="w-40"
+      src="@/assets/img/logo-fais/logo-fais.png"
+      alt="Il logo di FAIS"
+    />
   </div>
 </template>
