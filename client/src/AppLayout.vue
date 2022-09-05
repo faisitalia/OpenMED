@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { markRaw, ref, watch } from "vue";
-import { useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { useHead } from "@vueuse/head";
 
 import EmptyLayout from "./layouts/EmptyLayout.vue";
 
-const layout = ref(markRaw(EmptyLayout));
-const route = useRoute();
 useHead({
   titleTemplate: (title) => `OpenMed - ${title}`,
   link: [
@@ -29,8 +27,10 @@ useHead({
   ],
 });
 
+const { currentRoute } = useRouter();
+const layout = ref(markRaw(EmptyLayout));
 watch(
-  () => route.meta?.layout,
+  () => currentRoute.value.meta?.layout,
   async (metaLayout) => {
     try {
       if (!metaLayout) return;

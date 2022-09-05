@@ -1,4 +1,3 @@
-import { storeToRefs } from "pinia";
 import { createRouter, createWebHistory } from "vue-router";
 
 import useAuth from "@/composables/useAuth";
