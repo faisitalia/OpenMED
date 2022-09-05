@@ -29,7 +29,6 @@ const useAuth = defineStore("auth", () => {
   // );
 
   const isAuthenticated = computed(() => !!accessToken.value);
-  const token = computed(() => accessToken);
 
   async function login(credentials: OpenMedCredentials): Promise<void> {
     const response = await client.post(
@@ -59,7 +58,7 @@ const useAuth = defineStore("auth", () => {
 
   return {
     isAuthenticated,
-    token,
+    accessToken,
     login,
     logout,
   };
