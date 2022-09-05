@@ -2,7 +2,8 @@ import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 import { constants } from 'http2'
 
-import { validateRequest } from '../../common'
+import { requireAuth, validateRequest } from '../../common'
+import { Role } from '../../models/user'
 import { createRole } from '../../services/auth'
 
 const router = express.Router()
@@ -39,6 +40,7 @@ const router = express.Router()
  */
 router.post(
   '/v1/roles',
+  requireAuth([Role.SUPER_ADMIN]),
   [body('name').trim().notEmpty().withMessage('A role name is required')],
   validateRequest,
   async (req: Request, res: Response) => {

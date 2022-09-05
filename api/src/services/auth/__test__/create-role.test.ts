@@ -4,7 +4,7 @@ import { createRole, findRoleByRoleName, deleteRoleByRoleName } from '..'
 import { Role } from '../../../models/user'
 
 it('should create a role', async () => {
-  const newRole = Role.PUBLISHER
+  const newRole = `${Role.PUBLISHER}_${new Date().getMilliseconds()}`
 
   const findRoleBefore = await findRoleByRoleName(newRole)
   expect(findRoleBefore).toBeNull()
@@ -22,7 +22,7 @@ it('should create a role', async () => {
 })
 
 it('should return a conflict error creating an already existing role', async () => {
-  const newRole = Role.PUBLISHER
+  const newRole = `${Role.PUBLISHER}_${new Date().getMilliseconds()}`
 
   await createRole(newRole)
 
@@ -32,7 +32,7 @@ it('should return a conflict error creating an already existing role', async () 
     const response = error.response
 
     expect(response.status).toStrictEqual(constants.HTTP_STATUS_CONFLICT)
-    expect(response.data.errorMessage).toStrictEqual('Role with name PUBLISHER already exists')
+    expect(response.data.errorMessage).toStrictEqual(`Role with name ${newRole} already exists`)
 
     await deleteRoleByRoleName(newRole)
   }

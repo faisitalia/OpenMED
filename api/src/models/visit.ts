@@ -2,15 +2,14 @@
 /* eslint-disable no-use-before-define */
 import mongoose from 'mongoose'
 import { FacilityDoc } from './facility'
-import { UserDoc } from './user'
 
 // An interface that describes the properties
 // that are required to create a new Visit
 interface VisitAttrs {
   facility: FacilityDoc
-  patient: UserDoc
-  doctor: UserDoc
-  caregiver: UserDoc
+  patientId: string
+  doctorId: string
+  caregiverId: string
   slot: Date
 }
 
@@ -24,9 +23,9 @@ interface VisitModel extends mongoose.Model<VisitDoc> {
 // that a Visit Document has
 interface VisitDoc extends mongoose.Document {
   facility: FacilityDoc
-  patient: UserDoc
-  doctor: UserDoc
-  caregiver: UserDoc
+  patientId: string
+  doctorId: string
+  caregiverId: string
   slot: Date
 }
 
@@ -37,20 +36,17 @@ const visitSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Facility',
     },
-    patient: {
+    patientId: {
       required: true,
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
-    doctor: {
+    doctorId: {
       required: true,
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
-    caregiver: {
+    caregiverId: {
       required: true,
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: String,
     },
     slot: {
       type: Date,

@@ -2,7 +2,7 @@ import { createRole, findRoleByRoleName, deleteRoleByRoleName } from '..'
 import { Role } from '../../../models/user'
 
 it('should delete a role', async () => {
-  const newRole = Role.PUBLISHER
+  const newRole = `${Role.PUBLISHER}_OPENMED`
 
   const findRoleBefore = await findRoleByRoleName(newRole)
   expect(findRoleBefore).toBeNull()

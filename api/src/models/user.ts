@@ -12,7 +12,7 @@ enum Role {
   PATIENT = 'PATIENT',
   CAREGIVER = 'CAREGIVER',
   USER = 'USER',
-  PUBLISHER = 'PUBLISHER'
+  PUBLISHER = 'PUBLISHER',
 }
 
 // An interface that describes the properties
@@ -21,7 +21,6 @@ interface UserAttrs {
   email: string
   password: string
   role: Role
-  personId: string
 }
 
 // An interface that describes the properties
@@ -36,7 +35,6 @@ interface UserDoc extends mongoose.Document {
   email: string
   password: string
   role: Role
-  personId: string
 }
 
 const userSchema = new mongoose.Schema(
@@ -53,10 +51,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       enum: Role,
       default: Role.USER,
-      required: true,
-    },
-    personId: {
-      type: String,
       required: true,
     },
   },

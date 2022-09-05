@@ -7,6 +7,7 @@ import { constants } from 'http2'
 import { app } from '../app'
 // import { assignRoleToUser, deleteUserById } from '../services/auth'
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
+import { logger } from '../utils/logger'
 
 declare global {
   namespace NodeJS {
@@ -33,7 +34,7 @@ let mongo: MongoMemoryServer
 
 beforeAll(async () => {
   process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = 'CVXrccbQqxTdTJGKqa39kUyhEAlnHdd1'
+  process.env.OPENID_CLIENT_SECRET = 'SMEvJVmtLQqkqrWZVumoEZoO8tRGurkV'
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
   mongo = await MongoMemoryServer.create()
@@ -63,9 +64,8 @@ global.signup = async (
   lastname,
   birthdate
 ) => {
-  const signup = await request(app)
-    .post('/v1/users/signup')
-    .send({
+  try {
+    const signup = await request(app).post('/v1/users/signup').send({
       username,
       email,
       password,
@@ -73,14 +73,14 @@ global.signup = async (
       lastname,
       birthdate,
     })
-    .expect(constants.HTTP_STATUS_CREATED)
 
-  const user = signup.body
+    return signup.body
+  } catch (error) {
+    logger.error(error)
+  }
 
   // add the "user" role to the test user
   // await assignRoleToUser('user', user)
-
-  return user
 }
 
 global.signin = async (username: string, password: string) => {

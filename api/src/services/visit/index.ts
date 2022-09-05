@@ -1,57 +1,6 @@
 import { NotFoundError } from '../../common'
 import { Visit } from '../../models/visit'
-import { Facility } from '../../models/facility'
-import { Role, User } from '../../models/user'
-
-/**
- *
- * @param facilityId
- * @param patientId
- * @param doctorId
- * @param caregiverId
- * @returns
- */
-async function getVisitComponets(
-  facilityId: string,
-  patientId: string,
-  doctorId: string,
-  caregiverId: string
-) {
-  // retrieve the facility
-  const facility = await Facility.findById(facilityId)
-
-  if (!facility) {
-    throw new NotFoundError()
-  }
-
-  // retrieve the patient
-  const patient = await User.findOne({ _id: patientId, role: Role.PATIENT })
-
-  if (!patient) {
-    throw new NotFoundError()
-  }
-
-  // retrieve the doctor
-  const doctor = await User.findOne({ _id: doctorId, role: Role.DOCTOR })
-
-  if (!doctor) {
-    throw new NotFoundError()
-  }
-
-  // retrieve the caregiver
-  const caregiver = await User.findOne({ _id: caregiverId, role: Role.CAREGIVER })
-
-  if (!caregiver) {
-    throw new NotFoundError()
-  }
-
-  return {
-    facility,
-    patient,
-    doctor,
-    caregiver,
-  }
-}
+import { getFacilityById } from '../facility'
 
 /**
  * Create a visit
@@ -64,19 +13,18 @@ async function createVisit(
   caregiverId: string,
   slot: Date
 ) {
-  // retrieve all the visit data
-  const { facility, patient, doctor, caregiver } = await getVisitComponets(
-    facilityId,
-    patientId,
-    doctorId,
-    caregiverId
-  )
+
+  const facility = await getFacilityById(facilityId)
+
+  if (!facility) {
+    throw new NotFoundError(`Facility ${facilityId} not found`)
+  }
 
   const visitDoc = Visit.build({
     facility,
-    patient,
-    doctor,
-    caregiver,
+    patientId,
+    doctorId,
+    caregiverId,
     slot,
   })
 
@@ -95,18 +43,17 @@ async function updateVisit(visitId: string, newVisitData: any) {
     throw new NotFoundError()
   }
 
-  const { facility, patient, doctor, caregiver } = await getVisitComponets(
-    newVisitData.facilityId,
-    newVisitData.patientId,
-    newVisitData.doctorId,
-    newVisitData.caregiverId
-  )
+  const facility = await getFacilityById(newVisitData.facilityId)
+
+  if (!facility) {
+    throw new NotFoundError(`Facility ${newVisitData.facilityId} not found`)
+  }
 
   visit.set({
-    facility,
-    patient,
-    doctor,
-    caregiver,
+    facility, 
+    patientId: newVisitData.patientId,
+    doctorId: newVisitData.doctorId,
+    caregiverId: newVisitData.caregiverId,
     slot: newVisitData.slot,
   })
 
@@ -124,32 +71,7 @@ async function fetchVisitById(visitId: string) {
   if (!visit) {
     throw new NotFoundError()
   }
-
-  // retrieve the patient
-  const patient = await User.findOne({ _id: visit.patient, role: Role.PATIENT })
-
-  if (!patient) {
-    throw new NotFoundError()
-  }
-
-  // retrieve the doctor
-  const doctor = await User.findOne({ _id: visit.doctor, role: Role.DOCTOR })
-
-  if (!doctor) {
-    throw new NotFoundError()
-  }
-
-  // retrieve the caregiver
-  const caregiver = await User.findOne({ _id: visit.caregiver, role: Role.CAREGIVER })
-
-  if (!caregiver) {
-    throw new NotFoundError()
-  }
-
-  visit.patient = patient
-  visit.doctor = doctor
-  visit.caregiver = caregiver
-
+  
   return visit
 }
 

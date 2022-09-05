@@ -35,26 +35,27 @@ services:
       - openmed-net
 
   keycloak:
-    image: jboss/keycloak:16.1.1
+    image: quay.io/keycloak/keycloak:18.0.2
     container_name: keycloak
+    build:
+      # step in the Dockerfile
+      context: keycloak
+      dockerfile: Dockerfile
     ports:
       - 8443:8443
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KC_DB_URL: jdbc:postgresql://keycloak-db-postgres/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME: localhost
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
       KEYCLOAK_IMPORT: /tmp/config/openmed.json
       KEYCLOAK_WELCOME_THEME: openmed
       KEYCLOAK_DEFAULT_THEME: openmed
-      # KEYCLOAK_FRONTEND_URL: https://localhost:8080/keycloak/auth
-      DB_VENDOR: POSTGRES
-      DB_ADDR: keycloak-db-postgres
-      DB_USER: keycloak
-      DB_PASSWORD: keycloak
-      DB_DATABASE: keycloak
-      DB_SCHEMA: public
     volumes:
       - "$PWD/keycloak/config:/tmp/config"
-      - "$PWD/keycloak/themes/openmed:/opt/jboss/keycloak/themes/openmed"
+      - "$PWD/keycloak/themes/openmed:/opt/keycloak/themes/openmed"
     depends_on:
       keycloak-db-postgres:
         condition: service_healthy

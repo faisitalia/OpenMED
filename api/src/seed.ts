@@ -2,10 +2,11 @@ import mongoose from 'mongoose'
 import fs from 'fs-extra'
 
 import { Facility } from './models/facility'
-import { User, Role } from './models/user'
+import { Role } from './models/user'
 import { Person } from './models/person'
 import { transformData } from './services/facility/utils/etl-json'
 import facilitiesData from './routes/facility/__test__/facilities.json'
+import { createRole, createUser, deleteRoleByRoleName, findRoleByRoleName } from './services/auth'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
@@ -13,31 +14,54 @@ require('dotenv').config()
 /**
  *
  */
+const createRoles = async () => {
+  console.log('Creating roles....')
+  for (const role of Object.keys(Role)) {
+    const existingRole = await findRoleByRoleName(role)
+    if (existingRole) {
+      await deleteRoleByRoleName(role)
+    }
+    await createRole(role)
+  }
+}
+
+/**
+ *
+ */
 const populateUsers = async function () {
-  console.log(`Droping users and persons....`)
-  await User.deleteMany({})
+  console.log('Droping users and persons....')
   await Person.deleteMany({})
 
-  console.log(`Inserting user....`)
+  console.log('Inserting user....')
 
-  // create the person
+  const username = 'user'
   const firstname = 'John'
   const lastname = 'Doe'
   const birthdate = new Date()
-  const personDoc = Person.build({ firstname, lastname, birthdate })
-  const person = await personDoc.save()
+  const personDoc = Person.build({ firstname, lastname, birthdate, username })
+  await personDoc.save()
 
-  // create the user
-  const userEmail = 'user@openmed.test'
-  const userPassword = 'password'
-  const user = User.build({
-    email: userEmail,
-    password: userPassword,
-    role: Role.USER,
-    personId: person.id,
+  const email = 'user@openmed.cloud'
+  const password = 'password'
+  await createUser(username, email, password, Role.USER)
+
+  const adminUsername = 'admin'
+  const adminFirstname = 'Admin'
+  const adminLastname = 'Doe'
+  const adminBirthdate = new Date()
+  const adminPersonDoc = Person.build({
+    firstname: adminFirstname,
+    lastname: adminLastname,
+    birthdate: adminBirthdate,
+    username: adminUsername,
   })
-  await user.save()
-  console.log(`User inserted!`)
+  await adminPersonDoc.save()
+
+  const adminEmail = 'admin@openmed.cloud'
+  const adminPassword = 'password'
+  await createUser(adminUsername, adminEmail, adminPassword, Role.ADMIN)
+
+  console.log('Users inserted!')
 }
 
 /**
@@ -45,7 +69,7 @@ const populateUsers = async function () {
  * @param writeJSON
  */
 const populateFacilities = async function (writeJSON = false) {
-  console.log(`Droping facilities....`)
+  console.log('Droping facilities....')
   await Facility.deleteMany({})
 
   const transformedData = await transformData(facilitiesData)
@@ -57,10 +81,10 @@ const populateFacilities = async function (writeJSON = false) {
       console.log('success!')
     })
   }
-  console.log(`Inserting facilities....`)
+  console.log('Inserting facilities....')
   await Facility.insertMany(transformedData)
 
-  console.log(`Facilities inserted!`)
+  console.log('Facilities inserted!')
 }
 
 /**
@@ -76,19 +100,21 @@ const runSeed = async () => {
     const databaseName = openmedMongo.connection.db.databaseName
     console.log(`Connected to MongoDb database: ${databaseName}`)
 
-    // users
+    // create the REALM roles to the auth manager
+    await createRoles()
+
     await populateUsers()
 
-    // facilities
     const writeJSON = false
     await populateFacilities(writeJSON)
 
     await mongoose.disconnect()
+
+    process.exit(0)
   } catch (err) {
     console.error(err)
+    process.exit(1)
   }
-
-  process.exit(1)
 }
 
 runSeed()

@@ -8,6 +8,7 @@ interface PersonAttrs {
   firstname: string
   lastname: string
   birthdate: Date
+  username: string
 }
 
 // An interface that describes the properties
@@ -22,6 +23,7 @@ interface PersonDoc extends mongoose.Document {
   firstname: string
   lastname: string
   birthdate: Date
+  username: string
 }
 
 const personSchema = new mongoose.Schema(
@@ -36,6 +38,10 @@ const personSchema = new mongoose.Schema(
     },
     birthdate: {
       type: Date,
+      required: true,
+    },
+    username: {
+      type: String,
       required: true,
     },
   },

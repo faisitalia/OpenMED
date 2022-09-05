@@ -51,9 +51,7 @@
         "composite": true,
         "composites": {
           "client": {
-            "api-server": [
-              "user"
-            ]
+            "api-server": ["user"]
           }
         },
         "clientRole": false,
@@ -75,15 +73,9 @@
         "description": "${role_default-roles}",
         "composite": true,
         "composites": {
-          "realm": [
-            "offline_access",
-            "uma_authorization"
-          ],
+          "realm": ["offline_access", "uma_authorization"],
           "client": {
-            "account": [
-              "manage-account",
-              "view-profile"
-            ]
+            "account": ["manage-account", "view-profile"]
           }
         },
         "clientRole": false,
@@ -105,9 +97,7 @@
         "composite": true,
         "composites": {
           "client": {
-            "api-server": [
-              "admin"
-            ]
+            "api-server": ["admin"]
           }
         },
         "clientRole": false,
@@ -133,9 +123,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-clients"
-              ]
+              "realm-management": ["query-clients"]
             }
           },
           "clientRole": true,
@@ -149,10 +137,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "realm-management": [
-                "query-users",
-                "query-groups"
-              ]
+              "realm-management": ["query-users", "query-groups"]
             }
           },
           "clientRole": true,
@@ -376,9 +361,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "manage-account-links"
-              ]
+              "account": ["manage-account-links"]
             }
           },
           "clientRole": true,
@@ -437,9 +420,7 @@
           "composite": true,
           "composites": {
             "client": {
-              "account": [
-                "view-consent"
-              ]
+              "account": ["view-consent"]
             }
           },
           "clientRole": true,
@@ -458,23 +439,16 @@
     "clientRole": false,
     "containerId": "OpenMED"
   },
-  "requiredCredentials": [
-    "password"
-  ],
+  "requiredCredentials": ["password"],
   "otpPolicyType": "totp",
   "otpPolicyAlgorithm": "HmacSHA1",
   "otpPolicyInitialCounter": 0,
   "otpPolicyDigits": 6,
   "otpPolicyLookAheadWindow": 1,
   "otpPolicyPeriod": 30,
-  "otpSupportedApplications": [
-    "FreeOTP",
-    "Google Authenticator"
-  ],
+  "otpSupportedApplications": ["FreeOTP", "Google Authenticator"],
   "webAuthnPolicyRpEntityName": "keycloak",
-  "webAuthnPolicySignatureAlgorithms": [
-    "ES256"
-  ],
+  "webAuthnPolicySignatureAlgorithms": ["ES256"],
   "webAuthnPolicyRpId": "",
   "webAuthnPolicyAttestationConveyancePreference": "not specified",
   "webAuthnPolicyAuthenticatorAttachment": "not specified",
@@ -484,9 +458,7 @@
   "webAuthnPolicyAvoidSameAuthenticatorRegister": false,
   "webAuthnPolicyAcceptableAaguids": [],
   "webAuthnPolicyPasswordlessRpEntityName": "keycloak",
-  "webAuthnPolicyPasswordlessSignatureAlgorithms": [
-    "ES256"
-  ],
+  "webAuthnPolicyPasswordlessSignatureAlgorithms": ["ES256"],
   "webAuthnPolicyPasswordlessRpId": "",
   "webAuthnPolicyPasswordlessAttestationConveyancePreference": "not specified",
   "webAuthnPolicyPasswordlessAuthenticatorAttachment": "not specified",
@@ -498,18 +470,14 @@
   "scopeMappings": [
     {
       "clientScope": "offline_access",
-      "roles": [
-        "offline_access"
-      ]
+      "roles": ["offline_access"]
     }
   ],
   "clientScopeMappings": {
     "account": [
       {
         "client": "account-console",
-        "roles": [
-          "manage-account"
-        ]
+        "roles": ["manage-account"]
       }
     ]
   },
@@ -524,9 +492,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/OpenMED/account/*"
-      ],
+      "redirectUris": ["/realms/OpenMED/account/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -542,12 +508,7 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -565,9 +526,7 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/realms/OpenMED/account/*"
-      ],
+      "redirectUris": ["/realms/OpenMED/account/*"],
       "webOrigins": [],
       "notBefore": 0,
       "bearerOnly": false,
@@ -595,12 +554,7 @@
           "config": {}
         }
       ],
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -632,12 +586,7 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -655,12 +604,8 @@
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
       "secret": "**********",
-      "redirectUris": [
-        "https://localhost:3001/*"
-      ],
-      "webOrigins": [
-        "https://localhost:3001"
-      ],
+      "redirectUris": ["https://localhost:3001/*"],
+      "webOrigins": ["https://localhost:3001"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -748,12 +693,7 @@
           }
         }
       ],
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -785,12 +725,7 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -822,12 +757,7 @@
       "authenticationFlowBindingOverrides": {},
       "fullScopeAllowed": false,
       "nodeReRegistrationTimeout": 0,
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -845,12 +775,8 @@
       "enabled": true,
       "alwaysDisplayInConsole": false,
       "clientAuthenticatorType": "client-secret",
-      "redirectUris": [
-        "/admin/OpenMED/console/*"
-      ],
-      "webOrigins": [
-        "+"
-      ],
+      "redirectUris": ["/admin/OpenMED/console/*"],
+      "webOrigins": ["+"],
       "notBefore": 0,
       "bearerOnly": false,
       "consentRequired": false,
@@ -884,12 +810,7 @@
           }
         }
       ],
-      "defaultClientScopes": [
-        "web-origins",
-        "profile",
-        "roles",
-        "email"
-      ],
+      "defaultClientScopes": ["web-origins", "profile", "roles", "email"],
       "optionalClientScopes": [
         "address",
         "phone",
@@ -1408,9 +1329,7 @@
   },
   "smtpServer": {},
   "eventsEnabled": false,
-  "eventsListeners": [
-    "jboss-logging"
-  ],
+  "eventsListeners": ["jboss-logging"],
   "enabledEventTypes": [],
   "adminEventsEnabled": false,
   "adminEventsDetailsEnabled": false,
@@ -1425,9 +1344,7 @@
         "subType": "authenticated",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1445,9 +1362,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "max-clients": [
-            "200"
-          ]
+          "max-clients": ["200"]
         }
       },
       {
@@ -1484,9 +1399,7 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "allow-default-scopes": [
-            "true"
-          ]
+          "allow-default-scopes": ["true"]
         }
       },
       {
@@ -1515,12 +1428,8 @@
         "subType": "anonymous",
         "subComponents": {},
         "config": {
-          "host-sending-registration-request-must-match": [
-            "true"
-          ],
-          "client-uris-must-match": [
-            "true"
-          ]
+          "host-sending-registration-request-must-match": ["true"],
+          "client-uris-must-match": ["true"]
         }
       }
     ],
@@ -1531,12 +1440,8 @@
         "providerId": "hmac-generated",
         "subComponents": {},
         "config": {
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "HS256"
-          ]
+          "priority": ["100"],
+          "algorithm": ["HS256"]
         }
       },
       {
@@ -1545,9 +1450,7 @@
         "providerId": "rsa-generated",
         "subComponents": {},
         "config": {
-          "priority": [
-            "100"
-          ]
+          "priority": ["100"]
         }
       },
       {
@@ -1556,9 +1459,7 @@
         "providerId": "aes-generated",
         "subComponents": {},
         "config": {
-          "priority": [
-            "100"
-          ]
+          "priority": ["100"]
         }
       },
       {
@@ -1567,12 +1468,8 @@
         "providerId": "rsa-enc-generated",
         "subComponents": {},
         "config": {
-          "priority": [
-            "100"
-          ],
-          "algorithm": [
-            "RSA-OAEP"
-          ]
+          "priority": ["100"],
+          "algorithm": ["RSA-OAEP"]
         }
       }
     ]

@@ -1,8 +1,8 @@
 import express, { Request, Response } from 'express'
 import { body } from 'express-validator'
 
-import { BadRequestError, validateRequest } from '../../common'
-import { getUserByEmail, refreshAuthToken } from '../../services/auth'
+import { validateRequest } from '../../common'
+import { refreshAuthToken } from '../../services/auth'
 
 const router = express.Router()
 

@@ -5,11 +5,13 @@ import { app } from '../../../app'
 import { deleteUserById } from '../../../services/auth'
 
 it('returns a 200 on successful signup', async () => {
+  const email = 'john-signup@test.com'
+  const username = 'john-signup'
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
-      username: 'john',
-      email: 'john@test.com',
+      username,
+      email,
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
@@ -18,7 +20,11 @@ it('returns a 200 on successful signup', async () => {
     .expect(constants.HTTP_STATUS_CREATED)
 
   expect(user.id).toBeDefined()
-  expect(user.email).toStrictEqual('john@test.com')
+  expect(user.username).toStrictEqual(username)
+  expect(user.email).toStrictEqual(email)
+  expect(user.personId).toBeDefined()
+
+  // TODO add the checks for the "person"
 
   await deleteUserById(user.id)
 })
@@ -133,11 +139,12 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
 })
 
 it('disallows duplicate emails', async () => {
+  const email = 'john-duplicate@test.com'
   const { body: user } = await request(app)
     .post('/v1/users/signup')
     .send({
       username: 'john',
-      email: 'john@test.com',
+      email,
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
@@ -149,7 +156,7 @@ it('disallows duplicate emails', async () => {
     .post('/v1/users/signup')
     .send({
       username: 'john',
-      email: 'john@test.com',
+      email,
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',

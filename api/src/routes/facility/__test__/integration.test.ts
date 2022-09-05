@@ -4,7 +4,9 @@ import { constants } from 'http2'
 import { app } from '../../../app'
 import facilitiesData from './facilities.json'
 import { Facility } from '../../../models/facility'
-import { deleteUserById } from '../../../services/auth'
+import { assignRoleToUser, deleteUserById } from '../../../services/auth'
+import { Role } from '../../../models/user'
+import { NotAuthorizedError } from '../../../common'
 
 describe('Facility integration test suite', () => {
   beforeEach(async () => {
@@ -23,9 +25,12 @@ describe('Facility integration test suite', () => {
 
     // signup
     const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
 
     // get auth token
     const accessToken = await global.signin(username, password)
+
+    await assignRoleToUser(Role.SUPER_ADMIN, userId)
 
     // create the facility
     const facilityToCreate = {
@@ -62,7 +67,56 @@ describe('Facility integration test suite', () => {
     expect(createdFacility.location.coordinates[0]).toStrictEqual(7.6745153)
     expect(createdFacility.location.coordinates[1]).toStrictEqual(45.0416061)
 
-    await deleteUserById(user.id!)
+    await deleteUserById(userId)
+  })
+
+  it('should fail creating a facility by a USER', async () => {
+    // get the access token
+    const username = 'facility'
+    const email = 'user-facility@test.com'
+    const password = 'password'
+    const firstname = 'john'
+    const lastname = 'doe'
+    const birthdate = new Date()
+
+    const EXPECTED_ERROR_MESSAGE = `Access denied for user "${username}"`
+
+    // signup
+    const user = await global.signup(username, email, password, firstname, lastname, birthdate)
+    const userId = user.id ?? ''
+
+    // get auth token
+    const accessToken = await global.signin(username, password)
+
+    // create the facility
+    const facilityToCreate = {
+      state: 'Piemonte',
+      town: 'Torino',
+      postalcode: 10126,
+      county: 'To',
+      name: 'Azienda Ospedaliera Molinette',
+      street: 'Corso Bramante 88',
+      email: '',
+      country: 'IT',
+    }
+    const facility = Facility.build(facilityToCreate)
+
+    // make the request to fetch all the facilities
+    const response = await request(app)
+      .post(`/v1/facilities`)
+      .set('Authorization', `Bearer ${accessToken}`)
+      .send(facility.toJSON())
+
+    // check data
+    expect(response.statusCode).toBe(constants.HTTP_STATUS_UNAUTHORIZED)
+    expect(response.error).toBeDefined()
+
+    const data = JSON.parse(response.text)
+    const errors = data.errors
+    expect(errors).toHaveLength(1)
+    expect(errors[0].message).toStrictEqual(EXPECTED_ERROR_MESSAGE)
+
+    await deleteUserById(userId)
   })
 
   it('should fetch all the facilities', async () => {
@@ -81,12 +135,14 @@ describe('Facility integration test suite', () => {
     const accessToken = await global.signin(username, password)
 
     // make the request to fetch all the facilities
-    const { body: fetchedFacilities } = await request(app)
+    const response = await request(app)
       .get(`/v1/facilities`)
       .set('Authorization', `Bearer ${accessToken}`)
       .send()
-      .expect(constants.HTTP_STATUS_OK)
 
+    expect(response.statusCode).toBe(constants.HTTP_STATUS_OK)
+
+    const fetchedFacilities = response.body
     expect(fetchedFacilities).toHaveLength(55)
 
     await deleteUserById(user.id!)

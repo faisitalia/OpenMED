@@ -4,7 +4,9 @@ import { constants } from 'http2'
 
 import { validateRequest } from '../../common'
 import { Person } from '../../models/person'
+import { Role } from '../../models/user'
 import { createUser, getUserById } from '../../services/auth'
+import { logger } from '../../utils/logger'
 
 const router = express.Router()
 
@@ -61,16 +63,30 @@ router.post(
 
     // TODO transaction
 
-    // create the person
-    const personDoc = Person.build({ firstname, lastname, birthdate })
-    await personDoc.save()
+    try {
+      const personDoc = Person.build({ firstname, lastname, birthdate, username })
+      const person = await personDoc.save()
 
-    const userId = await createUser(username, email, password)
+      const userId = await createUser(username, email, password, Role.USER)
 
-    // retrieve the user just created
-    const user = await getUserById(userId)
+      // retrieve the user just created
+      const rawUser = await getUserById(userId)
 
-    res.status(constants.HTTP_STATUS_CREATED).send(user)
+      // assign role to user
+      if (!rawUser) throw new Error(`No user available with id ${userId}`)
+
+      const user = {
+        id: userId,
+        username: rawUser?.username,
+        email: rawUser?.email,
+        personId: person._id,
+      }
+
+      res.status(constants.HTTP_STATUS_CREATED).send(user)
+    } catch (error: any) {
+      logger.error(error)
+      throw new Error(error.message)
+    }
   }
 )
 
