@@ -2,6 +2,10 @@
 
 To be used from inside this folder
 
+## To check whatever is running onto your machine
+
+docker ps
+
 ## To shutdown whatever is up at the moment
 
 docker compose down -v
