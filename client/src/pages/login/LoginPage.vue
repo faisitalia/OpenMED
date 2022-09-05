@@ -13,14 +13,9 @@ const { login } = useAuth();
 const { replace } = useRouter();
 
 const username = ref<string>("");
-const usernameMessages = {
-  required: "Inserisci la tua mail",
-  email: "Inserisci una mail vailda",
-};
+const usernameMessages = { required: "Inserisci il tuo username" };
 const password = ref<string>("");
-const passwordMessages = {
-  required: "Inserisci la tua password",
-};
+const passwordMessages = { required: "Inserisci la tua password" };
 
 const submitError = ref<string>();
 const hasStarted = ref(false);
@@ -38,9 +33,10 @@ async function loginWithCredentials() {
     submitError.value = "";
     replace("/");
   } catch (err) {
+    console.log(err);
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const e = err as any;
-    console.log(e);
 
     if (e?.code == "ERR_NETWORK") {
       submitError.value =
@@ -81,14 +77,15 @@ async function loginWithCredentials() {
         >
           <fieldset>
             <FormKit
-              type="email"
-              name="email"
+              type="text"
+              name="text"
               label="Username"
-              validation="required|email"
+              validation="required"
               :validation-messages="usernameMessages"
               placeholder="your@email.com"
               input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
               message-class="text-red-500"
+              v-model="username"
             />
           </fieldset>
           <fieldset>
@@ -100,6 +97,7 @@ async function loginWithCredentials() {
               :validation-messages="passwordMessages"
               input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
               message-class="text-red-500"
+              v-model="password"
             />
           </fieldset>
           <FormKit

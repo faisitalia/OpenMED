@@ -63,9 +63,8 @@ router.beforeEach(async (to) => {
   const publicPages = ["/login", "/about", "/signup"];
   const authRequired = !publicPages.includes(to.path);
 
-  const { isAuthenticated } = storeToRefs(useAuth());
+  const { isAuthenticated } = useAuth();
 
-  // TODO we need to check roles, too, afterwards.
   if (authRequired && !isAuthenticated) return "/login";
 });
 

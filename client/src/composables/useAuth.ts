@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
-import { computed, ref, watch } from "vue";
+import { computed, ref } from "vue";
 import { client, usersUri } from "@/utils/client";
 import axios from "axios";
 
@@ -16,42 +16,34 @@ export interface OpenMedCredentials {
   password: string;
 }
 
-// TODO use this type to parse the login response
-// type LoginResponse = {
-//   access_token: string;
-//   refresh_token: string;
-//   expires_in: number;
-//   refresh_expires_in: number;
-// };
-
 const useAuth = defineStore("auth", () => {
   const localValue = useLocalStorage<AuthInfo | null>("auth", null);
+  // TODO properly save and retrieve data from local storage avoiding XSS attacks.
+  // TODO properly handle refresh logic
 
-  const auth = ref<AuthInfo | null>(localValue.value);
+  const accessToken = ref<string | undefined>(localValue.value?.accessToken);
+  // const expiresIn = ref<number | undefined>(localValue.value?.expiresIn);
+  // const refreshToken = ref<string | undefined>(localValue.value?.refreshToken);
+  // const refreshExpiresIn = ref<number | undefined>(
+  // localValue.value?.refreshExpiresIn
+  // );
 
-  watch(auth, (_, newAuth) => {
-    localValue.value = newAuth;
-  });
-
-  const isAuthenticated = computed(() => auth?.value?.accessToken);
-  const token = computed(() => auth?.value?.accessToken);
+  const isAuthenticated = computed(() => !!accessToken.value);
+  const token = computed(() => accessToken);
 
   async function login(credentials: OpenMedCredentials): Promise<void> {
-    const response = await client.post(`${usersUri}/signin`, {
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...credentials }),
-    });
-
-    // TODO better error handling
-    if (response.status >= 300) throw response.statusText;
+    const response = await client.post(
+      `${usersUri}/signin`,
+      JSON.stringify({ ...credentials }),
+      { headers: { "Content-Type": "application/json" } }
+    );
 
     const data = response.data;
-    auth.value = {
-      accessToken: data.value?.access_token,
-      expiresIn: data.value?.expires_in,
-      refreshToken: data.value?.refresh_token,
-      refreshExpiresIn: data.value?.refresh_expires_in,
-    };
+
+    accessToken.value = data?.access_token;
+    // expiresIn.value = data?.expires_in;
+    // refreshToken.value = data?.refresh_token;
+    // refreshExpiresIn.value = data?.refresh_expires_in;
   }
 
   async function logout(): Promise<void> {
@@ -59,12 +51,13 @@ const useAuth = defineStore("auth", () => {
 
     if (response.status >= 300) throw response.statusText;
 
-    auth.value = null;
-    // clearInterval(refreshLoop);  // TODO with WATCH (see below for the what)
+    accessToken.value = undefined;
+    // expiresIn.value = undefined;
+    // refreshToken.value = undefined;
+    // refreshExpiresIn.value = undefined;
   }
 
   return {
-    auth,
     isAuthenticated,
     token,
     login,
