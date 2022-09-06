@@ -31,7 +31,9 @@ it('responds with details about the current user', async () => {
   expect(response.body.currentUser.roles.length).toBeGreaterThan(0)
 
   const roles = response.body.currentUser.roles
-  expect(roles[1].name).toStrictEqual(Role.USER)
+  expect(roles).toBeDefined()
+  expect(roles.length).toBeGreaterThan(0)
+  expect(roles[0].name).toStrictEqual(Role.USER)
 
   await deleteUserById(userId)
 })
