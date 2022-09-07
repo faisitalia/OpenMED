@@ -46,8 +46,6 @@ Per verificare che la configurazione sia corretta e completa è possibile lancia
 npm run test
 ```
 
-Attenzione: prima di lanciare i test è necessario copiare la OPENID_CLIENT_SECRET inserita nel .env anche nel setup dei test ("api/src/test/setup.ts" riga 36)
-
 ## Utilizzo
 
 Per lanciare l'API server:
