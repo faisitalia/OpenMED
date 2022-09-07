@@ -19,6 +19,7 @@
     "ryu1kn.partial-diff",
     "2gua.rainbow-brackets",
     "christian-kohler.npm-intellisense",
-    "orta.vscode-jest"
+    "orta.vscode-jest",
+    "Vue.volar"
   ]
 }
