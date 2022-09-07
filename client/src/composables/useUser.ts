@@ -5,11 +5,23 @@ import { computed, ref, watch, watchEffect } from "vue";
 import useAuth from "./useAuth";
 
 type User = {
-  firstName: string;
-  lastName: string;
-  email: string;
+  id: string;
   username: string;
+  email: string;
+  roles: Role[];
 };
+// User's Roles
+enum Role {
+  SUPER_ADMIN = "SUPER_ADMIN",
+  ADMIN = "ADMIN",
+  DOCTOR = "DOCTOR",
+  NURSE = "NURSE",
+  PATIENT = "PATIENT",
+  CAREGIVER = "CAREGIVER",
+  USER = "USER",
+  PUBLISHER = "PUBLISHER",
+}
+const roles = Object.keys(Role);
 
 export const useUser = defineStore("user", () => {
   const { isAuthenticated, accessToken } = storeToRefs(useAuth());
@@ -39,23 +51,49 @@ export const useUser = defineStore("user", () => {
     });
 
     const data = response.data;
+    console.log(data);
+
+    const userRoles = data?.roles
+      ?.map((value: any) => value?.name)
+      ?.filter((role: any) => !roles.includes(role));
 
     user.value = {
-      firstName: data?.currentUser?.given_name,
-      lastName: data?.currentUser?.family_name,
+      id: data?.currentUser?.id,
+      username: data?.currentUser?.username,
       email: data?.currentUser?.email,
-      username: data?.currentUser?.preferred_username,
+      roles: userRoles,
     };
   }
 
-  const fullName = computed(() => {
-    if (!user.value) return "Utente";
-    if (!user.value.firstName || !user.value.lastName) return "utente";
-
-    return `${user.value?.firstName} ${user.value?.lastName}`;
-  });
   const email = computed(() => user.value?.email);
   const username = computed(() => user.value?.username);
 
-  return { getUser, fullName, email, username };
+  const isSuperAdmin = computed(
+    () => !!user.value?.roles?.includes(Role.SUPER_ADMIN)
+  );
+  const isAdmin = computed(() => !!user.value?.roles?.includes(Role.ADMIN));
+  const isCaregiver = computed(
+    () => !!user.value?.roles?.includes(Role.CAREGIVER)
+  );
+  const isDoctor = computed(() => !!user.value?.roles?.includes(Role.DOCTOR));
+  const isNurse = computed(() => !!user.value?.roles?.includes(Role.NURSE));
+  const isPatient = computed(() => !!user.value?.roles?.includes(Role.PATIENT));
+  const isPublisher = computed(
+    () => !!user.value?.roles?.includes(Role.PUBLISHER)
+  );
+  const isUser = computed(() => !!user.value?.roles?.includes(Role.USER));
+
+  return {
+    getUser,
+    email,
+    username,
+    isUser,
+    isSuperAdmin,
+    isAdmin,
+    isCaregiver,
+    isDoctor,
+    isNurse,
+    isPatient,
+    isPublisher,
+  };
 });

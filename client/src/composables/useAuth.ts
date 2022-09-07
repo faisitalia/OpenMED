@@ -31,6 +31,7 @@ const useAuth = defineStore("auth", () => {
   const isAuthenticated = computed(() => !!accessToken.value);
 
   async function login(credentials: OpenMedCredentials): Promise<void> {
+    console.log(credentials);
     const response = await client.post(
       `${usersUri}/signin`,
       JSON.stringify({ ...credentials }),
@@ -38,6 +39,7 @@ const useAuth = defineStore("auth", () => {
     );
 
     const data = response.data;
+    console.log(data);
 
     accessToken.value = data?.access_token;
     // expiresIn.value = data?.expires_in;
@@ -46,7 +48,7 @@ const useAuth = defineStore("auth", () => {
   }
 
   async function logout(): Promise<void> {
-    const response = await axios.post(`${usersUri}/signout`);
+    const response = await client.post(`${usersUri}/signout`);
 
     if (response.status >= 300) throw response.statusText;
 

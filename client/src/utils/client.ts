@@ -9,4 +9,5 @@ export const facilitiesUri = `/facilities`;
 export const client = axios.create({
   baseURL: uri,
   timeout: 5000,
+  headers: { credentials: "include" },
 });

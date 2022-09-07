@@ -7,13 +7,9 @@ import SubTitle from "@/components/SubTitle.vue";
 import DashboardTile from "@/components/Dashboard/DashboardTile.vue";
 import DashboardAppointments from "@/components/Dashboard/DashboardAppointments.vue";
 
-const { fullName } = storeToRefs(useUser());
+const { isDoctor, isPatient, isAdmin, username } = storeToRefs(useUser());
 
-const roles = ["doctor", "admin"];
-
-const isDoctor = roles.includes("doctor");
-const isPatient = roles.includes("user");
-const isAdmin = roles.includes("admin");
+const noRolesDetected = !isDoctor.value && !isPatient.value && !isAdmin.value;
 </script>
 
 <template>
@@ -24,12 +20,26 @@ const isAdmin = roles.includes("admin");
       id="hello-user"
       class="col-start-1 row-start-1 row-span-full place-self-start"
     >
-      <H1Title>Ciao {{ fullName }},</H1Title>
+      <H1Title>Ciao {{ username ?? "Utente" }},</H1Title>
       <SubTitle>come desideri procedere?</SubTitle>
       <!-- Main content -->
+      <div class="p-24 flex flex-col items-center" v-if="noRolesDetected">
+        <h4>
+          Attenzione: non sei (ancora) autorizzato ad eseguire azioni in questa
+          pagina. Riprova più tardi
+        </h4>
+        <!-- TODO use another image, error-like -->
+        <img
+          src="@/assets/img/doctors.svg"
+          alt="Un dottore confuso non sa bene che fare, qui"
+          class="my-20"
+        />
+      </div>
+
       <div
         id="actions"
         class="col-start-1 row-start-3 flex flex-col justify-center items-start"
+        v-else
       >
         <DashboardTile
           v-if="isAdmin"
