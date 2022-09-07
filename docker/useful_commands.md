@@ -6,9 +6,11 @@ To be used from inside this folder
 
 docker ps
 
-## To shutdown whatever is up at the moment
+## To shutdown whatever is up at the moment (on a project)
 
-docker compose down -v
+docker compose -p [PROJECT_NAME] down -v
+
+> here, PROJECT_NAME == openmed
 
 ## To COMPLETELY erase instances and caches of ALL our containers
 
