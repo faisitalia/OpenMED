@@ -9,6 +9,9 @@ import { app } from '../app'
 import UserRepresentation from '@keycloak/keycloak-admin-client/lib/defs/userRepresentation'
 import { logger } from '../utils/logger'
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config()
+
 declare global {
   namespace NodeJS {
     interface Global {
@@ -33,10 +36,6 @@ declare global {
 let mongo: MongoMemoryServer
 
 beforeAll(async () => {
-  process.env.OPENID_CLIENT_ID = 'api-server'
-  process.env.OPENID_CLIENT_SECRET = 'SMEvJVmtLQqkqrWZVumoEZoO8tRGurkV'
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
   mongo = await MongoMemoryServer.create()
   const mongoUri = mongo.getUri()
 
