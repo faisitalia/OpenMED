@@ -14,6 +14,15 @@
       "program": "${workspaceFolder}/api/node_modules/.bin/jest",
       "cwd": "${workspaceFolder}/api",
       "args": ["api/src", "--no-cache", "--watchAll=false", "--coverage=false"]
-    }
+    },
+    {
+      "type": "node",
+      "name": "🔥 Debug Development",
+      "env": { "NODE_ENV": "development" },
+      "request": "launch",
+      "cwd": "${workspaceFolder}/api",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:dev"]
+    },
   ]
 }
