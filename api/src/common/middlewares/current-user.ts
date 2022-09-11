@@ -25,14 +25,14 @@ export const currentUser = async (req: Request, res: Response, next: NextFunctio
 
   const bearer = req.headers.authorization.split(' ')
   const bearerToken = bearer[1]
-  const userInfo = await getUserInfo(bearerToken)
 
   try {
+    const userInfo = await getUserInfo(bearerToken)
     if (userInfo && userInfo.id) {
       req.currentUser = userInfo
     } else throw new Error(userInfo.errorDescription)
   } catch (err) {
-    console.error(err)
+    console.error('error in user info: ' + err)
   }
 
   next()

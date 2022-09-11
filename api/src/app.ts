@@ -1,13 +1,9 @@
 import express from 'express'
 import 'express-async-errors'
 import { json } from 'body-parser'
-import expressSession from 'express-session'
-// import bodyParser from 'body-parser'
 import cors from 'cors'
 
-import { MemoryStore } from './session-store'
-
-import { errorHandler, NotFoundError, currentUser } from './common'
+import { currentUser, errorHandler, NotFoundError } from './common'
 
 import { currentUserRouter } from './routes/auth/current-user'
 import { signinRouter } from './routes/auth/signin'
@@ -29,19 +25,7 @@ app.set('trust proxy', true)
 app.use(json())
 app.use(cors({ origin: ['https://localhost:3000', 'https://localhost:5000'], credentials: true }))
 
-// Create a session-store to be used by both the express-session
-// middleware and the keycloak middleware.
-const memoryStore = MemoryStore.getInstance()
-
-app.use(
-  expressSession({
-    secret: 'some secret',
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore
-  })
-)
-
+// Middleware to set the current user, if available, to all the requests
 app.use(currentUser)
 
 app.use(currentUserRouter)

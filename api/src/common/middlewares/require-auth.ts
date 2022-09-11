@@ -2,14 +2,6 @@ import { Request, Response, NextFunction } from 'express'
 
 import { NotAuthorizedError } from '../errors/not-authorized-error'
 
-// export const requireAuth = (req: Request, res: Response, next: NextFunction) => {
-//   if (!req.currentUser) {
-//     throw new NotAuthorizedError()
-//   }
-
-//   next()
-// }
-
 const checker = (userRoles: (string | undefined)[], allowedRoles: string[]) => {
   for (const userRole of userRoles) {
     if (userRole && allowedRoles.includes(userRole)) return true
@@ -20,7 +12,7 @@ const checker = (userRoles: (string | undefined)[], allowedRoles: string[]) => {
 export const requireAuth = (allowedRoles: string[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.currentUser) {
-      throw new NotAuthorizedError()
+      throw new NotAuthorizedError('No current user available!')
     }
 
     const currentUser = req.currentUser

@@ -58,13 +58,13 @@ async function getUserById(id: string) {
   const roles = await kcAdminClient.users.listRealmRoleMappings({
     id: id,
   })
-  
+
   return {
     id: user.id,
     username: user.username,
     email: user.email,
     roles: roles,
-    attributes: user.attributes
+    attributes: user.attributes,
   }
 }
 
@@ -74,12 +74,17 @@ async function getUserById(id: string) {
  * @returns
  */
 async function getUserByEmail(email: string) {
-  const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
-  const user = await kcAdminClient.users.find({
-    email,
-  })
+  try {
+    const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
+    const user = await kcAdminClient.users.find({
+      email,
+    })
 
-  if (user && user[0]) return user[0]
+    if (user && user[0]) return user[0]
+  } catch (error) {
+    console.log(error)
+    throw new Error(`Error trying to get user data for user ${email}`)
+  }
 }
 
 /**
@@ -161,7 +166,7 @@ async function getUserInfo(accessToken: string) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const openidURI = getOpenIDConnectURI(kcAdminClient)
 
-  if (!accessToken) throw 'Access token is invalid!'
+  if (!accessToken) throw new Error('Access token is invalid!')
 
   try {
     const { data } = await axios.get(`${openidURI}/userinfo`, {
@@ -189,7 +194,8 @@ async function getUserInfo(accessToken: string) {
       throw new Error(`id or username or email not available: ${currentUser}`)
     }
   } catch (error: any) {
-    throw error.response.data.error_description
+    console.log(error)
+    throw new Error(error)
   }
 }
 

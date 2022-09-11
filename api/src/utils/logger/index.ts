@@ -15,14 +15,14 @@ const logger = winston.createLogger({
   // defaultMeta: { service: 'user-service' },
   format: winston.format.combine(
     winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
+      format: 'YYYY-MM-DD HH:mm:ss',
     }),
     winston.format.printf((info) =>
       JSON.stringify({
         timestamp: info.timestamp,
         level: info.level,
         message: info.message,
-        details: info
+        details: info,
       })
     )
   ),
@@ -32,8 +32,8 @@ const logger = winston.createLogger({
     // - Write all logs with importance level of `info` or less to `combined.log`
     //
     new winston.transports.File({ filename: errorFile, level: 'error' }),
-    new winston.transports.File({ filename: combinedFile })
-  ]
+    new winston.transports.File({ filename: combinedFile }),
+  ],
 })
 
 //
