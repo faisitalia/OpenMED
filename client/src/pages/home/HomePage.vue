@@ -24,10 +24,11 @@ const noRolesDetected = !isDoctor.value && !isPatient.value && !isAdmin.value;
       <SubTitle>come desideri procedere?</SubTitle>
       <!-- Main content -->
       <div class="p-24 flex flex-col items-center" v-if="noRolesDetected">
-        <h4>
-          Attenzione: non sei (ancora) autorizzato ad eseguire azioni in questa
-          pagina. Riprova più tardi
-        </h4>
+        <h2 class="my-4">Attenzione!</h2>
+        <p class="text-center my-8">
+          Non sei (ancora) autorizzato ad eseguire azioni in questa pagina.
+        </p>
+        <h3 class="my-4">Riprova più tardi.</h3>
         <!-- TODO use another image, error-like -->
         <img
           src="@/assets/img/doctors.svg"
