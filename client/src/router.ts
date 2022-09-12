@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import useAuth from "@/composables/useAuth";
+import { useAuth } from "./composables/useAuth";
 
 import HomePage from "@/pages/home/HomePage.vue";
 import LoginPage from "@/pages/login/LoginPage.vue";

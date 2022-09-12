@@ -1,8 +1,9 @@
-import { client, usersUri } from "@/utils/client";
+import { computed, ref, watch, watchEffect } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
-import { computed, ref, watch, watchEffect } from "vue";
-import useAuth from "./useAuth";
+import { useAuth } from "./useAuth";
+import { useAuthClient } from "./useAuthClient";
+import { usersUri } from "@/uri";
 
 type User = {
   id: string;
@@ -24,7 +25,7 @@ enum Role {
 const roles = Object.keys(Role);
 
 export const useUser = defineStore("user", () => {
-  const { isAuthenticated, accessToken } = storeToRefs(useAuth());
+  const { isAuthenticated } = storeToRefs(useAuth());
   const localValue = useLocalStorage<User | null>("user", null);
 
   const user = ref<User | null>(localValue.value);
@@ -46,21 +47,23 @@ export const useUser = defineStore("user", () => {
   });
 
   async function getUser(): Promise<void> {
-    const response = await client.get(`${usersUri}/currentuser`, {
-      headers: { Authorization: `Bearer ${accessToken.value}` },
+    const { data } = await useAuthClient(`${usersUri}/currentuser`, {
+      method: "GET",
     });
 
-    const data = response.data;
-    console.log(data);
+    const response = JSON.parse(data.value as string);
+    console.log(response);
+    console.log(response.currentUser);
+    console.log(response.currentUser.roles);
 
-    const userRoles = data?.roles
+    const userRoles = response?.currentUser?.roles
       ?.map((value: any) => value?.name)
-      ?.filter((role: any) => !roles.includes(role));
+      ?.filter((role: any) => roles.includes(role)) as Role[];
 
     user.value = {
-      id: data?.currentUser?.id,
-      username: data?.currentUser?.username,
-      email: data?.currentUser?.email,
+      id: response?.currentUser?.id,
+      username: response?.currentUser?.username,
+      email: response?.currentUser?.email,
       roles: userRoles,
     };
   }

@@ -4,7 +4,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useHead } from "@vueuse/head";
 
-import useAuth from "@/composables/useAuth";
+import { useAuth } from "@/composables/useAuth";
 
 import StyledButton from "../../components/StyledButton.vue";
 

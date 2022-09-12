@@ -16,6 +16,8 @@ docker compose -p [PROJECT_NAME] down -v
 
 docker system prune -a -f --volumes
 
+PS. remove any cache in your folders, e.g. `./volumes/*`
+
 ## To compose our containers and launch them
 
 docker compose up -d --build

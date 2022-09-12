@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
 import { computed, ref } from "vue";
-import { client, usersUri } from "@/utils/client";
-import axios from "axios";
+import { usersUri } from "@/uri";
+import { useClient } from "./useClient";
 
 type AuthInfo = {
   accessToken: string;
@@ -16,7 +16,7 @@ export interface OpenMedCredentials {
   password: string;
 }
 
-const useAuth = defineStore("auth", () => {
+export const useAuth = defineStore("auth", () => {
   const localValue = useLocalStorage<AuthInfo | null>("auth", null);
   // TODO properly save and retrieve data from local storage avoiding XSS attacks.
   // TODO properly handle refresh logic
@@ -31,31 +31,33 @@ const useAuth = defineStore("auth", () => {
   const isAuthenticated = computed(() => !!accessToken.value);
 
   async function login(credentials: OpenMedCredentials): Promise<void> {
-    console.log(credentials);
-    const response = await client.post(
-      `${usersUri}/signin`,
-      JSON.stringify({ ...credentials }),
-      { headers: { "Content-Type": "application/json" } }
-    );
+    const { data } = await useClient(`${usersUri}/signin`, {
+      headers: { "Content-Type": "application/json" },
+      method: "POST",
+      body: JSON.stringify({ ...credentials }),
+    });
 
-    const data = response.data;
-    console.log(data);
+    const response = JSON.parse(data.value as string);
 
-    accessToken.value = data?.access_token;
+    accessToken.value = response?.access_token;
     // expiresIn.value = data?.expires_in;
     // refreshToken.value = data?.refresh_token;
     // refreshExpiresIn.value = data?.refresh_expires_in;
   }
 
   async function logout(): Promise<void> {
-    const response = await client.post(`${usersUri}/signout`);
-
-    if (response.status >= 300) throw response.statusText;
+    const { response } = await useClient(`${usersUri}/signout`, {
+      method: "POST",
+    });
 
     accessToken.value = undefined;
     // expiresIn.value = undefined;
     // refreshToken.value = undefined;
     // refreshExpiresIn.value = undefined;
+
+    const status = response.value?.status;
+
+    if (status === undefined || status >= 300) throw response.value?.statusText;
   }
 
   return {
@@ -65,8 +67,6 @@ const useAuth = defineStore("auth", () => {
     logout,
   };
 });
-
-export default useAuth;
 
 // OLD NUXT logic --> TODO use the following logic for the refresh token
 // const useAuth = () => {
