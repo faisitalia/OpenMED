@@ -1,7 +1,9 @@
 <script setup lang="ts">
 import router from "@/router";
+import { storeToRefs } from "pinia";
 
 import DesktopMenuItem from "./DesktopMenuItem.vue";
+import { useUser } from "@/composables/useUser";
 // const { logout } = useAuth();
 // const { removeUser } = useUser();
 
@@ -10,6 +12,8 @@ async function logoutAndClearUser() {
   // removeUser();
   router.replace({ path: "/login" });
 }
+
+const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
 </script>
 
 <template>
@@ -25,9 +29,17 @@ async function logoutAndClearUser() {
     <nav class="self-stretch">
       <ul class="flex flex-col items-start list-none">
         <DesktopMenuItem to="/" name="Home" />
-        <DesktopMenuItem to="/users" name="Gestisci Utenti" />
-        <DesktopMenuItem to="/appointments/edit" name="Crea Appuntamento" />
-        <DesktopMenuItem to="/appointments" name="Lista Appuntamenti" />
+        <DesktopMenuItem v-if="isAdmin" to="/users" name="Gestisci Utenti" />
+        <DesktopMenuItem
+          v-if="isDoctor"
+          to="/appointments/edit"
+          name="Crea Appuntamento"
+        />
+        <DesktopMenuItem
+          v-if="isPatient || isDoctor"
+          to="/appointments"
+          name="Lista Appuntamenti"
+        />
         <DesktopMenuItem to="/" name="Contatti" />
         <div class="my-8"></div>
         <li

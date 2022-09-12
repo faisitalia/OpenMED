@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import router from "@/router";
-import MobileMenuItem from "@/components/Layout/Mobile/MobileMenuItem.vue";
+import { storeToRefs } from "pinia";
 
-defineProps({
-  isOpen: Boolean,
-});
+import MobileMenuItem from "@/components/Layout/Mobile/MobileMenuItem.vue";
+import { useUser } from "@/composables/useUser";
+
+defineProps({ isOpen: Boolean });
 // const { logout } = useAuth();
 // const { removeUser } = useUser();
 
@@ -13,6 +14,8 @@ async function logoutAndClearUser() {
   //   removeUser();
   router.replace({ path: "/ogin" });
 }
+
+const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
 </script>
 
 <template>
@@ -23,9 +26,17 @@ async function logoutAndClearUser() {
     <nav>
       <ul class="flex flex-col items-end list-none">
         <MobileMenuItem to="/" name="Home" />
-        <MobileMenuItem to="/users" name="Gestisci Utenti" />
-        <MobileMenuItem to="/appointments/edit" name="Crea Appuntamento" />
-        <MobileMenuItem to="/appointments" name="Lista Appuntamenti" />
+        <MobileMenuItem v-if="isAdmin" to="/users" name="Gestisci Utenti" />
+        <MobileMenuItem
+          v-if="isDoctor"
+          to="/appointments/edit"
+          name="Crea Appuntamento"
+        />
+        <MobileMenuItem
+          v-if="isPatient || isDoctor"
+          to="/appointments"
+          name="Lista Appuntamenti"
+        />
         <MobileMenuItem to="/" name="Contatti" />
         <li @click="logoutAndClearUser" class="font-light py-2 my-8">
           <button>Esci</button>

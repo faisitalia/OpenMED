@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useAuth } from "./composables/useAuth";
+import { useUser } from "./composables/useUser";
 
 import HomePage from "@/pages/home/HomePage.vue";
 import LoginPage from "@/pages/login/LoginPage.vue";
@@ -57,14 +58,31 @@ const router = createRouter({
   ],
 });
 
-router.beforeEach(async (to) => {
-  // redirect to login page if not logged in and trying to access a restricted page
+router.beforeEach(async (to, from) => {
   const publicPages = ["/login", "/about", "/signup"];
-  const authRequired = !publicPages.includes(to.path);
+  const authenticationRequired = !publicPages.includes(to.path);
 
   const { isAuthenticated } = useAuth();
 
-  if (authRequired && !isAuthenticated) return "/login";
+  if (authenticationRequired && !isAuthenticated) return "/login";
+
+  const { isDoctor, isPatient, isAdmin } = useUser();
+
+  const adminPages = ["/users"];
+  const adminRequired = adminPages.includes(to.path);
+  if (adminRequired && !isAdmin) return from.path;
+
+  const patientPages = ["/appointments"];
+  const patientRequired = patientPages.includes(to.path);
+  if (patientRequired && !isPatient) return from.path;
+
+  const doctorPages = [
+    "/appointments",
+    "/appointments/edit",
+    "/appointments/ok",
+  ];
+  const doctorRequired = doctorPages.includes(to.path);
+  if (doctorRequired && !isDoctor) return from.path;
 });
 
 export default router;
