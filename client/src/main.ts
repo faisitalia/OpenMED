@@ -8,12 +8,8 @@ import router from "./router";
 
 import "./assets/index.css";
 
-const app = createApp(App);
+const pinia = createPinia();
 const head = createHead();
+const app = createApp(App);
 
-app
-  .use(head)
-  .use(createPinia())
-  .use(router)
-  .use(plugin, defaultConfig)
-  .mount("#app");
+app.use(head).use(pinia).use(router).use(plugin, defaultConfig).mount("#app");
