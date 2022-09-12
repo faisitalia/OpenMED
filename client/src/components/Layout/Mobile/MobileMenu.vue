@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import router from "@/router";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
 import MobileMenuItem from "@/components/Layout/Mobile/MobileMenuItem.vue";
 import { useUser } from "@/composables/useUser";
+import { useAuth } from "@/composables/useAuth";
 
 defineProps({ isOpen: Boolean });
-// const { logout } = useAuth();
-// const { removeUser } = useUser();
+const emit = defineEmits(["toggle"]);
 
-async function logoutAndClearUser() {
-  //   await logout();
-  //   removeUser();
-  router.replace({ path: "/ogin" });
-}
-
+const { logout } = useAuth();
 const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
+const { replace } = useRouter();
+
+async function exit() {
+  await logout();
+  replace("/login");
+  emit("toggle");
+}
 </script>
 
 <template>
@@ -38,7 +40,7 @@ const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
           name="Lista Appuntamenti"
         />
         <MobileMenuItem to="/" name="Contatti" />
-        <li @click="logoutAndClearUser" class="font-light py-2 my-8">
+        <li @click="exit" class="font-light py-2 my-8">
           <button>Esci</button>
         </li>
       </ul>

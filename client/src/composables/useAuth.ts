@@ -1,15 +1,16 @@
 import { defineStore } from "pinia";
 import { useLocalStorage } from "@vueuse/core";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { usersUri } from "@/uri";
 import { useClient } from "./useClient";
+import { useAuthClient } from "./useAuthClient";
 
-type AuthInfo = {
-  accessToken: string;
-  expiresIn: number;
-  refreshToken: string;
-  refreshExpiresIn: number;
-};
+// type AuthInfo = {
+//   accessToken: string;
+//   expiresIn: number;
+//   refreshToken: string;
+//   refreshExpiresIn: number;
+// };
 
 export interface OpenMedCredentials {
   username: string;
@@ -17,16 +18,20 @@ export interface OpenMedCredentials {
 }
 
 export const useAuth = defineStore("auth", () => {
-  const localValue = useLocalStorage<AuthInfo | null>("auth", null);
-  // TODO properly save and retrieve data from local storage avoiding XSS attacks.
-  // TODO properly handle refresh logic
+  const localValue = useLocalStorage<string | null>("auth", null);
 
-  const accessToken = ref<string | undefined>(localValue.value?.accessToken);
+  const accessToken = ref<string | null>(localValue.value);
+
+  // TODO properly handle refresh logic
   // const expiresIn = ref<number | undefined>(localValue.value?.expiresIn);
   // const refreshToken = ref<string | undefined>(localValue.value?.refreshToken);
   // const refreshExpiresIn = ref<number | undefined>(
   // localValue.value?.refreshExpiresIn
   // );
+
+  watch(accessToken, (token) => {
+    localValue.value = token;
+  });
 
   const isAuthenticated = computed(() => !!accessToken.value);
 
@@ -46,18 +51,22 @@ export const useAuth = defineStore("auth", () => {
   }
 
   async function logout(): Promise<void> {
-    const { response } = await useClient(`${usersUri}/signout`, {
-      method: "POST",
-    });
+    try {
+      const { response } = await useAuthClient(`${usersUri}/signout`, {
+        method: "POST",
+      });
 
-    accessToken.value = undefined;
-    // expiresIn.value = undefined;
-    // refreshToken.value = undefined;
-    // refreshExpiresIn.value = undefined;
+      const status = response.value?.status;
 
-    const status = response.value?.status;
-
-    if (status === undefined || status >= 300) throw response.value?.statusText;
+      if (status === undefined || status >= 300) {
+        throw response.value?.statusText;
+      }
+    } finally {
+      accessToken.value = null;
+      // expiresIn.value = undefined;
+      // refreshToken.value = undefined;
+      // refreshExpiresIn.value = undefined;
+    }
   }
 
   return {

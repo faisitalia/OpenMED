@@ -1,5 +1,4 @@
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
 import { createFetch } from "@vueuse/core";
 import { baseFetchOptions, baseOptions, baseUri } from "@/uri";
 import { useAuth } from "./useAuth";
@@ -21,7 +20,6 @@ export const useAuthClient = createFetch({
     },
     onFetchError: (ctx) => {
       const { logout } = useAuth();
-      const { replace } = useRouter();
 
       if (ctx.response?.status === 401) {
         try {
@@ -30,9 +28,6 @@ export const useAuthClient = createFetch({
         } catch (e) {
           // If the refresh fails, logout the user
           logout();
-
-          // The router should redirect from here
-          replace("/");
         }
       }
 

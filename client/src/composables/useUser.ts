@@ -26,12 +26,13 @@ const roles = Object.keys(Role);
 
 export const useUser = defineStore("user", () => {
   const { isAuthenticated } = storeToRefs(useAuth());
-  const localValue = useLocalStorage<User | null>("user", null);
+  const localValue = useLocalStorage<string>("user", null);
 
-  const user = ref<User | null>(localValue.value);
+  const user = ref<User | null>(JSON.parse(localValue.value));
 
-  watch(user, (_, newUser) => {
-    localValue.value = newUser;
+  watch(user, (newUser, _) => {
+    if (newUser) localValue.value = JSON.stringify(newUser);
+    else localValue.value = null;
   });
 
   watchEffect(() => {
@@ -52,12 +53,11 @@ export const useUser = defineStore("user", () => {
     });
 
     const response = JSON.parse(data.value as string);
-    console.log(response);
-    console.log(response.currentUser);
-    console.log(response.currentUser.roles);
 
     const userRoles = response?.currentUser?.roles
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ?.map((value: any) => value?.name)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ?.filter((role: any) => roles.includes(role)) as Role[];
 
     user.value = {

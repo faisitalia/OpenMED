@@ -1,19 +1,19 @@
 <script setup lang="ts">
-import router from "@/router";
 import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
 import DesktopMenuItem from "./DesktopMenuItem.vue";
 import { useUser } from "@/composables/useUser";
-// const { logout } = useAuth();
-// const { removeUser } = useUser();
-
-async function logoutAndClearUser() {
-  // await logout();
-  // removeUser();
-  router.replace({ path: "/login" });
-}
+import { useAuth } from "@/composables/useAuth";
 
 const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
+const { replace } = useRouter();
+const { logout } = useAuth();
+
+async function exit() {
+  await logout();
+  replace("/login");
+}
 </script>
 
 <template>
@@ -42,10 +42,7 @@ const { isDoctor, isPatient, isAdmin } = storeToRefs(useUser());
         />
         <DesktopMenuItem to="/" name="Contatti" />
         <div class="my-8"></div>
-        <li
-          @click="logoutAndClearUser"
-          class="font-bold text-lg text-white py-2"
-        >
+        <li @click="exit" class="font-bold text-lg text-white py-2">
           <button>Esci</button>
         </li>
       </ul>

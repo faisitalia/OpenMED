@@ -5,11 +5,12 @@ import MobileMenu from "@/components/Layout/Mobile/MobileMenu.vue";
 import DesktopMenu from "@/components/Layout/Desktop/DesktopMenu.vue";
 
 const isDrawerOpen = ref(false);
+const toggle = () => (isDrawerOpen.value = !isDrawerOpen.value);
 </script>
 
 <template>
   <!-- Mobile Menu, open iff we clicked on the drawer button -->
-  <MobileMenu :isOpen="isDrawerOpen" />
+  <MobileMenu :isOpen="isDrawerOpen" @toggle="toggle" />
 
   <div class="grid grid-flow-col md:grid-cols-[auto_1fr]">
     <DesktopMenu />
