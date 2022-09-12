@@ -32,6 +32,8 @@ const populateUsers = async function () {
   console.log('Droping users and persons....')
   await Person.deleteMany({})
 
+  // TODO delete users from keycloak
+
   console.log('Inserting user....')
 
   const username = 'user'
@@ -53,13 +55,57 @@ const populateUsers = async function () {
     firstname: adminFirstname,
     lastname: adminLastname,
     birthdate: adminBirthdate,
-    username: adminUsername,
+    username: adminUsername
   })
   await adminPersonDoc.save()
 
   const adminEmail = 'admin@openmed.cloud'
   const adminPassword = 'password'
   await createUser(adminUsername, adminEmail, adminPassword, Role.ADMIN)
+
+  const doctorUsername = 'doctor'
+  const doctorFirstname = 'John-doctor'
+  const doctorLastname = 'Doe-doctor'
+  const doctorBirthdate = new Date()
+  const doctorPersonDoc = Person.build({ firstname: doctorFirstname, lastname: doctorLastname, birthdate: doctorBirthdate, username })
+  await doctorPersonDoc.save()
+
+  const doctorEmail = 'doctor@openmed.cloud'
+  const doctorPassword = 'password'
+  await createUser(doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+
+  const nurseUsername = 'nurse'
+  const nurseFirstname = 'John-nurse'
+  const nurseLastname = 'Doe-nurse'
+  const nurseBirthdate = new Date()
+  const nursePersonDoc = Person.build({ firstname: nurseFirstname, lastname: nurseLastname, birthdate: nurseBirthdate, username })
+  await nursePersonDoc.save()
+
+  const nurseEmail = 'nurse@openmed.cloud'
+  const nursePassword = 'password'
+  await createUser(nurseUsername, nurseEmail, nursePassword, Role.NURSE)
+
+  const patientUsername = 'patient'
+  const patientFirstname = 'John-patient'
+  const patientLastname = 'Doe-patient'
+  const patientBirthdate = new Date()
+  const patientPersonDoc = Person.build({ firstname: patientFirstname, lastname: patientLastname, birthdate: patientBirthdate, username })
+  await patientPersonDoc.save()
+
+  const patientEmail = 'patient@openmed.cloud'
+  const patientPassword = 'password'
+  await createUser(patientUsername, patientEmail, patientPassword, Role.PATIENT)
+
+  const caregiverUsername = 'caregiver'
+  const caregiverFirstname = 'John-caregiver'
+  const caregiverLastname = 'Doe-caregiver'
+  const caregiverBirthdate = new Date()
+  const caregiverPersonDoc = Person.build({ firstname: caregiverFirstname, lastname: caregiverLastname, birthdate: caregiverBirthdate, username })
+  await caregiverPersonDoc.save()
+
+  const caregiverEmail = 'caregiver@openmed.cloud'
+  const caregiverPassword = 'password'
+  await createUser(caregiverUsername, caregiverEmail, caregiverPassword, Role.CAREGIVER)
 
   console.log('Users inserted!')
 }
