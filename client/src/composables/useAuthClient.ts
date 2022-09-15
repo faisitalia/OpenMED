@@ -5,9 +5,7 @@ import { useAuth } from "./useAuth";
 
 export const useAuthClient = createFetch({
   baseUrl: baseUri,
-  fetchOptions: {
-    ...baseFetchOptions,
-  },
+  fetchOptions: { ...baseFetchOptions },
   options: {
     ...baseOptions,
     beforeFetch: ({ options }) => {
@@ -24,7 +22,7 @@ export const useAuthClient = createFetch({
       if (ctx.response?.status === 401) {
         try {
           // Try to refresh this with `client`
-          throw "Unimplemented Error";
+          throw "No refresh logic implemented, yet";
         } catch (e) {
           // If the refresh fails, logout the user
           logout();
