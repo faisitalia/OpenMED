@@ -1,11 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 import { useAuth } from "./composables/useAuth";
-import { useUser } from "./composables/useUser";
 
 import HomePage from "@/pages/home/HomePage.vue";
 import LoginPage from "@/pages/login/LoginPage.vue";
 import SurveysPage from "./pages/surveys/SurveysPage.vue";
+import ProjectPage from "@/pages/project/ProjectPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +14,7 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomePage,
-      meta: { layout: "OpenmedLayout" },
+      meta: { layout: "OnisLayout" },
     },
     {
       path: "/login",
@@ -25,12 +25,18 @@ const router = createRouter({
       path: "/surveys",
       name: "surveys",
       component: SurveysPage,
-      meta: { layout: "OpenmedLayout" },
+      meta: { layout: "OnisLayout" },
+    },
+    {
+      path: "/surveys",
+      name: "surveys",
+      component: ProjectPage,
+      meta: { layout: "OnisLayout" },
     },
   ],
 });
 
-router.beforeEach(async (to, from) => {
+router.beforeEach(async (to) => {
   const publicPages = ["/login", "/about", "/signup"];
   const authenticationRequired = !publicPages.includes(to.path);
 
