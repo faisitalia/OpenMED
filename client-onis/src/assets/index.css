@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+body::-webkit-scrollbar {
+  width: 0;
+}
+
+@layer base {
+  html {
+    font-family: "Poppins", sans-serif;
+  }
+
+  body {
+    @apply text-base font-normal text-brandText-500;
+  }
+
+  h1 {
+    @apply text-3xl font-black text-brandBlue-500;
+  }
+
+  h2 {
+    @apply text-2xl font-extrabold text-brandBlue-500;
+  }
+
+  h3 {
+    @apply text-xl font-bold text-brandBlue-500;
+  }
+
+  h4 {
+    @apply text-lg font-medium text-brandBlue-500;
+  }
+
+  h5 {
+    @apply text-base font-bold text-brandBlue-500;
+  }
+
+  h6 {
+    @apply text-sm font-light text-brandBlue-500;
+  }
+}
