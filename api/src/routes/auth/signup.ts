@@ -3,7 +3,6 @@ import { body } from 'express-validator'
 import { constants } from 'http2'
 
 import { validateRequest } from '../../common'
-import { Person } from '../../models/person'
 import { Role } from '../../models/user'
 import { createUser, getUserById } from '../../services/auth'
 import { logger } from '../../utils/logger'
@@ -64,10 +63,9 @@ router.post(
     // TODO transaction
 
     try {
-      const personDoc = Person.build({ firstname, lastname, birthdate, username })
-      const person = await personDoc.save()
+      
 
-      const userId = await createUser(username, email, password, Role.USER)
+      const userId = await createUser(firstname, lastname, birthdate, username, email, password, Role.USER)
 
       // retrieve the user just created
       const rawUser = await getUserById(userId)
@@ -79,7 +77,7 @@ router.post(
         id: userId,
         username: rawUser?.username,
         email: rawUser?.email,
-        personId: person._id,
+        person: rawUser.person,
       }
 
       res.status(constants.HTTP_STATUS_CREATED).send(user)

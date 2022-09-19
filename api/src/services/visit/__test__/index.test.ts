@@ -35,51 +35,30 @@ describe('Visit service test suite', function () {
     const patientName = 'Patient1'
     const patientLastname = 'Patient1Lastname'
     const patientBirthdate = new Date()
-    const patientPersonDoc = Person.build({
-      firstname: patientName,
-      lastname: patientLastname,
-      birthdate: patientBirthdate,
-      username: patientUsername
-    })
-    await patientPersonDoc.save()
-
     const patientEmail = `${patientUsername}@openmed.test`
     const patientPassword = 'password'
-    const patientId = await createUser(patientUsername, patientEmail, patientPassword, Role.PATIENT)
+    const patientId = await createUser(patientName, patientLastname, patientBirthdate, patientUsername, patientEmail, patientPassword, Role.PATIENT)
 
     // create the person / doctor
     const doctorUsername = `doctor_${new Date().getMilliseconds()}`
     const doctorName = 'Doctor1'
     const doctorLastname = 'Doctor1Lastname'
     const doctorBirthdate = new Date()
-    const doctorPersonDoc = Person.build({
-      firstname: doctorName,
-      lastname: doctorLastname,
-      birthdate: doctorBirthdate,
-      username: doctorUsername
-    })
-    await doctorPersonDoc.save()
-
     const doctorEmail = `${doctorUsername}@openmed.test`
     const doctorPassword = 'password'
-    const doctorId = await createUser(doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+    const doctorId = await createUser(doctorName, doctorLastname, doctorBirthdate, doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
 
     // create the person / caregiver
     const caregiverUsername = `caregiver_${new Date().getMilliseconds()}`
     const caregiverName = 'Caregiver1'
     const caregiverLastname = 'Caregiver1Lastname'
     const caregiverBirthdate = new Date()
-    const caregiverPersonDoc = Person.build({
-      firstname: caregiverName,
-      lastname: caregiverLastname,
-      birthdate: caregiverBirthdate,
-      username: caregiverUsername
-    })
-    await caregiverPersonDoc.save()
-
     const caregiverEmail = `${caregiverUsername}@openmed.test`
     const caregiverPassword = 'password'
     const caregiverId = await createUser(
+      caregiverName,
+      caregiverLastname,
+      caregiverBirthdate,
       caregiverUsername,
       caregiverEmail,
       caregiverPassword,

@@ -4,7 +4,6 @@ import mongoose from 'mongoose'
 
 import { app } from '../../../app'
 import { createFacility } from '../../../services/facility'
-import { Person } from '../../../models/person'
 import { Role } from '../../../models/user'
 import { Visit, VisitDoc } from '../../../models/visit'
 import { assignRoleToUser, createUser, deleteUserById } from '../../../services/auth'
@@ -42,49 +41,28 @@ describe('Visit integration test suite', function () {
     const patientName = 'Patient1'
     const patientLastname = 'Patient1Lastname'
     const patientBirthdate = new Date()
-    const patientPersonDoc = Person.build({
-      firstname: patientName,
-      lastname: patientLastname,
-      birthdate: patientBirthdate,
-      username: patientUsername,
-    })
-    await patientPersonDoc.save()
-
     const patientEmail = 'patient@openmed.test'
     const patientPassword = 'password'
-    patientId = await createUser(patientUsername, patientEmail, patientPassword, Role.PATIENT)
+    patientId = await createUser(patientName, patientLastname, patientBirthdate, patientUsername, patientEmail, patientPassword, Role.PATIENT)
 
     const doctorUsername = 'doctor1'
     const doctorName = 'Doctor1'
     const doctorLastname = 'Doctor1Lastname'
     const doctorBirthdate = new Date()
-    const doctorPersonDoc = Person.build({
-      firstname: doctorName,
-      lastname: doctorLastname,
-      birthdate: doctorBirthdate,
-      username: doctorUsername,
-    })
-    await doctorPersonDoc.save()
-
     const doctorEmail = 'doctor@openmed.test'
     const doctorPassword = 'password'
-    doctorId = await createUser(doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+    doctorId = await createUser(doctorName, doctorLastname, doctorBirthdate, doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
 
     const caregiverUsername = 'caregiver1'
     const caregiverName = 'Caregiver1'
     const caregiverLastname = 'Caregiver1Lastname'
     const caregiverBirthdate = new Date()
-    const caregiverPersonDoc = Person.build({
-      firstname: caregiverName,
-      lastname: caregiverLastname,
-      birthdate: caregiverBirthdate,
-      username: caregiverUsername,
-    })
-    await caregiverPersonDoc.save()
-
     const caregiverEmail = 'user@openmed.test'
     const caregiverPassword = 'password'
     caregiverId = await createUser(
+      caregiverName, 
+      caregiverLastname, 
+      caregiverBirthdate,
       caregiverUsername,
       caregiverEmail,
       caregiverPassword,
@@ -440,15 +418,10 @@ describe('Visit integration test suite', function () {
 
     // update the doctor
     const newDoctorUsername = 'updatedDoctor'
-    const newDoctorPersonDoc = Person.build({
-      firstname: 'UpdatedDoctor',
-      lastname: 'UpdatedDoctor1Lastname',
-      birthdate: new Date(),
-      username: newDoctorUsername,
-    })
-    await newDoctorPersonDoc.save()
-
     const newDoctorId = await createUser(
+      'UpdatedDoctor',
+      'UpdatedDoctor1Lastname',
+      new Date(),
       newDoctorUsername,
       'updatedDoctor@openmed.test',
       'password',

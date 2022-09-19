@@ -2,10 +2,13 @@ import { createUser, deleteUserById, getUserById } from '..'
 import { Role } from '../../../models/user'
 
 it('should create an user', async () => {
+  const firstname = 'John'
+  const lastname = 'New'
+  const birthdate = new Date()
   const username = 'john.new'
   const email = 'john.new@email.test'
   const password = '12345678'
-  const userId = await createUser(username, email, password, Role.USER)
+  const userId = await createUser(firstname, lastname, birthdate, username, email, password, Role.USER)
 
   expect(userId).toBeDefined()
 
@@ -13,6 +16,9 @@ it('should create an user', async () => {
 })
 
 it('should create an user with attributes', async () => {
+  const firstname = 'John'
+  const lastname = 'Attributes'
+  const birthdate = new Date()
   const username = 'john.attributes'
   const email = 'john.attributes@email.test'
   const password = '12345678'
@@ -23,7 +29,7 @@ it('should create an user with attributes', async () => {
     newDate,
     newData
   }
-  const userId = await createUser(username, email, password, Role.USER, attributes)
+  const userId = await createUser(firstname, lastname, birthdate, username, email, password, Role.USER, attributes)
   expect(userId).toBeDefined()
 
   // retrieve the user just created
