@@ -2,23 +2,25 @@ import { TokenResponse } from '@keycloak/keycloak-admin-client/lib/utils/auth'
 import axios from 'axios'
 import url from 'url'
 import { NotAuthorizedError } from '../../common'
+import { Person, PersonDoc } from '../../models/person'
 import { KeycloakAdminClientImpl } from './config/keycloakAdminClient'
 import { getOpenIDConnectURI } from './config/openid-connect'
 
-/**
- *
- * @param username
- * @param email
- * @param password
- * @returns
- */
+
 async function createUser(
+  firstname: string, 
+  lastname: string, 
+  birthdate: Date,
   username: string,
   email: string,
   password: string,
   role: string,
   attributes: Object = {}
 ) {
+
+  const personDoc = Person.build({ firstname, lastname, birthdate, username })
+  await personDoc.save()
+
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
 
   const { id: userId } = await kcAdminClient.users.create({
@@ -59,12 +61,15 @@ async function getUserById(id: string) {
     id: id,
   })
 
+  const person = await Person.find({username : user.username})
+
   return {
     id: user.id,
     username: user.username,
     email: user.email,
     roles: roles,
     attributes: user.attributes,
+    person: person
   }
 }
 
@@ -194,8 +199,7 @@ async function getUserInfo(accessToken: string) {
       throw new Error(`id or username or email not available: ${currentUser}`)
     }
   } catch (error: any) {
-    console.log(error)
-    throw new Error(error)
+      throw new Error(error)   
   }
 }
 

@@ -15,14 +15,14 @@ it('returns a 200 on successful signup', async () => {
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_CREATED)
 
   expect(user.id).toBeDefined()
   expect(user.username).toStrictEqual(username)
   expect(user.email).toStrictEqual(email)
-  expect(user.personId).toBeDefined()
+  expect(user.person).toBeDefined()
 
   // TODO add the checks for the "person"
 
@@ -37,7 +37,7 @@ it('returns a 400 with an invalid username', async () => {
       password: 'p',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
@@ -51,7 +51,7 @@ it('returns a 400 with an invalid email', async () => {
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
@@ -65,7 +65,7 @@ it('returns a 400 with an invalid password', async () => {
       password: 'p',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
@@ -78,7 +78,7 @@ it('returns a 400 with missing email and password', async () => {
       email: 'test@test.com',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
@@ -89,7 +89,7 @@ it('returns a 400 with missing email and password', async () => {
       password: 'alskjdf',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
@@ -100,7 +100,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
     .send({
       username: 'john',
       email: 'test@test.com',
-      password: 'alskjdf',
+      password: 'alskjdf'
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
@@ -111,7 +111,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       email: 'test@test.com',
       password: 'alskjdf',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
@@ -122,7 +122,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       email: 'test@test.com',
       password: 'alskjdf',
       firstname: 'John',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 
@@ -133,7 +133,7 @@ it('returns a 400 with missing fistname, lastname and birthdate', async () => {
       email: 'test@test.com',
       password: 'alskjdf',
       firstname: 'John',
-      lastname: 'Doe',
+      lastname: 'Doe'
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 })
@@ -148,7 +148,7 @@ it('disallows duplicate emails', async () => {
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_CREATED)
 
@@ -160,7 +160,7 @@ it('disallows duplicate emails', async () => {
       password: 'password',
       firstname: 'John',
       lastname: 'Doe',
-      birthdate: new Date(),
+      birthdate: new Date()
     })
     .expect(constants.HTTP_STATUS_BAD_REQUEST)
 

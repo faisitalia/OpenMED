@@ -40,72 +40,49 @@ const populateUsers = async function () {
   const firstname = 'John'
   const lastname = 'Doe'
   const birthdate = new Date()
-  const personDoc = Person.build({ firstname, lastname, birthdate, username })
-  await personDoc.save()
-
   const email = 'user@openmed.cloud'
   const password = 'password'
-  await createUser(username, email, password, Role.USER)
+  await createUser(firstname, lastname, birthdate, username, email, password, Role.USER)
 
   const adminUsername = 'admin'
   const adminFirstname = 'Admin'
   const adminLastname = 'Doe'
   const adminBirthdate = new Date()
-  const adminPersonDoc = Person.build({
-    firstname: adminFirstname,
-    lastname: adminLastname,
-    birthdate: adminBirthdate,
-    username: adminUsername
-  })
-  await adminPersonDoc.save()
-
   const adminEmail = 'admin@openmed.cloud'
   const adminPassword = 'password'
-  await createUser(adminUsername, adminEmail, adminPassword, Role.ADMIN)
+  await createUser(adminFirstname, adminLastname, adminBirthdate, adminUsername, adminEmail, adminPassword, Role.ADMIN)
 
   const doctorUsername = 'doctor'
   const doctorFirstname = 'John-doctor'
   const doctorLastname = 'Doe-doctor'
   const doctorBirthdate = new Date()
-  const doctorPersonDoc = Person.build({ firstname: doctorFirstname, lastname: doctorLastname, birthdate: doctorBirthdate, username })
-  await doctorPersonDoc.save()
-
   const doctorEmail = 'doctor@openmed.cloud'
   const doctorPassword = 'password'
-  await createUser(doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+  await createUser(doctorFirstname, doctorLastname, doctorBirthdate, doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
 
   const nurseUsername = 'nurse'
   const nurseFirstname = 'John-nurse'
   const nurseLastname = 'Doe-nurse'
   const nurseBirthdate = new Date()
-  const nursePersonDoc = Person.build({ firstname: nurseFirstname, lastname: nurseLastname, birthdate: nurseBirthdate, username })
-  await nursePersonDoc.save()
-
   const nurseEmail = 'nurse@openmed.cloud'
   const nursePassword = 'password'
-  await createUser(nurseUsername, nurseEmail, nursePassword, Role.NURSE)
+  await createUser(nurseFirstname, nurseLastname, nurseBirthdate, nurseUsername, nurseEmail, nursePassword, Role.NURSE)
 
   const patientUsername = 'patient'
   const patientFirstname = 'John-patient'
   const patientLastname = 'Doe-patient'
   const patientBirthdate = new Date()
-  const patientPersonDoc = Person.build({ firstname: patientFirstname, lastname: patientLastname, birthdate: patientBirthdate, username })
-  await patientPersonDoc.save()
-
   const patientEmail = 'patient@openmed.cloud'
   const patientPassword = 'password'
-  await createUser(patientUsername, patientEmail, patientPassword, Role.PATIENT)
+  await createUser(patientFirstname, patientLastname, patientBirthdate, patientUsername, patientEmail, patientPassword, Role.PATIENT)
 
   const caregiverUsername = 'caregiver'
   const caregiverFirstname = 'John-caregiver'
   const caregiverLastname = 'Doe-caregiver'
   const caregiverBirthdate = new Date()
-  const caregiverPersonDoc = Person.build({ firstname: caregiverFirstname, lastname: caregiverLastname, birthdate: caregiverBirthdate, username })
-  await caregiverPersonDoc.save()
-
   const caregiverEmail = 'caregiver@openmed.cloud'
   const caregiverPassword = 'password'
-  await createUser(caregiverUsername, caregiverEmail, caregiverPassword, Role.CAREGIVER)
+  await createUser(caregiverFirstname, caregiverLastname, caregiverBirthdate, caregiverUsername, caregiverEmail, caregiverPassword, Role.CAREGIVER)
 
   console.log('Users inserted!')
 }
