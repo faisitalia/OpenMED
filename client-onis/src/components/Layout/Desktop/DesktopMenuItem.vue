@@ -9,7 +9,9 @@ defineProps({
 </script>
 
 <template>
-  <RouterLink :to="to">
-    <li class="font-bold text-lg text-white py-2">{{ name }}</li>
+  <RouterLink :to="to" class="flex items-center">
+    <li class="mx-4 py-2 font-bold text-lg text-white flex items-center">
+      <slot />
+    </li>
   </RouterLink>
 </template>

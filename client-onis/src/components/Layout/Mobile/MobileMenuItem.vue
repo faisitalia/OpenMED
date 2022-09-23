@@ -1,6 +1,5 @@
 <script setup lang="ts">
 defineProps({
-  name: String,
   to: {
     required: true,
     type: String,
@@ -9,7 +8,7 @@ defineProps({
 </script>
 
 <template>
-  <RouterLink :to="to">
-    <li class="font-light py-2">{{ name }}</li>
+  <RouterLink :to="to" class="flex items-center">
+    <li class="py-2 flex items-center"><slot /></li>
   </RouterLink>
 </template>
