@@ -1,9 +1,7 @@
 <script setup lang="ts">
-import { markRaw, ref, watch } from "vue";
-import { useRouter } from "vue-router";
 import { useHead } from "@vueuse/head";
 
-import EmptyLayout from "./layouts/EmptyLayout.vue";
+import OnisLayout from "./layouts/OnisLayout.vue";
 
 useHead({
   titleTemplate: (title) => `ONIS - ${title}`,
@@ -26,28 +24,10 @@ useHead({
     },
   ],
 });
-
-const { currentRoute } = useRouter();
-const layout = ref(markRaw(EmptyLayout));
-watch(
-  () => currentRoute.value.meta?.layout,
-  async (metaLayout) => {
-    try {
-      if (!metaLayout) return;
-      if (typeof metaLayout != "string") return;
-
-      const layoutComponent = await import(`./layouts/${metaLayout}.vue`);
-
-      layout.value = markRaw(layoutComponent?.default || EmptyLayout);
-    } catch (e) {
-      layout.value = markRaw(EmptyLayout);
-    }
-  }
-);
 </script>
 
 <template>
-  <Component :is="layout">
+  <OnisLayout>
     <Router-View />
-  </Component>
+  </OnisLayout>
 </template>
