@@ -6,6 +6,7 @@ import HomePage from "@/pages/home/HomePage.vue";
 import LoginPage from "@/pages/login/LoginPage.vue";
 import SurveysPage from "@/pages/surveys/SurveysPage.vue";
 import ProjectPage from "@/pages/project/ProjectPage.vue";
+import AccountPage from "@/pages/account/AccountPage.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
       path: "/project",
       name: "project",
       component: ProjectPage,
+      meta: { layout: "OnisLayout" },
+    },
+    {
+      path: "/account",
+      name: "account",
+      component: AccountPage,
       meta: { layout: "OnisLayout" },
     },
   ],
