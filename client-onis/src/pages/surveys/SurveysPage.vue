@@ -1,6 +1,6 @@
 <script setup>
 import { useHead } from "@vueuse/head";
-import { onMounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
 
 useHead({
   link: [
@@ -17,42 +17,36 @@ useHead({
   ],
 });
 
+let surveyScript;
 onMounted(() => {
-  const options = {
-    showLogicTab: true,
-    isAutoSave: true,
-  };
+  /* eslint-disable no-undef */
+  Survey.StylesManager.applyTheme("defaultV2");
 
-  const configJson = {
-    pages: [
+  const surveyJson = {
+    elements: [
       {
-        name: "Name",
-        elements: [
-          {
-            name: "FirstName",
-            title: "Enter your first name:",
-            type: "text",
-          },
-          {
-            name: "LastName",
-            title: "Enter your last name:",
-            type: "text",
-          },
-        ],
+        name: "FirstName",
+        title: "Enter your first name:",
+        type: "text",
+      },
+      {
+        name: "LastName",
+        title: "Enter your last name:",
+        type: "text",
       },
     ],
   };
 
-  const survey = new window.SurveyCreator.SurveyCreator(options);
-  survey.text = JSON.stringify(configJson);
+  const survey = new Survey.Model(surveyJson);
+  function alertResults(sender) {
+    const results = JSON.stringify(sender.data);
+    alert(results); // TODO send POST REQUEST
+  }
+  survey.onComplete.add(alertResults);
 
-  survey.saveSurveyFunc = (saveNo, callback) => {
-    callback(saveNo, true); // TODO read the docs bout this
-
-    // TODO mock a POST request
-  };
-
-  survey.render("survey");
+  $(function () {
+    $("#survey").Survey({ model: survey });
+  });
 });
 </script>
 
