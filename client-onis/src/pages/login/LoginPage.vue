@@ -6,8 +6,6 @@ import { useHead } from "@vueuse/head";
 
 import { useAuth } from "@/composables/useAuth";
 
-import StyledButton from "../../components/StyledButton.vue";
-
 useHead({ title: `Login` });
 const { login } = useAuth();
 const { replace } = useRouter();
@@ -18,13 +16,9 @@ const password = ref<string>("");
 const passwordMessages = { required: "Inserisci la tua password" };
 
 const submitError = ref<string>();
-const hasStarted = ref(false);
 
 async function loginWithCredentials() {
   try {
-    // username: choices.value.username,
-    // password: choices.value.password,
-
     await login({
       username: username.value,
       password: password.value,
@@ -50,24 +44,14 @@ async function loginWithCredentials() {
 </script>
 
 <template>
-  <div
-    class="bg-no-repeat bg-center bg-cover bg-[url('img/login-background.png')] h-screen flex flex-col px-8 py-16 items-center justify-between"
-  >
-    <img
-      src="@/assets/img/logo-openmed/openmed-logo-full.svg"
-      alt="Il logo di Openmed"
-    />
-    <div id="login" class="grid grid-rows-1 grid-cols-1">
-      <StyledButton
-        v-if="!hasStarted"
-        @click="hasStarted = true"
-        class="font-bold"
-        spaces="px-16 py-2"
-      >
-        Inizia
-      </StyledButton>
+  <div class="min-h-[45vh] flex items-center justify-center">
+    <div
+      id="login"
+      class="flex flex-col items-center justify-center bg-white bg-opacity-80 px-36 py-12 rounded-3xl"
+    >
+      <h1 class="text-secondary text-5xl mb-8">Accedi</h1>
 
-      <div class="flex flex-col justify-center items-center" v-else>
+      <div class="flex flex-col justify-center items-center">
         <FormKit
           type="form"
           id="signin"
@@ -81,43 +65,57 @@ async function loginWithCredentials() {
               name="text"
               label="Username"
               validation="required"
+              placeholder="username"
               :validation-messages="usernameMessages"
-              placeholder="your@email.com"
-              input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-              message-class="text-red-500"
+              wrapper-class="flex flex-col justify-center items-center"
+              label-class="font-semibold text-primary text-center w-96"
+              input-class="appearance-none my-1 px-3 py-1 rounded-3xl text-onPrimary bg-primary-50/25 hover:bg-primary-50/40 text-center"
+              message-class="self- text-red-500"
+              outer-class="w-96 flex flex-col items-center justify-center"
               v-model="username"
             />
           </fieldset>
+          <div class="my-4" />
           <fieldset>
             <FormKit
               type="password"
               name="password"
               label="Password"
               validation="required"
+              placeholder="password"
               :validation-messages="passwordMessages"
-              input-class="appearance-none my-1 px-3 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-              message-class="text-red-500"
+              wrapper-class="flex flex-col justify-center items-center"
+              label-class="font-semibold text-primary text-center"
+              input-class="appearance-none my-1 px-3 py-1 rounded-3xl text-onPrimary bg-brandBlue-50/25 hover:bg-brandBlue-50/40 text-center"
+              message-class="self- text-red-500"
+              outer-class="w-96 flex flex-col items-center justify-center"
               v-model="password"
             />
           </fieldset>
+          <div class="my-8" />
           <FormKit
             type="submit"
             name="submit-button"
             label="Accedi"
-            outer-class="my-2"
-            input-class="submit inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            outer-class="my-2 flex items-center justify-center"
+            label-class="font-bold"
+            input-class="items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2"
           />
         </FormKit>
         <div v-if="submitError" class="my-8 text-center text-red-500">
           {{ submitError }}
         </div>
       </div>
-    </div>
 
-    <img
-      class="w-40"
-      src="@/assets/img/logo-fais/logo-fais.png"
-      alt="Il logo di FAIS"
-    />
+      <div class="mt-8">
+        <!-- TODO add a registration page -->
+        <p class="text-primary">
+          Non hai un account? <span class="font-bold">Registrati</span>
+        </p>
+
+        <!-- TODO think about a "password recovery" flow -->
+        <p class="text-primary">Hai dimenticato la password?</p>
+      </div>
+    </div>
   </div>
 </template>
