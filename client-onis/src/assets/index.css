@@ -15,7 +15,7 @@ body::-webkit-scrollbar {
   }
 
   body {
-    @apply text-base font-normal text-onPrimary;
+    @apply text-base font-normal text-onSecondary;
   }
 
   h1 {
