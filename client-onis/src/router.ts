@@ -4,7 +4,7 @@ import { useAuth } from "./composables/useAuth";
 
 import HomePage from "@/pages/home/HomePage.vue";
 import LoginPage from "@/pages/login/LoginPage.vue";
-import SurveysPage from "./pages/surveys/SurveysPage.vue";
+import SurveysPage from "@/pages/surveys/SurveysPage.vue";
 import ProjectPage from "@/pages/project/ProjectPage.vue";
 
 const router = createRouter({
@@ -28,8 +28,8 @@ const router = createRouter({
       meta: { layout: "OnisLayout" },
     },
     {
-      path: "/surveys",
-      name: "surveys",
+      path: "/project",
+      name: "project",
       component: ProjectPage,
       meta: { layout: "OnisLayout" },
     },
@@ -37,7 +37,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const publicPages = ["/login", "/about", "/signup"];
+  const publicPages = ["/", "/login", "/project"];
   const authenticationRequired = !publicPages.includes(to.path);
 
   const { isAuthenticated } = useAuth();
