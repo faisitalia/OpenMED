@@ -15,30 +15,30 @@ body::-webkit-scrollbar {
   }
 
   body {
-    @apply text-base font-normal text-brandText-500;
+    @apply text-base font-normal text-onPrimary;
   }
 
   h1 {
-    @apply text-3xl font-black text-brandBlue-500;
+    @apply text-3xl font-black text-onSecondary;
   }
 
   h2 {
-    @apply text-2xl font-extrabold text-brandBlue-500;
+    @apply text-2xl font-extrabold text-onSecondary;
   }
 
   h3 {
-    @apply text-xl font-bold text-brandBlue-500;
+    @apply text-xl font-bold text-onSecondary;
   }
 
   h4 {
-    @apply text-lg font-medium text-brandBlue-500;
+    @apply text-lg font-medium text-onSecondary;
   }
 
   h5 {
-    @apply text-base font-bold text-brandBlue-500;
+    @apply text-base font-bold text-onSecondary;
   }
 
   h6 {
-    @apply text-sm font-light text-brandBlue-500;
+    @apply text-sm font-light text-onSecondary;
   }
 }
