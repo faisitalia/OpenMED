@@ -13,7 +13,7 @@ function toggleDrawer() {
 </script>
 
 <template>
-  <header class="flex flex-row items-center md:hidden transition-all">
+  <header class="flex flex-row items-center md:hidden py-2 transition-all">
     <!-- mettere qui logo e mobile menu -->
     <img src="@/assets/img/logo-onis/ONIS-provv-01.png" alt="onis's logo" />
     <div class="flex-grow" />

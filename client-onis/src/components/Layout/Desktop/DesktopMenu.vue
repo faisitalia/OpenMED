@@ -3,7 +3,7 @@ import DesktopMenuItem from "./DesktopMenuItem.vue";
 </script>
 
 <template>
-  <header class="hidden md:block py-2 px-4">
+  <header class="hidden md:block py-2">
     <nav class="flex flex-row items-center">
       <img src="@/assets/img/logo-onis/ONIS-provv-01.png" alt="onis's logo" />
       <div class="flex-grow" />

@@ -6,7 +6,7 @@ import { useHead } from "@vueuse/head";
 import EmptyLayout from "./layouts/EmptyLayout.vue";
 
 useHead({
-  titleTemplate: (title) => `OpenMed - ${title}`,
+  titleTemplate: (title) => `ONIS - ${title}`,
   link: [
     {
       rel: "preconnect",
