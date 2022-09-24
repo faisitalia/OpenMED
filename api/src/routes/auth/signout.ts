@@ -1,6 +1,5 @@
 import express, { Request, Response } from 'express'
 import { constants } from 'http2'
-import { Role } from '../../models/user'
 
 import { logout } from '../../services/auth'
 import { getUserInfo } from '../../services/user'
@@ -13,7 +12,7 @@ const router = express.Router()
  *   post:
  *     description: Logout the current user
  *     tags:
- *      - User
+ *      - Authentication
  *     produces:
  *      - application/json
  *     responses:
@@ -23,18 +22,17 @@ const router = express.Router()
 router.post('/v1/users/signout', async (req: Request, res: Response) => {
   if (req.headers.authorization) {
     try {
-      
       const bearer = req.headers.authorization.split(' ')
       const accessToken = bearer[1]
-  
+
       const userInfo = await getUserInfo(accessToken)
-  
+
       if (!userInfo.id) throw new Error(`User id non available for user ${userInfo}`)
-  
+
       await logout(userInfo.id)
-  
+
       res.status(constants.HTTP_STATUS_OK).send({})
-    } catch (error:any) {
+    } catch (error: any) {
       throw new Error(error)
     }
   } else {

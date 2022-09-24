@@ -12,7 +12,7 @@ const router = express.Router()
  *   post:
  *     description: Refresh the access token
  *     tags:
- *      - User
+ *      - Authentication
  *     produces:
  *      - application/json
  *     requestBody:
