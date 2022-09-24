@@ -4,9 +4,9 @@ import { constants } from 'http2'
 import { app } from '../../../app'
 import facilitiesData from './facilities.json'
 import { Facility } from '../../../models/facility'
-import { assignRoleToUser, deleteUserById } from '../../../services/auth'
+import { assignRoleToUser } from '../../../services/auth'
 import { Role } from '../../../models/user'
-import { NotAuthorizedError } from '../../../common'
+import { deleteUserById } from '../../../services/user'
 
 describe('Facility integration test suite', () => {
   beforeEach(async () => {

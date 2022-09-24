@@ -6,7 +6,8 @@ import { Role } from './models/user'
 import { Person } from './models/person'
 import { transformData } from './services/facility/utils/etl-json'
 import facilitiesData from './routes/facility/__test__/facilities.json'
-import { createRole, createUser, deleteRoleByRoleName, findRoleByRoleName } from './services/auth'
+import { createRole, deleteRoleByRoleName, findRoleByRoleName } from './services/auth'
+import { createUser } from './services/user'
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()

@@ -14,6 +14,7 @@ import { createRoleRouter } from './routes/auth/create-role'
 
 import { facilityRouter } from './routes/facility'
 import { visitRouter } from './routes/visit'
+import { userDetailsRouter } from './routes/user/get-user-details'
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
@@ -36,6 +37,7 @@ app.use(refreshTokenRouter)
 app.use(createRoleRouter)
 app.use(facilityRouter)
 app.use(visitRouter)
+app.use(userDetailsRouter)
 
 app.all('*', async () => {
   throw new NotFoundError()

@@ -6,7 +6,8 @@ import { app } from '../../../app'
 import { createFacility } from '../../../services/facility'
 import { Role } from '../../../models/user'
 import { Visit, VisitDoc } from '../../../models/visit'
-import { assignRoleToUser, createUser, deleteUserById } from '../../../services/auth'
+import { assignRoleToUser } from '../../../services/auth'
+import { createUser, deleteUserById } from '../../../services/user'
 
 async function createTestFacility() {
   const facilityName = 'Facility1'

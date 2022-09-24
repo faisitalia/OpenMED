@@ -1,4 +1,4 @@
-import { createUser, deleteUserById, getUserById } from '..'
+import { createUser, deleteUserById, getUserById } from '../index'
 import { Role } from '../../../models/user'
 
 it('should create an user', async () => {

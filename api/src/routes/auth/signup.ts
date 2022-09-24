@@ -4,7 +4,7 @@ import { constants } from 'http2'
 
 import { validateRequest } from '../../common'
 import { Role } from '../../models/user'
-import { createUser, getUserById } from '../../services/auth'
+import { createUser, getUserById } from '../../services/user'
 import { logger } from '../../utils/logger'
 
 const router = express.Router()

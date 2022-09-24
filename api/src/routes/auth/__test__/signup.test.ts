@@ -2,7 +2,7 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { deleteUserById } from '../../../services/auth'
+import { deleteUserById } from '../../../services/user'
 
 it('returns a 200 on successful signup', async () => {
   const email = 'john-signup@test.com'

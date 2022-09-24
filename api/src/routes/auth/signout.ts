@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express'
 import { constants } from 'http2'
-import { requireAuth } from '../../common'
 import { Role } from '../../models/user'
 
-import { getUserInfo, logout } from '../../services/auth'
+import { logout } from '../../services/auth'
+import { getUserInfo } from '../../services/user'
 
 const router = express.Router()
 

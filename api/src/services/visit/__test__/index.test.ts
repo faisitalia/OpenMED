@@ -1,8 +1,7 @@
 import { createVisit } from '..'
-import { Person } from '../../../models/person'
 import { Role } from '../../../models/user'
-import { createUser, deleteUserById } from '../../auth'
 import { createFacility } from '../../facility'
+import { createUser, deleteUserById } from '../../user'
 
 describe('Visit service test suite', function () {
   it('should create a visit', async () => {
