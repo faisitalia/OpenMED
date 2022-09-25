@@ -154,7 +154,13 @@ async function getUserInfo(accessToken: string) {
   }
 }
 
-async function getAllUsers() {
+/**
+ *
+ * @param facilityId
+ * @param role
+ * @returns
+ */
+async function getAllUsers(facilityId = undefined, role = undefined) {
   const kcAdminClient = await KeycloakAdminClientImpl.getInstance()
   const users = await kcAdminClient.users.find()
 
