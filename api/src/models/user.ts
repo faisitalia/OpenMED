@@ -54,6 +54,7 @@ const userSchema = new mongoose.Schema(
     },
   },
   {
+    collection: 'user',
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id

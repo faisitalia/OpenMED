@@ -51,7 +51,15 @@ const populateUsers = async function () {
   const adminBirthdate = new Date()
   const adminEmail = 'admin@openmed.cloud'
   const adminPassword = 'password'
-  await createUser(adminFirstname, adminLastname, adminBirthdate, adminUsername, adminEmail, adminPassword, Role.ADMIN)
+  await createUser(
+    adminFirstname,
+    adminLastname,
+    adminBirthdate,
+    adminUsername,
+    adminEmail,
+    adminPassword,
+    Role.ADMIN
+  )
 
   const doctorUsername = 'doctor'
   const doctorFirstname = 'John-doctor'
@@ -59,7 +67,15 @@ const populateUsers = async function () {
   const doctorBirthdate = new Date()
   const doctorEmail = 'doctor@openmed.cloud'
   const doctorPassword = 'password'
-  await createUser(doctorFirstname, doctorLastname, doctorBirthdate, doctorUsername, doctorEmail, doctorPassword, Role.DOCTOR)
+  await createUser(
+    doctorFirstname,
+    doctorLastname,
+    doctorBirthdate,
+    doctorUsername,
+    doctorEmail,
+    doctorPassword,
+    Role.DOCTOR
+  )
 
   const nurseUsername = 'nurse'
   const nurseFirstname = 'John-nurse'
@@ -67,7 +83,15 @@ const populateUsers = async function () {
   const nurseBirthdate = new Date()
   const nurseEmail = 'nurse@openmed.cloud'
   const nursePassword = 'password'
-  await createUser(nurseFirstname, nurseLastname, nurseBirthdate, nurseUsername, nurseEmail, nursePassword, Role.NURSE)
+  await createUser(
+    nurseFirstname,
+    nurseLastname,
+    nurseBirthdate,
+    nurseUsername,
+    nurseEmail,
+    nursePassword,
+    Role.NURSE
+  )
 
   const patientUsername = 'patient'
   const patientFirstname = 'John-patient'
@@ -75,7 +99,15 @@ const populateUsers = async function () {
   const patientBirthdate = new Date()
   const patientEmail = 'patient@openmed.cloud'
   const patientPassword = 'password'
-  await createUser(patientFirstname, patientLastname, patientBirthdate, patientUsername, patientEmail, patientPassword, Role.PATIENT)
+  await createUser(
+    patientFirstname,
+    patientLastname,
+    patientBirthdate,
+    patientUsername,
+    patientEmail,
+    patientPassword,
+    Role.PATIENT
+  )
 
   const caregiverUsername = 'caregiver'
   const caregiverFirstname = 'John-caregiver'
@@ -83,7 +115,15 @@ const populateUsers = async function () {
   const caregiverBirthdate = new Date()
   const caregiverEmail = 'caregiver@openmed.cloud'
   const caregiverPassword = 'password'
-  await createUser(caregiverFirstname, caregiverLastname, caregiverBirthdate, caregiverUsername, caregiverEmail, caregiverPassword, Role.CAREGIVER)
+  await createUser(
+    caregiverFirstname,
+    caregiverLastname,
+    caregiverBirthdate,
+    caregiverUsername,
+    caregiverEmail,
+    caregiverPassword,
+    Role.CAREGIVER
+  )
 
   console.log('Users inserted!')
 }
@@ -120,6 +160,7 @@ const runSeed = async () => {
   }
 
   try {
+    // TODO get the MONGO_URI for the node environment
     const openmedMongo = await mongoose.connect(process.env.MONGO_URI)
     const databaseName = openmedMongo.connection.db.databaseName
     console.log(`Connected to MongoDb database: ${databaseName}`)

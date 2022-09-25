@@ -54,6 +54,7 @@ const visitSchema = new mongoose.Schema(
     },
   },
   {
+    collection: 'visit',
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id
