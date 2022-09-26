@@ -82,6 +82,7 @@ const facilitySchema = new mongoose.Schema(
     },
   },
   {
+    collection: 'facility',
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id

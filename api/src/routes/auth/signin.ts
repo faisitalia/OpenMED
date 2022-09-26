@@ -12,7 +12,7 @@ const router = express.Router()
  *   post:
  *     description: Returns the logged user
  *     tags:
- *      - User
+ *      - Authentication
  *     produces:
  *      - application/json
  *     requestBody:

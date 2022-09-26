@@ -46,6 +46,7 @@
   "apis": [
     "./src/routes/facility/*.ts",
     "./src/routes/auth/*.ts",
+    "./src/routes/user/*.ts",
     "./src/routes/visit/*.ts",
     "../models/*.ts"
   ]

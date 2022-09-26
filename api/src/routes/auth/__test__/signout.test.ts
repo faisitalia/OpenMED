@@ -2,7 +2,7 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { deleteUserById, getUserInfo } from '../../../services/auth'
+import { deleteUserById, getUserInfo } from '../../../services/user'
 
 it('clears the session after signing out', async () => {
   const username = 'john1'

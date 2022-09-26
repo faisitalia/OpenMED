@@ -1,6 +1,6 @@
 import RoleRepresentation from '@keycloak/keycloak-admin-client/lib/defs/roleRepresentation'
 import { Request, Response, NextFunction } from 'express'
-import { getUserInfo } from '../../services/auth'
+import { getUserInfo } from '../../services/user'
 
 interface UserPayload {
   id: string

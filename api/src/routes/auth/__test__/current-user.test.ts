@@ -2,8 +2,8 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { deleteUserById } from '../../../services/auth'
 import { Role } from '../../../models/user'
+import { deleteUserById } from '../../../services/user'
 
 it('responds with details about the current user', async () => {
   const username = 'john-current'

@@ -2,8 +2,9 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { assignRoleToUser, deleteRoleByRoleName, deleteUserById } from '../../../services/auth'
+import { assignRoleToUser, deleteRoleByRoleName } from '../../../services/auth'
 import { Role } from '../../../models/user'
+import { deleteUserById } from '../../../services/user'
 
 it('returns a 200 on successful role creation', async () => {
   const username = 'john-role'

@@ -5,8 +5,6 @@ import fs from 'fs-extra'
 import { app, PORT } from './app'
 import { logger } from './utils/logger'
 
-import swaggerDocs from './utils/swagger'
-
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config()
 
@@ -33,8 +31,7 @@ const start = async () => {
 
   https.createServer({ key: key, cert: cert }, app).listen(PORT, () => {
     logger.info(`The API server is running at port ${PORT}`)
-    // run swagger/openapi docs
-    swaggerDocs(app, 3001)
+    console.log(`Docs available at https://localhost:${PORT}/docs`)
   })
 }
 

@@ -4,7 +4,7 @@ import { constants } from 'http2'
 
 import { validateRequest } from '../../common'
 import { Role } from '../../models/user'
-import { createUser, getUserById } from '../../services/auth'
+import { createUser, getUserById } from '../../services/user'
 import { logger } from '../../utils/logger'
 
 const router = express.Router()
@@ -15,7 +15,7 @@ const router = express.Router()
  *   post:
  *     description: Returns the just created user
  *     tags:
- *      - User
+ *      - Authentication
  *     produces:
  *      - application/json
  *     requestBody:
@@ -63,9 +63,15 @@ router.post(
     // TODO transaction
 
     try {
-      
-
-      const userId = await createUser(firstname, lastname, birthdate, username, email, password, Role.USER)
+      const userId = await createUser(
+        firstname,
+        lastname,
+        birthdate,
+        username,
+        email,
+        password,
+        Role.USER
+      )
 
       // retrieve the user just created
       const rawUser = await getUserById(userId)

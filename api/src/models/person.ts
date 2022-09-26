@@ -46,6 +46,7 @@ const personSchema = new mongoose.Schema(
     },
   },
   {
+    collection: 'person',
     toJSON: {
       transform(doc, ret) {
         ret.id = ret._id

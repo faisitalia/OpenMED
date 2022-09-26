@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test:dev": "jest --watchAll --no-cache",
-    "test": "jest --no-cache",
+    "test": "jest --no-cache --testTimeout=10000",
     "eslint": "eslint . --ext .ts",
     "start:services": "cd ../docker && docker-compose -p openmed up -d && cd ../api",
     "stop:services": "cd ../docker && docker-compose -p openmed down -v && cd ../api",
     "start:dev": "NODE_ENV=development HTTPS=true ts-node-dev src/index.ts",
     "build": "webpack --mode production",
-    "seed": "ts-node-dev src/seed.ts"
+    "seed": "NODE_ENV=development ts-node-dev src/seed.ts"
   },
   "jest": {
     "preset": "ts-jest",

@@ -8,7 +8,7 @@ const router = express.Router()
  *   get:
  *     description: Returns the logged user details
  *     tags:
- *      - User
+ *      - Authentication
  *     produces:
  *      - application/json
  *     responses:

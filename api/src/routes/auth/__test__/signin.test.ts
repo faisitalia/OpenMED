@@ -2,7 +2,7 @@ import request from 'supertest'
 import { constants } from 'http2'
 
 import { app } from '../../../app'
-import { deleteUserById } from '../../../services/auth'
+import { deleteUserById } from '../../../services/user'
 
 it('fails when a username that does not exist is supplied', async () => {
   const response = await request(app)
