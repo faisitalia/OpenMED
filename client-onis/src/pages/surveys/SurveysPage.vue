@@ -1,6 +1,7 @@
 <script setup>
 import { useHead } from "@vueuse/head";
 import { onMounted, onUnmounted } from "vue";
+import surveyJson from "./survey";
 
 useHead({
   link: [
@@ -22,20 +23,7 @@ onMounted(() => {
   /* eslint-disable no-undef */
   Survey.StylesManager.applyTheme("defaultV2");
 
-  const surveyJson = {
-    elements: [
-      {
-        name: "FirstName",
-        title: "Enter your first name:",
-        type: "text",
-      },
-      {
-        name: "LastName",
-        title: "Enter your last name:",
-        type: "text",
-      },
-    ],
-  };
+  // console.log(surveyJson);
 
   const survey = new Survey.Model(surveyJson);
   function alertResults(sender) {
