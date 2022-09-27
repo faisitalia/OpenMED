@@ -11,8 +11,9 @@ import patientQualityOfLifeJson from "./survey-questions/patient-quality-of-life
 import structureJson from "./survey-questions/structure";
 
 export default {
-  title: "ONIS - STOMA. PROTOCOLLO di STUDIO PROSPETTICO",
-  description: "Registro prospettico multicentrico delle persone stomizzate.",
+  title: "PROTOCOLLO di STUDIO PROSPETTICO",
+  description:
+    "ONIS: Registro prospettico multicentrico delle persone stomizzate",
   pages: [
     { ...genericJson },
     { ...accessJson },
@@ -26,4 +27,7 @@ export default {
     { ...patientQualityOfLifeJson },
     { ...structureJson },
   ],
+  requiredError: "Campo obbligatorio",
+  completedHtml:
+    "<h3>Grazie.</h3><p>Le tue risposte ci aiuteranno a migliorare il servizio.</p>",
 };

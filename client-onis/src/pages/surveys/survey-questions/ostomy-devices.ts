@@ -148,13 +148,13 @@ export default {
     {
       name: "ostomy-devices-abs-profile-other",
       type: "text",
-      title: "Indicare l'accessorio usato",
+      title: "Indicare il profilo",
       visibleIf: "{ostomy-devices-abs-profile}='other'",
       isRequired: true,
     },
     {
       name: "ostomy-devices-abs-everting-rate",
-      title: "Che tipo di profilo addominale presenta?",
+      title: "Dimensione grado estroflessione stomia",
       choices: [
         {
           value: "inverted",

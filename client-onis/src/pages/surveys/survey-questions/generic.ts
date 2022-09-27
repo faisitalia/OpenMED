@@ -2,7 +2,7 @@ export default {
   elements: [
     {
       type: "html",
-      html: '<p class="text-onPrimary">Stai per compilare un questionario che [...]. Più informazioni su [...].</p>',
+      html: '<p class="text-onPrimary">Stai per compilare un questionario che di indagine prospettica sulle condizioni delle persone stomizzate. Più informazioni su www.onis.com.</p>',
     },
     {
       type: "html",

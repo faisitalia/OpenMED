@@ -40,7 +40,6 @@ export default {
         { value: "device-apply", text: "Applicazione del dispositivo" },
       ],
       isRequired: true,
-      hasNone: true,
     },
     {
       name: "ostomy-management-likert",
