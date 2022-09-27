@@ -13,7 +13,7 @@ const toggle = () => (isDrawerOpen.value = !isDrawerOpen.value);
     <MobileMenu @toggle="toggle" />
     <DesktopMenu />
 
-    <div class="p-12 relative flex flex-col">
+    <div class="p-12 relative flex flex-col items-center">
       <main
         class="transition-all md:blur-none"
         :class="isDrawerOpen ? 'blur-sm' : 'blur-none'"
