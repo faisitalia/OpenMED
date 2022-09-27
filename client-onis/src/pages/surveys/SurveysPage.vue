@@ -42,7 +42,10 @@ onMounted(() => {
       item: "text-primary-dark font-bold",
     },
     text: { small: "text-primary-dark font-bold" },
-    boolean: { mainRoot: "flex justify-center items-center" },
+    boolean: {
+      mainRoot: "flex flex-col justify-center items-center",
+      root: "pt-4",
+    },
     checkbox: {
       controlLabel: "flex items-center justify-center font-light mx-4 my-0",
       // materialDecorator:
