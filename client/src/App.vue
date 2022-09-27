@@ -62,8 +62,6 @@ useHead({
 
 <template>
   <div id="app">
-    <main>
-      <AppLayout />
-    </main>
+    <Router-View />
   </div>
 </template>

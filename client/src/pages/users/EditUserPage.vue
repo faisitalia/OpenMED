@@ -2,6 +2,7 @@
 import { useHead } from "@vueuse/head";
 import { validate } from "validate.js";
 import { useRouter } from "vue-router";
+import OpenmedLayout from "../../layouts/OpenmedLayout.vue";
 
 const props = defineProps({ userId: String });
 
@@ -180,7 +181,7 @@ async function submit() {
 </script>
 
 <template>
-  <NuxtLayout name="layout">
+  <OpenmedLayout>
     <h1 class="font-bold my-2">Gestione Utenti</h1>
     <p class="font-normal mb-8">Nuovo Profilo</p>
 
@@ -326,5 +327,5 @@ async function submit() {
     <div v-if="asyncErrors?.errors" class="text-red-500">
       Woops! Qualcosa è andato storto, riprova.
     </div>
-  </NuxtLayout>
+  </OpenmedLayout>
 </template>

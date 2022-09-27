@@ -4,6 +4,7 @@ import { format } from "date-fns";
 
 import { useRouter } from "vue-router";
 import { useHead } from "@vueuse/head";
+import OpenmedLayout from "../../layouts/OpenmedLayout.vue";
 
 const props = defineProps({
   appointmentId: String,
@@ -91,93 +92,95 @@ async function submit() {
 </script>
 
 <template>
-  <div class="mx-4 my-4">
-    <h1 class="font-bold my-2">Nuovo Appuntamento</h1>
-    <p class="font-normal mb-8">Compila tutti i campi.</p>
+  <OpenmedLayout>
+    <div class="mx-4 my-4">
+      <h1 class="font-bold my-2">Nuovo Appuntamento</h1>
+      <p class="font-normal mb-8">Compila tutti i campi.</p>
 
-    <FormKit
-      type="form"
-      id="edit-appointment"
-      :actions="false"
-      :incomplete-message="false"
-      @submit="submit"
-      class="flex flex-col items-stretch px-2"
-    >
-      <fieldset class="my-3" name="Ambulatorio">
-        <FormKit
-          id="clinic"
-          name="Ambulatorio"
-          label="Seleziona Ambulatorio"
-          type="select"
-          v-model="clinic"
-          value="Virtuale"
-          validation="required"
-          :validation-messages="{ required: requiredError }"
-          :options="clinics"
-          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-          message-class="text-red-500"
-        />
-      </fieldset>
-      <fieldset class="my-3" name="Appuntamento">
-        <FormKit
-          id="appointment"
-          name="Appuntamento"
-          label="Seleziona l'appuntamento"
-          type="datetime-local"
-          :required="false"
-          v-model="startDateTime"
-          :value="formattedDate"
-          :validation="`required|date_after:${formattedDate}`"
-          :validation-messages="{ date_after: noPastAppointments }"
-          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-          message-class="text-red-500"
-        />
-      </fieldset>
-      <fieldset class="my-3" name="Durata">
-        <FormKit
-          id="duration"
-          name="Durata"
-          label="Durata"
-          type="select"
-          v-model="duration"
-          :options="durations"
-          :value="durations[0]"
-          validation="required"
-          :validation-messages="{ required: requiredError }"
-          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-          message-class="text-red-500"
-        />
-      </fieldset>
-      <fieldset class="my-3" name="Paziente">
-        <FormKit
-          id="patient"
-          name="Paziente"
-          label="Paziente"
-          type="select"
-          v-model="patient"
-          :options="patients"
-          :value="patients[0]"
-          validation="required"
-          :validation-messages="{ required: requiredError }"
-          input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
-          message-class="text-red-500"
-        />
-      </fieldset>
       <FormKit
-        type="submit"
-        name="submit-button"
-        label="Crea appuntamento"
-        wrapper-class="$reset flex justify-center align-middle mt-12"
-        input-class="align-center px-4 py-2 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
-      />
-    </FormKit>
-    <div v-if="asyncErrors" class="text-red-500">
-      Woops! Qualcosa è andato storto, riprova.
+        type="form"
+        id="edit-appointment"
+        :actions="false"
+        :incomplete-message="false"
+        @submit="submit"
+        class="flex flex-col items-stretch px-2"
+      >
+        <fieldset class="my-3" name="Ambulatorio">
+          <FormKit
+            id="clinic"
+            name="Ambulatorio"
+            label="Seleziona Ambulatorio"
+            type="select"
+            v-model="clinic"
+            value="Virtuale"
+            validation="required"
+            :validation-messages="{ required: requiredError }"
+            :options="clinics"
+            input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+            message-class="text-red-500"
+          />
+        </fieldset>
+        <fieldset class="my-3" name="Appuntamento">
+          <FormKit
+            id="appointment"
+            name="Appuntamento"
+            label="Seleziona l'appuntamento"
+            type="datetime-local"
+            :required="false"
+            v-model="startDateTime"
+            :value="formattedDate"
+            :validation="`required|date_after:${formattedDate}`"
+            :validation-messages="{ date_after: noPastAppointments }"
+            input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+            message-class="text-red-500"
+          />
+        </fieldset>
+        <fieldset class="my-3" name="Durata">
+          <FormKit
+            id="duration"
+            name="Durata"
+            label="Durata"
+            type="select"
+            v-model="duration"
+            :options="durations"
+            :value="durations[0]"
+            validation="required"
+            :validation-messages="{ required: requiredError }"
+            input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+            message-class="text-red-500"
+          />
+        </fieldset>
+        <fieldset class="my-3" name="Paziente">
+          <FormKit
+            id="patient"
+            name="Paziente"
+            label="Paziente"
+            type="select"
+            v-model="patient"
+            :options="patients"
+            :value="patients[0]"
+            validation="required"
+            :validation-messages="{ required: requiredError }"
+            input-class="w-full transition-all hover:cursor-pointer appearance-none px-4 py-1 rounded-3xl bg-brandBlue-50/25 hover:bg-brandBlue-50/40"
+            message-class="text-red-500"
+          />
+        </fieldset>
+        <FormKit
+          type="submit"
+          name="submit-button"
+          label="Crea appuntamento"
+          wrapper-class="$reset flex justify-center align-middle mt-12"
+          input-class="align-center px-4 py-2 rounded-xl text-white font-bold bg-brandBlue-500/95 hover:bg-brandBlue-500"
+        />
+      </FormKit>
+      <div v-if="asyncErrors" class="text-red-500">
+        Woops! Qualcosa è andato storto, riprova.
+      </div>
     </div>
-  </div>
-  <div
-    class="mx-3 align-middle bg-brandBlue-100/60 rounded-lg cursor-pointer"
-  ></div>
+    <div
+      class="mx-3 align-middle bg-brandBlue-100/60 rounded-lg cursor-pointer"
+    ></div>
+  </OpenmedLayout>
 </template>
 
 <style>

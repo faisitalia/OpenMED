@@ -17,7 +17,6 @@ const router = createRouter({
       path: "/",
       name: "home",
       component: HomePage,
-      meta: { layout: "OpenmedLayout" },
     },
     {
       path: "/login",
@@ -28,25 +27,21 @@ const router = createRouter({
       path: "/users",
       name: "users",
       component: UsersPageVue,
-      meta: { layout: "OpenmedLayout" },
     },
     {
       path: "/appointments",
       name: "appointments",
       component: AppointmentsPage,
-      meta: { layout: "OpenmedLayout" },
     },
     {
       path: "/appointments/edit",
       name: "edit-appointment",
       component: EditAppointmentPage,
-      meta: { layout: "OpenmedLayout" },
     },
     {
       path: "/appointments/ok",
       name: "confirm-appointment",
       component: ConfirmAppointmentPageVue,
-      meta: { layout: "OpenmedLayout" },
     },
   ],
 });
