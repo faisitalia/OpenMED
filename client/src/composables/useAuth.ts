@@ -5,35 +5,14 @@ import { usersUri } from "@/uri";
 import { useClient } from "./useClient";
 import { useAuthClient } from "./useAuthClient";
 
-// type AuthInfo = {
-//   accessToken: string;
-//   expiresIn: number;
-//   refreshToken: string;
-//   refreshExpiresIn: number;
-// };
-
-export interface OpenMedCredentials {
-  username: string;
-  password: string;
-}
-
 export const useAuth = defineStore("auth", () => {
   const localValue = useLocalStorage<string | null>("auth", null);
-
   const accessToken = ref<string | null>(localValue.value);
-
-  // TODO properly handle refresh logic
-  // const expiresIn = ref<number | undefined>(localValue.value?.expiresIn);
-  // const refreshToken = ref<string | undefined>(localValue.value?.refreshToken);
-  // const refreshExpiresIn = ref<number | undefined>(
-  // localValue.value?.refreshExpiresIn
-  // );
+  const isAuthenticated = computed(() => !!accessToken.value);
 
   watch(accessToken, (token) => {
     localValue.value = token;
   });
-
-  const isAuthenticated = computed(() => !!accessToken.value);
 
   async function login(credentials: OpenMedCredentials): Promise<void> {
     const { data } = await useClient(`${usersUri}/signin`, {
@@ -61,6 +40,8 @@ export const useAuth = defineStore("auth", () => {
       if (status === undefined || status >= 300) {
         throw response.value?.statusText;
       }
+    } catch (e) {
+      console.log(e);
     } finally {
       accessToken.value = null;
       // expiresIn.value = undefined;
@@ -69,13 +50,33 @@ export const useAuth = defineStore("auth", () => {
     }
   }
 
+  const redirect = (currentRoute: string) => {
+    const isLoggingIn = currentRoute === "login";
+
+    if (isLoggingIn) {
+      if (isAuthenticated.value) return "/";
+
+      return;
+    }
+
+    if (!isAuthenticated.value) return "/login";
+
+    return;
+  };
+
   return {
     isAuthenticated,
     accessToken,
     login,
     logout,
+    redirect,
   };
 });
+
+export interface OpenMedCredentials {
+  username: string;
+  password: string;
+}
 
 // OLD NUXT logic --> TODO use the following logic for the refresh token
 // const useAuth = () => {

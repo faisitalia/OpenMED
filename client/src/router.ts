@@ -67,7 +67,7 @@ router.beforeEach(async (to, from) => {
 
   const patientPages = ["/appointments"];
   const patientRequired = patientPages.includes(to.path);
-  if (patientRequired && !isPatient) return from.path;
+  if (patientRequired && !isPatient && !isDoctor) return from.path;
 
   const doctorPages = [
     "/appointments",

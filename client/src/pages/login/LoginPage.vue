@@ -7,10 +7,12 @@ import { useHead } from "@vueuse/head";
 import { useAuth } from "@/composables/useAuth";
 
 import StyledButton from "../../components/StyledButton.vue";
+import { useUser } from "@/composables/useUser";
 
 useHead({ title: `Login` });
 const { login } = useAuth();
-const { replace } = useRouter();
+const { getUser } = useUser();
+const { push } = useRouter();
 
 const username = ref<string>("");
 const usernameMessages = { required: "Inserisci il tuo username" };
@@ -31,7 +33,10 @@ async function loginWithCredentials() {
     });
 
     submitError.value = "";
-    replace("/");
+
+    await getUser();
+
+    push("/");
   } catch (err) {
     console.log(err);
 

@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { useUser } from "@/composables/useUser";
-import { storeToRefs } from "pinia";
 
 import H1Title from "@/components/H1Title.vue";
 import SubTitle from "@/components/SubTitle.vue";
 import DashboardTile from "@/components/Dashboard/DashboardTile.vue";
 import DashboardAppointments from "@/components/Dashboard/DashboardAppointments.vue";
+import { useHead } from "@vueuse/head";
 
-const { isDoctor, isPatient, isAdmin, username } = storeToRefs(useUser());
+useHead({ title: `Dashboard` });
 
-const noRolesDetected = !isDoctor.value && !isPatient.value && !isAdmin.value;
+const { isDoctor, isPatient, isAdmin, username } = useUser();
+
+const noRolesDetected = !isDoctor && !isPatient && !isAdmin;
 </script>
 
 <template>
