@@ -8,6 +8,7 @@ import UsersFilterButton from "../../components/Users/UsersFilterButton.vue";
 import StyledButton from "../../components/StyledButton.vue";
 import DeleteButton from "../../components/DeleteButton.vue";
 import DetailedTile from "../../components/DetailedTile.vue";
+import OpenmedLayout from "../../layouts/OpenmedLayout.vue";
 
 const props = defineProps({
   users: { default: [] },
@@ -116,94 +117,98 @@ const filteredList = computed(
 </script>
 
 <template>
-  <div class="">
-    <div
-      class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:justify-items-center lg:grid-cols-[auto_auto]"
-    >
-      <div id="user-list">
-        <H1Title>Gestione Utenti</H1Title>
-        <SubTitle>Lista Utenti</SubTitle>
-        <div
-          id="search"
-          class="mt-16 mb-4 self-end col-start-1 row-start-1 px-4 py-2 flex flex-row items-center w-full md:w-96 bg-brandBlue-50/50 rounded-full text-center"
-        >
-          <span class="material-icons-round"> search </span>
-          <input
-            id="search-input"
-            class="focus:bg-white/30 rounded-xl px-4 bg-transparent focus:outline-none"
-            type="text"
-            placeholder="Cerca utente"
-            v-model="search"
-          />
-        </div>
-        <div id="filters" class="my-1 col-start-1 row-start-2 w-full">
-          <div class="w-full flex flex-wrap flex-row justify-evenly">
-            <!-- TODO implement on:click events -->
-            <UsersFilterButton>Medici</UsersFilterButton>
-            <UsersFilterButton>Infermieri</UsersFilterButton>
-            <UsersFilterButton>Pazienti</UsersFilterButton>
+  <OpenmedLayout>
+    <div class="">
+      <div
+        class="mx-4 my-4 sm:my-16 lg:gap-x-10 lg:grid lg:place-items-start lg:justify-items-center lg:grid-cols-[auto_auto]"
+      >
+        <div id="user-list">
+          <H1Title>Gestione Utenti</H1Title>
+          <SubTitle>Lista Utenti</SubTitle>
+          <div
+            id="search"
+            class="mt-16 mb-4 self-end col-start-1 row-start-1 px-4 py-2 flex flex-row items-center w-full md:w-96 bg-brandBlue-50/50 rounded-full text-center"
+          >
+            <span class="material-icons-round"> search </span>
+            <input
+              id="search-input"
+              class="focus:bg-white/30 rounded-xl px-4 bg-transparent focus:outline-none"
+              type="text"
+              placeholder="Cerca utente"
+              v-model="search"
+            />
+          </div>
+          <div id="filters" class="my-1 col-start-1 row-start-2 w-full">
+            <div class="w-full flex flex-wrap flex-row justify-evenly">
+              <!-- TODO implement on:click events -->
+              <UsersFilterButton>Medici</UsersFilterButton>
+              <UsersFilterButton>Infermieri</UsersFilterButton>
+              <UsersFilterButton>Pazienti</UsersFilterButton>
+            </div>
+          </div>
+          <div
+            id="users-table"
+            class="my-4 col-start-1 row-start-3 place-self-stretch md:pr-40"
+          >
+            <DetailedTile
+              v-for="user in filteredList"
+              :key="user.id"
+              :title="`${user.name} ${user.surname}`"
+              :subtitle="user.email"
+              class="rounded-3xl my-1 px-4 py-1"
+            >
+              <template #content>
+                <div class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]">
+                  <div class="col-span-1">
+                    <p class="font-bold">Email</p>
+                    <p>{{ user.email }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Ruolo</p>
+                    <p>{{ user.role }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Telefono:</p>
+                    <p>{{ user.phone }}</p>
+                  </div>
+                  <div class="col-span-1">
+                    <p class="font-bold">Città:</p>
+                    <p>{{ user.city }}</p>
+                  </div>
+                </div>
+              </template>
+
+              <template #trailing>
+                <div
+                  @click.stop
+                  class="flex flex-col items-center cursor-default"
+                >
+                  <StyledButton @click="replace(`/users/edit?id=${user.id}`)">
+                    Modifica
+                  </StyledButton>
+
+                  <DeleteButton @delete="null">Elimina</DeleteButton>
+                </div>
+              </template>
+            </DetailedTile>
+            <h3 v-if="!filteredList">Nessun utente trovato.</h3>
           </div>
         </div>
-        <div
-          id="users-table"
-          class="my-4 col-start-1 row-start-3 place-self-stretch md:pr-40"
-        >
-          <DetailedTile
-            v-for="user in filteredList"
-            :key="user.id"
-            :title="`${user.name} ${user.surname}`"
-            :subtitle="user.email"
-            class="rounded-3xl my-1 px-4 py-1"
+
+        <!-- Crea nuovo utente-->
+        <div class="col-start-2 hidden lg:flex lg:flex-col">
+          <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
+          <StyledButton class="font-bold" @click="replace('/users/edit')">
+            Crea Nuovo
+          </StyledButton>
+          <div class="my-20" />
+          <!-- TODO -->
+          <h3 class="mt-4 mb-8 text-center">SERVE AIUTO?</h3>
+          <StyledButton class="font-bold" @click="null"
+            >Clicca qui</StyledButton
           >
-            <template #content>
-              <div class="gap-x-6 gap-y-2 grid grid-cols-[auto_auto]">
-                <div class="col-span-1">
-                  <p class="font-bold">Email</p>
-                  <p>{{ user.email }}</p>
-                </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Ruolo</p>
-                  <p>{{ user.role }}</p>
-                </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Telefono:</p>
-                  <p>{{ user.phone }}</p>
-                </div>
-                <div class="col-span-1">
-                  <p class="font-bold">Città:</p>
-                  <p>{{ user.city }}</p>
-                </div>
-              </div>
-            </template>
-
-            <template #trailing>
-              <div
-                @click.stop
-                class="flex flex-col items-center cursor-default"
-              >
-                <StyledButton @click="replace(`/users/edit?id=${user.id}`)">
-                  Modifica
-                </StyledButton>
-
-                <DeleteButton @delete="null">Elimina</DeleteButton>
-              </div>
-            </template>
-          </DetailedTile>
-          <h3 v-if="!filteredList">Nessun utente trovato.</h3>
         </div>
       </div>
-
-      <!-- Crea nuovo utente-->
-      <div class="col-start-2 hidden lg:flex lg:flex-col">
-        <h3 class="mt-4 mb-8 text-center">NUOVO UTENTE?</h3>
-        <StyledButton class="font-bold" @click="replace('/users/edit')">
-          Crea Nuovo
-        </StyledButton>
-        <div class="my-20" />
-        <!-- TODO -->
-        <h3 class="mt-4 mb-8 text-center">SERVE AIUTO?</h3>
-        <StyledButton class="font-bold" @click="null">Clicca qui</StyledButton>
-      </div>
     </div>
-  </div>
+  </OpenmedLayout>
 </template>

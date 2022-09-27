@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { useHead } from "@vueuse/head";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import StyledButton from "../../components/StyledButton.vue";
 import DetailedTile from "../../components/DetailedTile.vue";
+import OpenmedLayout from "../../layouts/OpenmedLayout.vue";
 
-// import { visitsEndpoint } from '$lib/uri.js';
-defineProps({
-  visits: {
-    required: false,
-    type: Array<any>,
-  },
-});
 const { replace, push } = useRouter();
 useHead({ title: `I tuoi appuntamenti` });
+
+const visits = ref();
 
 // async function load({ session, fetch }) {
 //   // if(!session?.id) {
@@ -105,63 +102,67 @@ useHead({ title: `I tuoi appuntamenti` });
 </script>
 
 <template>
-  <div class="mx-4 my-4">
-    <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
-    <p class="font-normal mb-8">Le visite programmate sono qui.</p>
-    <DetailedTile
-      v-for="v in visits"
-      title="Visita"
-      :subtitle="`${v.date} h ${v.time}`"
-      :key="v"
-    >
-      <template #content>
-        <div class="py-3">
-          <h3>Appuntamento</h3>
-          <p>il {{ v.date }}</p>
-          <p>h {{ v.time }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Ambulatorio</h3>
-          <p>{{ v.clinic }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Medico</h3>
-          <p>{{ v.doctor.name }} {{ v.doctor.surname }}</p>
-          <p class="font-light text-brandText-400">
-            {{ v.doctor.qualification }}
-          </p>
-        </div>
-        <div class="py-3">
-          <h3>Paziente</h3>
-          <p>{{ v.patient.name }} {{ v.patient.surname }}</p>
-          <p class="font-light">{{ v.patient.ssn }}</p>
-        </div>
-        <div class="py-3">
-          <h3>Caregiver / Familiare</h3>
-          <p>{{ v.caregiver.name }} {{ v.caregiver.surname }}</p>
-          <p class="font-light text-brandText-400">
-            {{ v.caregiver.relation }}
-          </p>
-        </div>
-      </template>
-      <template #trailing>
-        <div
-          @click.stop="() => null"
-          class="flex flex-col items-stretch cursor-default"
+  <OpenmedLayout>
+    <div class="mx-4 my-4">
+      <h1 class="font-bold my-2">Scegli il tuo appuntamento</h1>
+      <p class="font-normal mb-8">Le visite programmate sono qui.</p>
+      <div v-if="visits">
+        <DetailedTile
+          v-for="v in visits"
+          title="Visita"
+          :subtitle="`${v.date} h ${v.time}`"
+          :key="v"
         >
-          <StyledButton @click="() => replace(`/call?id=${v.id}`)">
-            <span class="material-icons-round align-middle pr-2">call</span>
-            Inizio chiamata
-          </StyledButton>
-          <StyledButton
-            colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
-            @click="() => push(`/appointments/edit?id=${v.id}`)"
-          >
-            Modifica
-          </StyledButton>
-        </div>
-      </template>
-    </DetailedTile>
-    <p v-if="!visits">Non hai appuntamenti da poter mostrare qui.</p>
-  </div>
+          <template #content>
+            <div class="py-3">
+              <h3>Appuntamento</h3>
+              <p>il {{ v.date }}</p>
+              <p>h {{ v.time }}</p>
+            </div>
+            <div class="py-3">
+              <h3>Ambulatorio</h3>
+              <p>{{ v.clinic }}</p>
+            </div>
+            <div class="py-3">
+              <h3>Medico</h3>
+              <p>{{ v.doctor.name }} {{ v.doctor.surname }}</p>
+              <p class="font-light text-brandText-400">
+                {{ v.doctor.qualification }}
+              </p>
+            </div>
+            <div class="py-3">
+              <h3>Paziente</h3>
+              <p>{{ v.patient.name }} {{ v.patient.surname }}</p>
+              <p class="font-light">{{ v.patient.ssn }}</p>
+            </div>
+            <div class="py-3">
+              <h3>Caregiver / Familiare</h3>
+              <p>{{ v.caregiver.name }} {{ v.caregiver.surname }}</p>
+              <p class="font-light text-brandText-400">
+                {{ v.caregiver.relation }}
+              </p>
+            </div>
+          </template>
+          <template #trailing>
+            <div
+              @click.stop="() => null"
+              class="flex flex-col items-stretch cursor-default"
+            >
+              <StyledButton @click="() => replace(`/call?id=${v.id}`)">
+                <span class="material-icons-round align-middle pr-2">call</span>
+                Inizio chiamata
+              </StyledButton>
+              <StyledButton
+                colors="bg-brandBlue-50/20 hover:bg-brandBlue-50/40 text-center"
+                @click="() => push(`/appointments/edit?id=${v.id}`)"
+              >
+                Modifica
+              </StyledButton>
+            </div>
+          </template>
+        </DetailedTile>
+      </div>
+      <p v-else>Non hai appuntamenti da poter mostrare qui.</p>
+    </div>
+  </OpenmedLayout>
 </template>

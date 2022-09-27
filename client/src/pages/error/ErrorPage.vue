@@ -2,7 +2,9 @@
 <script setup></script>
 
 <template>
-  <div>
-    <h1>Something went wrong</h1>
-  </div>
+  <OpenmedLayout>
+    <div>
+      <h1>Something went wrong</h1>
+    </div>
+  </OpenmedLayout>
 </template>

@@ -1,4 +1,4 @@
-import { computed, ref, watch, watchEffect } from "vue";
+import { computed, ref, watch } from "vue";
 import { useLocalStorage } from "@vueuse/core";
 import { defineStore, storeToRefs } from "pinia";
 import { useAuth } from "./useAuth";
@@ -25,27 +25,18 @@ enum Role {
 const roles = Object.keys(Role);
 
 export const useUser = defineStore("user", () => {
-  const { isAuthenticated } = storeToRefs(useAuth());
   const localValue = useLocalStorage<string>("user", null);
 
   const user = ref<User | null>(JSON.parse(localValue.value));
 
-  watch(user, (newUser, _) => {
-    if (newUser) localValue.value = JSON.stringify(newUser);
+  watch(user, (newUser) => {
+    if (newUser === null) localValue.value = JSON.stringify(newUser);
     else localValue.value = null;
   });
 
-  watchEffect(() => {
-    if (!isAuthenticated.value) {
-      user.value = null;
-      return;
-    }
-    try {
-      getUser();
-    } catch (e) {
-      console.log(e);
-    }
-  });
+  function dropUser(): void {
+    user.value = null;
+  }
 
   async function getUser(): Promise<void> {
     const { data } = await useAuthClient(`${usersUri}/currentuser`, {
@@ -53,6 +44,7 @@ export const useUser = defineStore("user", () => {
     });
 
     const response = JSON.parse(data.value as string);
+    if (response?.currentUser === null) throw "useless response";
 
     const userRoles = response?.currentUser?.roles
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -88,6 +80,7 @@ export const useUser = defineStore("user", () => {
 
   return {
     getUser,
+    dropUser,
     email,
     username,
     isUser,
