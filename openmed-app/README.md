@@ -31,7 +31,9 @@ npm start
 
 La procedura di [seed](../api/README.md) genera alcuni utenti di default che possono essere utilizzati per i primi login:
 
-### Utente
+### Accesso
+
+https://localhost:3000/
 
 username: `user`
 password: `password`
