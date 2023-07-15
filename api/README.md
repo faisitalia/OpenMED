@@ -13,7 +13,7 @@ npm run start:services
 
 Lanciati i container (vedere il seguente [README.md](../docker/README.md) è necessario configurare keycloak:
 
-- eseguire il login su keycloak (admin/admin)
+- eseguire il login su keycloak: https://localhost:8443/ (admin/admin)
 - cliccare su "Add realm"
 - importare il file "docker/keycloak/config/openmed.json"
 
@@ -22,13 +22,12 @@ Ora si può passare alla configurazione dell'API server:
 - crea una directory "certs"
 - entrare nella directory "certs" e lanciare:
 
-https://github.com/FiloSottile/mkcert/
-
 ```bash
 openssl req -x509 -newkey rsa:2048 -keyout keytmp.pem -out cert.pem -days 365
 openssl rsa -in keytmp.pem -out key.pem
 ```
 
+- tornare nella root directory del progetto "api-server"
 - Creare un file .env copiandolo da .env.template.
 - Aggiornare OPENID_CLIENT_SECRET con quella relativo alla proprio installazione di keycloak. Per recuperare il client secret id è sufficiente accedere a keycloak con l'utenza di amministratore (admin/admin), cliccare su "Clients" --> "api-server" --> "Credentials" ed infine sul bottone "Regenerate secret".
 - Lanciare i seguenti comandi

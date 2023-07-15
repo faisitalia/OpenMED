@@ -57,3 +57,10 @@ npm run test:e2e # or `npm run test:e2e:ci` for headless testing
 ```sh
 npm run lint
 ```
+
+Warning: if the HTTP cert is not verified, you need to authorize the following services via browser:
+
+https://localhost:3001/v1/users/signin
+https://localhost:3001/v1/users/currentuser
+
+and run the login again.
